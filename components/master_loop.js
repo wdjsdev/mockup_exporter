@@ -33,12 +33,25 @@ function masterLoop()
 		{
 			continue;
 		}
-		
+
 		uvFile.activate();
 
 		if(!scalePiecesToFitGuides())
 		{
 			continue;
 		}
+
+		var specialSuccess = true;
+		if(mockupExporterSpecialInstructions[curGarmentCode])
+		{
+			specialSuccess = mockupExporterSpecialInstructions[curGarmentCode]();
+		}
+
+		if(!specialSuccess)
+		{
+			errorList.push("Special instructions function failed for: " + curGarmentCode);
+			
+		}
+
 	}
 }

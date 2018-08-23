@@ -31,6 +31,7 @@ function openUV(garmentCode)
 		uvFile = app.open(result);
 		uvLayers = uvFile.layers;
 		uvSwatches = uvFile.swatches;
+		uvArtboards = uvFile.artboards;
 		uvParamLayer = findSpecificLayer(uvFile,"paramcolors");
 		uvArtLayer = findSpecificLayer(uvFile,"Art");
 		if(!uvArtLayer)

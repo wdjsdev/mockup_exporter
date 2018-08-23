@@ -11,8 +11,9 @@ var docRef = app.activeDocument,
 	layers = docRef.layers,
 	aB = docRef.artboards,
 	swatches = docRef.swatches,
-	ppLay, //prepress layer for a given garment
-	mockupLayer, //mockup layer for a given garment
+	artLay, //artwork layer for the given garment
+	ppLay, //prepress layer for the given garment
+	mockupLayer, //mockup layer for the given garment
 	paramLayer, //sublayer inside mockup layer that contains paramcolor blocks
 	
 
@@ -31,6 +32,7 @@ var docRef = app.activeDocument,
 	uvFolder = Folder(desktopPath + "/automation/mockup_exporter/uv_files"),
 	uvFile,
 	uvLayers,
+	uvArtboards,
 	uvSwatches,
 	uvArtLayer,
 	uvParamLayer,

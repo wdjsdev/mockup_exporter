@@ -45,4 +45,12 @@ function scalePiecesToFitGuides()
 		setCenterPoint(curItem,guideCenter);
 
 	}
+
+	for(var x=0,len=uvParamLayer.pageItems.length;x<len;x++)
+	{
+		curItem = uvParamLayer.pageItems[x];
+		curItem.left = uvArtboards[0].artboardRect[0];
+		curItem.top = uvArtboards[0].artboardRect[1] + (x * -5);
+	}
+	return true;
 }

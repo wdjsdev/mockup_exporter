@@ -34,6 +34,13 @@ function getMasterLayers()
 		errorList.push("Failed to find the paramcolors layer for " + curGarmentLayer.name);
 		return false;
 	}
+
+	artLayer = findSpecificLayer(curGarmentLayer,"Artwork Layer");
+	if(!artLayer)
+	{
+		errorList.push("Failed to find the artwork layer for " + curGarmentLayer.name);
+		return false;
+	}
 	
 	return true;
 }

@@ -43,15 +43,16 @@ function duplicateMockupSizePiecesToTemplate()
 	}
 	if(curGroup)
 	{
+		duplicateArtwork(curGroup);
 
 		tmpArtGroup = curGroup.duplicate(uvFile);
 		tmpArtGroup.moveToBeginning(uvArtLayer);
+
 		tmpParamGroup = paramGroup.duplicate(uvFile);
 		tmpParamGroup.moveToBeginning(uvParamLayer);
+		
 		uvFile.activate();
 		ungroupTmpGroup();
-		curGroup.remove();
-		paramGroup.remove();
 		tmpLay.remove();
 		removeProductionInfo();
 		updateArtColors();
