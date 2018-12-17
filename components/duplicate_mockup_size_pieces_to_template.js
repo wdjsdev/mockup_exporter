@@ -17,16 +17,18 @@
 
 function duplicateMockupSizePiecesToTemplate()
 {
+	docRef.activate();
 	tmpLay = docRef.layers.add();
 
 	//move the paramColors
 	paramGroup = tmpLay.groupItems.add();
+	app.redraw();
 	for(var x=0,len=paramLayer.pageItems.length;x<len;x++)
 	{
 		paramLayer.pageItems[x].duplicate(paramGroup);
 	}
 
-	var curLay,curGroup;
+	var curLay,curGroup,curSize,curItem;
 	for(var x=0,len=ppLay.layers.length;x<len;x++)
 	{
 		curLay = ppLay.layers[x];
@@ -34,9 +36,14 @@ function duplicateMockupSizePiecesToTemplate()
 		{
 			curGroup = tmpLay.groupItems.add();
 			curGroup.name = "curGroup";
+			curSize = curLay.pageItems[0].name.substring(0,curLay.pageItems[0].name.indexOf(" "));
 			for(var y=0,yLen = curLay.pageItems.length;y<yLen;y++)
 			{
-				curLay.pageItems[y].duplicate(curGroup);
+				curItem = curLay.pageItems[y];
+				if(sizeType === "std" || curItem.name.indexOf(curSize) === 0)
+				{
+					curLay.pageItems[y].duplicate(curGroup);
+				}
 			}
 			break;	
 		}
@@ -56,6 +63,7 @@ function duplicateMockupSizePiecesToTemplate()
 		tmpLay.remove();
 		removeProductionInfo();
 		updateArtColors();
+		app.executeMenuCommand("clearguide");
 		return true;
 	}
 	else

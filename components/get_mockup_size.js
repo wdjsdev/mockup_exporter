@@ -14,16 +14,25 @@
 
 function getMockupSize()
 {
-	if(curGarmentCode.indexOf("W")>-1)
+	var mockupSize;
+	var curData;
+
+	eval("#include \"" + centralLibraryFile.fsName + "\"");
+	if(prepressInfo)
 	{
-		return "M";
+		curData = prepressInfo[curGarmentCode];
+		
+		if(curData)
+		{
+			mockupSize = curData.mockupSize;
+			if(mockupSize.toLowerCase().indexOf("i")>-1)
+			{
+				sizeType = "var";
+			}
+		}
+
+
 	}
-	else if(curGarmentCode.indexOf("Y")>-1)
-	{
-		return "YXL";
-	}
-	else
-	{
-		return "XL";
-	}
+	return mockupSize;
+
 }

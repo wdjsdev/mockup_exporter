@@ -19,8 +19,16 @@ function container()
 
 	var valid = true;
 
-	// eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsx\"");
-	eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
+	// //Production Utilities
+	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
+	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
+	
+	//Dev Utilities
+	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
+	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
+
+
+	 
 
 	//verify the existence of a document
 	if(app.documents.length === 0)
@@ -36,7 +44,7 @@ function container()
 
 	if(user === "will.dowling")
 	{
-		logDest.push(File(desktopPath + "/automation/logs/build_prod_file_dev_log.txt"));
+		logDest.push(File(desktopPath + "/automation/logs/mockup_exporter_dev_log.txt"));
 	}
 	else
 	{
@@ -79,22 +87,28 @@ function container()
 	/*****************************************************************************/
 	//=================================  Procedure  =================================//
 	
-	if(valid)
+	function execute()
 	{
-		// curGarmentCode = layers[0].name;
-		// mockupSize = "XL";
-		// openUV("FD-872");
-		// duplicateMockupSizePiecesToTemplate(uvFile);
-		// uvFile.activate();
-		// scalePiecesToFitGuides();
+		initMockupExporter();
 
-		valid = getGarments(docRef);
+		layers[0].name = layers[0].name.replace("FD_","FD-");
+		layers[0].name = layers[0].name.replace("_0","_10");
+
+		log.l("Mockup Exporter Initialized for document: " + docRef.name);
+		if(valid)
+		{
+			valid = getGarments(docRef);
+		}
+
+		if(valid)
+		{
+			log.l("Successfully gathered garments.");
+			log.l("garmentsNeeded = " + garmentsNeeded);
+			valid = masterLoop();
+		}
 	}
 
-	if(valid)
-	{
-		valid = masterLoop();
-	}
+	batchInit(execute,"Exported svg versions of blank styles");
 
 
 	//=================================  /Procedure  =================================//
@@ -104,6 +118,9 @@ function container()
 	{
 		sendErrors(errorList);
 	}
+
+	printLog();
+
 	return valid
 
 }

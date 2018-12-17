@@ -15,6 +15,7 @@
 
 function openUV(garmentCode)
 {
+	log.l("Opening UV for " + garmentCode);
 	var result;
 	var files = uvFolder.getFiles();
 
@@ -23,6 +24,7 @@ function openUV(garmentCode)
 		if (files[x].name === garmentCode + ".ait")
 		{
 			result = files[x];
+			log.l("UV file was identified as " + result.name);
 		}
 	}
 
@@ -34,22 +36,41 @@ function openUV(garmentCode)
 		uvArtboards = uvFile.artboards;
 		uvParamLayer = findSpecificLayer(uvFile,"paramcolors");
 		uvArtLayer = findSpecificLayer(uvFile,"Art");
+		uvGuidesLayer = findSpecificLayer(uvFile,"Guides");
+
+		log.l("uvParamLayer = " + uvParamLayer);
+		log.l("uvArtLayer = " + uvArtLayer);
+		log.l("uvGuidesLayer = " + uvGuidesLayer);
+
+
 		if(!uvArtLayer)
 		{
+			log.l("Failed to find the uvArtLayer. Creating one now.");
 			uvArtLayer = uvLayers.add();
 			uvArtLayer.name = "Art";
 		}
-		uvGuidesLayer = findSpecificLayer(uvFile,"Guides");
+
+		if(!uvParamLayer)
+		{
+			log.l("Failed to find the uvParamLayer. Creating one now.");
+			uvParamLayer = uvLayers.add();
+			uvParamLayer.name = "paramcolors";
+		}
+
+		
 		if(!uvGuidesLayer)
 		{
+			log.e("Failed to find the uvGuidesLayer. Cannot proceed. returning false.");
 			errorList.push("The UV Map file is missing the necessary \"Guides\" layer.");
 			return false;
 		}
+
 		docRef.activate();
 		return true;
 	}
 	else
 	{
+		log.e("Failed to find a UV Map File for the garment code: " + garmentCode);
 		errorList.push("Failed to find a UV Map File for the garment code: " + garmentCode);
 		return false;
 	}
