@@ -17,6 +17,9 @@
 function removeProductionInfo()
 {
 	var colorsToRemove = BOOMBAH_PRODUCTION_COLORS;
+
+	//add the collar colors to the list of colors to remove
+	colorsToRemove = colorsToRemove.concat(COLLAR_COLORS);
 	var toBeRemoved = [];
 
 	for(var x=0,len=colorsToRemove.length;x<len;x++)
