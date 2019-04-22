@@ -19,11 +19,22 @@ function masterLoop()
 	{
 		log.l("Beginning master loop number: " + (x+1) + " for garment: " + garmentsNeeded[x].name);
 
-		if(devMode)addParamColors();
+		if(devMode)
+		{
+			addParamColors();
+			normalizeLayerName();
+		}
 		
-		curGarmentLayer = garmentsNeeded[x];
+		curGarmentLayer = garmentsNeeded[x];		
 		curGarmentCode = getCode(curGarmentLayer.name);
-		mockupSize = getMockupSize();
+
+		if(devMode)
+		{
+			exportPath = devExportPath + "/" + curGarmentCode + "_SVGs";
+		}
+
+		getMockupSize();
+		
 		if (!openUV(curGarmentCode))
 		{
 			continue;
@@ -76,7 +87,14 @@ function masterLoop()
 
 		app.doScript("rmswatches","rmswatches");
 
+		// if(devMode)
+		// {
+		// 	updateParamColorNames();
+		// }
+
 		exportUV();
+
+		filesToClose.push(uvFile);
 
 	}
 

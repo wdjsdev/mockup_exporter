@@ -22,9 +22,14 @@ function removeProductionInfo()
 	colorsToRemove = colorsToRemove.concat(COLLAR_COLORS);
 	var toBeRemoved = [];
 
-	for(var x=0,len=colorsToRemove.length;x<len;x++)
+	var curSwatch;
+	for(var x=0,len=uvSwatches.length;x<len;x++)
 	{
-		findProdColor(colorsToRemove[x]);
+		curSwatch = uvSwatches[x];
+		if(colorsToRemove.indexOf(curSwatch.name)>-1)
+		{
+			findProdColor(curSwatch);
+		}
 	}
 
 	for(var x= toBeRemoved.length-1;x>=0;x--)
@@ -38,34 +43,26 @@ function removeProductionInfo()
 
 	return true;
 
-	function findProdColor(swatchName)
+	function findProdColor(swatch)
 	{
 		var curSwatch;
 		uvFile.selection = null;
 		app.redraw();
-		var tmpColorValues = {
-			cyan: 0,
-			magenta: 0,
-			yellow: 0,
-			black: 0
-		}
-		curSwatch = makeNewSpotColor(swatchName, "CMYK", tmpColorValues);
+		// var tmpColorValues = {
+		// 	cyan: 0,
+		// 	magenta: 0,
+		// 	yellow: 0,
+		// 	black: 0
+		// }
+		// curSwatch = makeNewSpotColor(swatchName, "CMYK", tmpColorValues);
 
-		var tmpBlock = uvFile.pathItems.rectangle(0, 0, 5, 5);
-		tmpBlock.fillColor = curSwatch.color;
-		tmpBlock.stroked = false;
-		tmpBlock.selected = true;
+		uvFile.defaultFillColor = swatch.color;
 		app.executeMenuCommand("Find Fill Color menu item");
-		tmpBlock.remove();
 		pushRmColors(uvFile.selection);
 		uvFile.selection = null;
 
-		tmpBlock = uvFile.pathItems.rectangle(0, 0, 5, 5);
-		tmpBlock.strokeColor = curSwatch.color;
-		tmpBlock.filled = false;
-		tmpBlock.selected = true;
+		uvFile.defaultStrokeColor = swatch.color;
 		app.executeMenuCommand("Find Stroke Color menu item");
-		tmpBlock.remove();
 		pushRmColors(uvFile.selection);
 		uvFile.selection = null;
 

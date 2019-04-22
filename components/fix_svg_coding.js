@@ -25,7 +25,7 @@ function fixSvgCoding(exportFile)
 	exportFile.close();
 
 	var docTypeDeclaration = '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n';
-	var svgInfoDeclaration = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="4000px" height="4000px" viewBox="0 0 4000 4000" enable-background="new 0 0 4000 4000" xml:space="preserve">';
+	var svgInfoDeclaration = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="2048px" height="2048px" viewBox="0 0 2048 2048" enable-background="new 0 0 2048 2048" xml:space="preserve">';
 
 	
 

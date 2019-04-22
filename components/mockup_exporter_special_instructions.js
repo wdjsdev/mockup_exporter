@@ -14,14 +14,32 @@ var mockupExporterSpecialInstructions =
 	
 	"FD-161": function()
 	{
-		this.flipCollars();
-		return this.alignBottomsOfCollars();
+		return this.flipCollars();
 	},
 
 	"FD-163": function()
 	{
-		this.flipCollars();
-		return this.alignBottomsOfCollars();
+		return this.flipCollars();
+	},
+
+	"FD-161W": function()
+	{
+		return this.flipCollars();
+	},
+
+	"FD-163W": function()
+	{
+		return this.flipCollars();
+	},
+
+	"FD-161G": function()
+	{
+		return this.flipCollars();
+	},
+
+	"FD-163G": function()
+	{
+		return this.flipCollars();
 	},
 
 	"FD-170W": function()
@@ -29,51 +47,94 @@ var mockupExporterSpecialInstructions =
 		return this.flipCollars();
 	},
 
+	"FD-170G": function()
+	{
+		return this.flipCollars();
+	},
+
 	"FD-230": function()
 	{
-		var rmNames = ["Placard","Placket"];
-		this.removeSpecificPieces(rmNames);
 		return this.updateDisplay("buttons",uvParamLayer.pageItems.length - 2);
 	},
 
 	"FD-233": function()
 	{
-		var rmNames = ["Placard","Placket"];
-		this.removeSpecificPieces(rmNames);
-		return this.updateDisplay("buttons",uvParamLayer.pageItems.length - 2);
+		return this.updateDisplay("buttons",uvParamLayer.pageItems.length - 1);
 	},
 
 	"FD-234" : function()
 	{
-		var rmNames = ["Placard","Placket"];
-		this.removeSpecificPieces(rmNames);
 		return this.updateDisplay("buttons",uvParamLayer.pageItems.length - 2);
 	},
 
 	"FD-240W" : function()
 	{
-		var rmNames = ["Placard","Placket"];
-		this.removeSpecificPieces(rmNames);
+		return this.updateDisplay("buttons",uvParamLayer.pageItems.length - 2);
+	},
+
+	"FD-240G" : function()
+	{
 		return this.updateDisplay("buttons",uvParamLayer.pageItems.length - 2);
 	},
 
 	"FD-243W" : function()
 	{
-		var rmNames = ["Placard","Placket"];
-		this.removeSpecificPieces(rmNames);
+		return this.updateDisplay("buttons",uvParamLayer.pageItems.length - 1);
+	},
+
+	"FD-243G" : function()
+	{
 		return this.updateDisplay("buttons",uvParamLayer.pageItems.length - 1);
 	},
 
 	"FD-246W" : function()
 	{
-		var rmNames = ["Placard","Placket"];
-		this.removeSpecificPieces(rmNames);
-		return this.updateDisplay("buttons", uvParamLayer.pageItems.length -1);
+		return this.updateDisplay("buttons", uvParamLayer.pageItems.length - 2);
+	},
+
+	"FD-246G" : function()
+	{
+		return this.updateDisplay("buttons", uvParamLayer.pageItems.length - 2);
+	},
+
+	"FD-400W" : function()
+	{
+		return this.flipCollars();
+	},
+
+	"FD-400G" : function()
+	{
+		return this.flipCollars();
+	},
+
+	"FD-4416W" : function()
+	{
+		return this.flipCollars();
+	},
+
+	"FD-4416G" : function()
+	{
+		return this.flipCollars();
 	},
 
 	"FD-500W" : function()
 	{
 		return this.flipCollars();
+	},
+
+	"FD-5060" : function()
+	{
+		return this.updateDisplay("buttons",uvParamLayer.pageItems.length-1);
+	},
+
+	"FD-5060W" : function()
+	{
+		return this.updateDisplay("buttons",uvParamLayer.pageItems.length - 2);
+	},
+
+	"FD-5077" : function()
+	{
+		return this.updateDisplay("buttons", uvParamLayer.pageItems.length - 2);
 	},
 
 	"FD-600" : function()
@@ -86,30 +147,18 @@ var mockupExporterSpecialInstructions =
 		return this.flipCollars();
 	},
 
-	"FD-872": function()
+	"FD-692": function()
 	{
 		return this.updateDisplay("drawstrings",uvParamLayer.pageItems.length - 2);
 	},
 
-	"FD-4416W" : function()
+	"PS-5098W": function()
 	{
-		return this.flipCollars();
-	},
-
-	"FD-5060" : function()
-	{
-		var rmNames = ["Right Fly Facing", "Right Knee", "Left Knee"];
-		this.removeSpecificPieces(rmNames);
-		return this.updateDisplay("buttons",uvParamLayer.pageItems.length-1);
-	},
-
-	"FD-5060W" : function()
-	{
-		var rmNames = ["Knee Panel 1", "Knee Panel 2", "Small Belt Loops 1", "Small Belt Loops 2", "Pocket Welt 1", "Pocket Welt 2", "Crotch Facing", "Right Fly Facing", "Left Fly Facing"];
-		this.removeSpecificPieces(rmNames);
-		this.updateDisplay("small_belt_loop", (Math.abs(uvParamLayer.pageItems.length - 5)));
+		this.updateDisplay("base_color",0);
+		this.updateDisplay("boombah_logo",uvParamLayer.pageItems.length - 1);
 		return this.updateDisplay("buttons",uvParamLayer.pageItems.length - 2);
 	},
+
 
 
 
@@ -147,27 +196,14 @@ var mockupExporterSpecialInstructions =
 		return true;
 	},
 
-	"alignBottomsOfCollars":function()
-	{
-		// var doc = app.activeDocument;
-		// var layers = doc.layers;
-		// var artLay = findSpecificLayer(doc,"Art");
-		// var guidesLay = findSpecificLayer(doc,"Guides");
-		// var collarBleed = 20.5;
-
-		// if(!artLay || !guidesLay)
-		// {
-		// 	errorList.push("Failed to identify one or more necessary layers:");
-		// 	errorList.push("artLay = " + artLay + "\nguidesLay = " + guidesLay);
-		// 	return false;
-		// }
-
-		var guideCollar = this.docProps.guidesLay.pageItems["Collar"];
-		var artCollar = this.docProps.artLay.pageItems["Collar"];
-		artCollar.height = guideCollar.height + collarBleed*2;
-		artCollar.top = (guideCollar.top + artCollar.height - guideCollar.height) - collarBleed;
-		return true;
-	},
+	// "alignBottomsOfCollars":function()
+	// {
+	// 	var guideCollar = this.docProps.guidesLay.pageItems["Collar"];
+	// 	var artCollar = this.docProps.artLay.pageItems["Collar"];
+	// 	artCollar.height = guideCollar.height + collarBleed*2;
+	// 	artCollar.top = (guideCollar.top + artCollar.height - guideCollar.height) - collarBleed;
+	// 	return true;
+	// },
 
 	"removeSpecificPieces":function(names)
 	{
@@ -182,48 +218,6 @@ var mockupExporterSpecialInstructions =
 			}
 		}
 	},
-
-	// "updateDisplay" : function(names,seq)
-	// {
-	// 	var name;
-	// 	for(var x=0,len = names.length;x<len;x++)
-	// 	{
-	// 		//"name" = array of names of display boxes in the uv map file that need to be recolored
-	// 		//"seq" = an integer representing which swatch to apply.
-	// 			//eg. if seq = 2, use the swatch that is used for the uvParamLayer.pageItems[2].
-	// 		name = names[x];
-	// 		try
-	// 		{
-	// 			var disp = uvArtLayer.pageItems[name];
-	// 		}
-	// 		catch(e)
-	// 		{
-	// 			errorList.push("Failed to find the " + name + " display in the UV Map File.");
-	// 			return false;
-	// 		}
-
-
-	// 		try
-	// 		{
-	// 			var dsParam = uvParamLayer.pageItems[seq];
-	// 			var dsParamColor = dsParam.fillColor.spot.name;
-	// 			var dsSwatch = swatches[dsParamColor];
-	// 		}
-	// 		catch(e)
-	// 		{
-	// 			errorList.push("Failed to set the color for the" + name + " display.");
-	// 			return false;
-	// 		}
-
-	// 		app.activeDocument.selection = null;
-
-
-	// 		disp.selected = true;
-
-	// 		app.activeDocument.defaultFillColor = dsParam.fillColor;
-	// 	}
-	// 	return true;
-	// }
 
 	"updateDisplay" : function(names,seq)
 	{

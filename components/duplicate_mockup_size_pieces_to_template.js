@@ -1,4 +1,4 @@
-/*
+	/*
 	Component Name: duplicate_mockup_size_pieces_to_template
 	Author: William Dowling
 	Creation Date: 07 August, 2018
@@ -40,9 +40,16 @@ function duplicateMockupSizePiecesToTemplate()
 			for(var y=0,yLen = curLay.pageItems.length;y<yLen;y++)
 			{
 				curItem = curLay.pageItems[y];
-				if(sizeType === "std" || curItem.name.indexOf(curSize) === 0)
+				if(sizeType === "std" || curItem.name.indexOf(mockupSize) === 0)
 				{
-					curLay.pageItems[y].duplicate(curGroup);
+					curItem.duplicate(curGroup);
+				}
+				else if(sizeType === "var")
+				{
+					if(curItem.name.indexOf(waistSize) === 0)
+					{
+						curItem.duplicate(curGroup);
+					}
 				}
 			}
 			break;	

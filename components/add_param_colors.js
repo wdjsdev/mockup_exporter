@@ -41,6 +41,7 @@ function addParamColors()
 				result.push(swatches[x]);
 			}
 		}
+		result = result.sort();
 		return result;
 	}
 
@@ -56,7 +57,7 @@ function addParamColors()
 		curCName = placeholdersNeeded[x].name;
 		curSwatch = makeNewSpotColor(curCName,"CMYK",colorValues[curCName]);
 		curParam = paramLayer.pathItems.rectangle(x * -5, aB[aB.getActiveArtboardIndex()].artboardRect[0] - 5,5,5);
-		curParam.name = "paramcolor-" + curCName;
+		curParam.name = "paramcolor-" + curCName.replace("B","C");
 		curParam.fillColor = curSwatch.color;
 		curParam.stroked = false;
 	}

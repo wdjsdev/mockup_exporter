@@ -8,19 +8,18 @@
 	Arguments
 		none
 	Return value
-		string representing mockup size
+		void
 
 */
 
 function getMockupSize()
 {
-	var mockupSize;
 	var curData;
 
 	eval("#include \"" + centralLibraryFile.fsName + "\"");
 	if(prepressInfo)
 	{
-		curData = prepressInfo[curGarmentCode];
+		curData = getLibraryEntry(prepressInfo,curGarmentCode);
 		
 		if(curData)
 		{
@@ -28,11 +27,21 @@ function getMockupSize()
 			if(mockupSize.toLowerCase().indexOf("i")>-1)
 			{
 				sizeType = "var";
+				waistSize = curData.waistMockupSize;
+				if(!waistSize)
+				{
+					waistSize = uiPrompt("Enter the mockup waist size.");
+					if(!waistSize)
+					{
+						errorList.push("Failed to determine the proper mockup size.");
+						valid = false;
+						return;
+					}
+				}
 			}
 		}
 
 
 	}
-	return mockupSize;
 
 }

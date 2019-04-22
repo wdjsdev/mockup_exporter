@@ -13,30 +13,30 @@ Description: open the 3d mockup template file for the current garment
 	
 	
 */
-
+#target Illustrator
 function container()
 {
 
 	var valid = true;
 
 	// //Production Utilities
-	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
-	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
+	// eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
+	// eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
 	
 	//Dev Utilities
-	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
-	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
+	eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
+	eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
 
 
 	 
 
 	//verify the existence of a document
-	if(app.documents.length === 0)
-	{
-		errorList.push("You must have a document open.");
-		sendErrors(errorList);
-		return false;
-	}
+	// if(app.documents.length === 0)
+	// {
+	// 	errorList.push("You must have a document open.");
+	// 	sendErrors(errorList);
+	// 	return false;
+	// }
 
 
 	/*****************************************************************************/
@@ -90,6 +90,25 @@ function container()
 	function execute()
 	{
 		initMockupExporter();
+
+		////////////////////////
+		////////ATTENTION://////
+		//
+		//		dev only
+		//		remove this block for production
+		//
+		////////////////////////
+		
+		#include "tmp_utilities/update_wrong_placeholder_colors.js";
+		updateWrongPlaceholderColors();
+
+		////////////////////////
+		////////ATTENTION://////
+		//
+		//		dev only
+		//		remove this block for production
+		//
+		////////////////////////
 
 		layers[0].name = layers[0].name.replace("FD_","FD-");
 		layers[0].name = layers[0].name.replace("_0","_10");

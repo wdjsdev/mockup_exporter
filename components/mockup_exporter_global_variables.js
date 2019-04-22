@@ -6,6 +6,22 @@
 		set of global variables for the mockup exporter script
 */
 
+
+
+/*
+	Mockup Sizes Expected
+
+	Male: 	33" Chest
+			32" Waist
+			32" Inseam
+
+	Female: 33" Chest 
+			25" Waist 
+			34" Hips 
+			33" Inseam
+
+*/
+
 	////////////
 
 	//dev mode
@@ -33,16 +49,20 @@ var docRef,
 	infoLayer,//information layer for the given garment
 	paramLayer, //sublayer inside mockup layer that contains paramcolor blocks
 	sizeType = "std", //string representing the sizing structure. "std" = standard, "var" = variable inseam
-	placeholderSwatchLetter = "C";
+	waistSize = "",
+	placeholderSwatchLetter = "B";
 
 	//garment variables
 var garmentsNeeded = [],
 	curGarmentLayer,
+	curGarmentCode,
 	curGarmentDesignId,
 	mockupSize,
 	tmpLay,
 	tmpArtGroup,
-	tmpParamGroup;
+	tmpParamGroup,
+	//COLAR_COLORS is a list of colors that should be removed from the uvFile before exporting.
+	COLLAR_COLORS = ["Collar Info B", "Collar Info 2 B", "Care Label B", "Collar B", "Collar 2 B"];
 
 
 
@@ -54,7 +74,8 @@ var uvFolder = Folder("/Volumes/Customization/Library/Scripts/Script Resources/F
 	uvSwatches,
 	uvArtLayer,
 	uvParamLayer,
-	uvGuidesLayer;
+	uvGuidesLayer,
+	uvProdColorsLayer;
 
 
 
@@ -84,6 +105,7 @@ var exportExtension = svgExt;
 if(devMode)
 {
 	uvFolder = Folder(desktopPath + "/automation/mockup_exporter/uv_maps");
-	exportPath = desktopPath + "/3D_Mockup_test";
+	var devExportPath = desktopPath + "/3D_Mockup_test";
+	exportPath = devExportPath;
 	// exportFileName = layers[0].name;
 }
