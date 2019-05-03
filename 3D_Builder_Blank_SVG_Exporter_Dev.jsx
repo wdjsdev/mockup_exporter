@@ -79,6 +79,8 @@ function container()
 	{
 		initMockupExporter();
 
+		devMode = true;
+
 		//create the cleanup_swatches action
 		createCleanupSwatchesAction();
 

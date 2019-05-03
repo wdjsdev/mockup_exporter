@@ -28,7 +28,7 @@
 
 	////////////
 	
-var devMode = true;
+var devMode = false;
 
 	////////////
 
@@ -81,7 +81,7 @@ var uvFolder = Folder("/Volumes/Customization/Library/Scripts/Script Resources/F
 
 	//export variables
 var appendages = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-	exportPath = "/Volumes/Customization/Library/Scripts/Script Resources/Files/3d_mockup_exports",
+	exportPath = "/Volumes/Customization/Library/Scripts/Script Resources/Files/3D_Builder_SVGs",
 	exportFileName,
 	exportFile;
 
@@ -104,8 +104,8 @@ var exportExtension = svgExt;
 
 if(devMode)
 {
-	uvFolder = Folder(desktopPath + "/automation/mockup_exporter/uv_maps");
-	var devExportPath = desktopPath + "/3D_Mockup_test";
+	// uvFolder = Folder(desktopPath + "/automation/mockup_exporter/uv_maps");
+	var devExportPath = desktopPath + "/3D_Builder_SVGs";
 	exportPath = devExportPath;
 	// exportFileName = layers[0].name;
 }
