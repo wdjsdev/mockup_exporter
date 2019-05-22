@@ -45,7 +45,7 @@ function addParamColors()
 		return result;
 	}
 
-	app.doScript("rmswatches","rmswatches");
+	app.doScript("cleanup_swatches","cleanup_swatches");
 
 
 	// var numOfPlaceholderColors = getPlaceholderSwatches();

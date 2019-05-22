@@ -162,61 +162,13 @@ var mockupExporterSpecialInstructions =
 
 
 
-
-	//"global" settings and variables
-
-	"docProps" : {},
-
-	populateDocProps: function()
-	{
-		this.docProps.doc = app.activeDocument;
-		this.docProps.layers = this.docProps.doc.layers;
-		this.docProps.artLay = findSpecificLayer(this.docProps.doc,"Art");
-		this.docProps.guidesLay = findSpecificLayer(this.docProps.doc,"Guides");
-		this.docProps.collarBleed = 20.5;
-
-		if(!this.docProps.artLay || !this.docProps.guidesLay)
-		{
-			errorList.push("Failed to identify one or more necessary layers:");
-			errorList.push("artLay = " + this.docProps.artLay + "\nguidesLay = " + this.docProps.guidesLay);
-			return false;
-		}
-		return true;
-	},
-
-
-
-
 	//generic functions
 
 	"flipCollars":function()
 	{
-		var artCollar = this.docProps.artLay.pageItems["Collar"];
+		var artCollar = uvFile.layers["Art"].pageItems["Collar"];
 		artCollar.rotate(180);
 		return true;
-	},
-
-	// "alignBottomsOfCollars":function()
-	// {
-	// 	var guideCollar = this.docProps.guidesLay.pageItems["Collar"];
-	// 	var artCollar = this.docProps.artLay.pageItems["Collar"];
-	// 	artCollar.height = guideCollar.height + collarBleed*2;
-	// 	artCollar.top = (guideCollar.top + artCollar.height - guideCollar.height) - collarBleed;
-	// 	return true;
-	// },
-
-	"removeSpecificPieces":function(names)
-	{
-		for(var x= uvArtLayer.pageItems.length-1;x>=0;x--)
-		{
-			for(var y=0,yLen = names.length;y<yLen;y++)
-			{
-				if(uvArtLayer.pageItems[x].name.toLowerCase().indexOf(names[y].toLowerCase()) > -1)
-				{
-					uvArtLayer.pageItems[x].remove();
-				}
-			}
-		}
 	},
 
 	"updateDisplay" : function(names,seq)

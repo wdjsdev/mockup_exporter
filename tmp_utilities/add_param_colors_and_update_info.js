@@ -45,7 +45,7 @@ function addParamColors()
 
 	
 
-	app.doScript("rmswatches","rmswatches");
+	app.doScript("cleanup_swatches","cleanup_swatches");
 	
 	for(var x=0,len = layers.length;x<len;x++)
 	{

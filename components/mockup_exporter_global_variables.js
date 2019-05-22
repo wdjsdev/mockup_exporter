@@ -36,6 +36,9 @@ var devMode = false;
 
 	////////////
 
+	//get the mockup_exporter_garment_data.js file
+var dataFile = File(dataPath + "/mockup_exporter_garment_data.js");
+eval("#include \"" + dataFile.fsName + "\"");
 
 
 	//master file variables
@@ -102,10 +105,4 @@ var exportType = svgExportType;
 var exportOptions = svgExportOptions;
 var exportExtension = svgExt;
 
-if(devMode)
-{
-	// uvFolder = Folder(desktopPath + "/automation/mockup_exporter/uv_maps");
-	var devExportPath = desktopPath + "/3D_Builder_SVGs";
-	exportPath = devExportPath;
-	// exportFileName = layers[0].name;
-}
+var devExportPath = desktopPath + "/3D_Builder_SVGs";

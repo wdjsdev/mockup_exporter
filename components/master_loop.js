@@ -14,6 +14,8 @@
 
 function masterLoop()
 {
+	var mxd; //mockup exporter data
+
 	//garmentsNeeded is an array of template layers
 	for (var x = 0, len = garmentsNeeded.length; x < len; x++)
 	{
@@ -60,23 +62,31 @@ function masterLoop()
 
 		log.l("Successfully scaled and  positioned the pieces on the UV Map.");
 
-		var specialSuccess = true;
-		if (mockupExporterSpecialInstructions[curGarmentCode] && mockupExporterSpecialInstructions.populateDocProps())
+		// var specialSuccess = true;
+		// if (mockupExporterSpecialInstructions[curGarmentCode])
+		// {
+
+		// 	log.l("Special instructions are necessary for " + curGarmentCode);
+		// 	specialSuccess = mockupExporterSpecialInstructions[curGarmentCode]();
+
+		// }
+
+		// if (!specialSuccess)
+		// {
+		// 	log.e("Failed to execute the special instructions for " + curGarmentCode);
+		// 	errorList.push("Special instructions function failed for: " + curGarmentCode);
+		// 	continue;
+		// }
+
+		// log.l("Successfully executed special instructions.");
+
+		if(!recolorDisplayBlocks(curGarmentCode))
 		{
-
-			log.l("Special instructions are necessary for " + curGarmentCode);
-			specialSuccess = mockupExporterSpecialInstructions[curGarmentCode]();
-
-		}
-
-		if (!specialSuccess)
-		{
-			log.e("Failed to execute the special instructions for " + curGarmentCode);
-			errorList.push("Special instructions function failed for: " + curGarmentCode);
+			log.e("Failed while recoloring the display blocks.");
+			errorList.push("Failed while recoloring the display blocks.");
 			continue;
 		}
-
-		log.l("Successfully executed special instructions.");
+		
 
 		if(!removePossiblePolygons())
 		{
@@ -85,7 +95,7 @@ function masterLoop()
 			continue;
 		}
 
-		app.doScript("rmswatches","rmswatches");
+		app.doScript("cleanup_swatches","cleanup_swatches");
 
 		// if(devMode)
 		// {

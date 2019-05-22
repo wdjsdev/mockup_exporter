@@ -13,6 +13,50 @@ function setupUv()
 	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
 	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
 	
+
+	if(user === "will.dowling")
+	{
+		logDest.push(File(desktopPath + "/automation/logs/mockup_exporter_dev_log.txt"));
+	}
+	else
+	{
+		logDest.push(File("/Volumes/Customization/Library/Scripts/Script Resources/Data/.script_logs/mockup_exporter_log.txt"));
+	}
+
+	var devComponents = desktopPath + "/automation/mockup_exporter/components";
+	var prodComponents = "/Volumes/Customization/Library/Scripts/Script Resources/components/mockup_exporter"
+
+	var compFiles = includeComponents(devComponents,prodComponents,true);
+	if(compFiles && compFiles.length)
+	{
+		for(var x=0,len=compFiles.length;x<len;x++)
+		{
+			try
+			{
+				eval("#include \"" + compFiles[x].fsName + "\"");
+			}
+			catch(e)
+			{
+				errorList.push("Failed to include the component: " + compFiles[x].name);
+				log.e("Failed to include the component: " + compFiles[x].name + "::System Error Message: " + e + "::System Error Line: " + e.line);
+				valid = false;
+			}
+		}
+	}
+	else
+	{
+		valid = false;
+		errorList.push("Failed to find any of the necessary components for this script to work.");
+		log.e("Failed to include any components. Exiting script.");
+	}
+
+	if(!valid)
+	{
+		printLog();
+		return;
+	}
+
+
 	function extractProductionColors()
 	{
 		var valid = true;
@@ -118,10 +162,22 @@ function setupUv()
 	var aB = docRef.artboards;
 	var swatches = docRef.swatches;
 
-	extractProductionColors();
-	app.redraw();
-	addGuides();
+	log.h("Beginning Setup UV Map Template Script.")
 
-	app.doScript("rmswatches","rmswatches");
+	createCleanupSwatchesAction();
+
+	getGarmentData();
+	if(valid)
+	{
+		extractProductionColors();
+		app.redraw();
+		addGuides();
+		app.doScript("cleanup_swatches","cleanup_swatches");
+	}
+
+	removeAction("cleanup_swatches");
+
+	printLog();
+	return valid;
 }
 setupUv();

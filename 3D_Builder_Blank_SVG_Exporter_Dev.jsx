@@ -105,16 +105,10 @@ function container()
 			valid = masterLoop();
 		}
 
-		//remove the cleanup_swatches action
-		try
-		{
-			app.unloadAction("cleanup_swatches","");
-		}
-		catch(e)
-		{
-			//log.l("Failed to unload the apply swatch action.. That probably means the action didn't get created properly..");
-		}
+		removeAction("cleanup_swatches");
 	}
+
+	log.h("Beginning Blank SVG Exporter Script")
 
 	batchInit(execute,"Exported svg versions of blank styles");
 

@@ -70,7 +70,4 @@ function createCleanupSwatchesAction()
 	
 	//load the action
 	app.loadAction(actionFile);
-
-	//execute the action
-	app.doScript("cleanup_swatches","cleanup_swatches");
 }

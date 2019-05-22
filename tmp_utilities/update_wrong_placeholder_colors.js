@@ -51,7 +51,7 @@ function updateWrongPlaceholderColors()
 	var ppLay = getPPLay(layers);
 	ppLay.visible = true;
 
-	app.doScript("rmswatches", "rmswatches");
+	app.doScript("cleanup_swatches", "cleanup_swatches");
 
 	for (var x = 0, len = swatches.length; x < len; x++)
 	{
@@ -66,6 +66,6 @@ function updateWrongPlaceholderColors()
 		replaceColor(colorsToReplace[x], newPlaceHolderSwatch(x));
 	}
 
-	app.doScript("rmswatches", "rmswatches");
+	app.doScript("cleanup_swatches", "cleanup_swatches");
 	ppLay.visible = false;
 }
