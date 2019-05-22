@@ -1,3 +1,12 @@
+////////////////////////
+////////ATTENTION://////
+//
+//		This component is deprecated in favor of
+//		a more centralized database accessible
+//		by other users.
+//
+////////////////////////
+
 /*
 	Component Name: mockup_exporter_special_instructions
 	Author: William Dowling

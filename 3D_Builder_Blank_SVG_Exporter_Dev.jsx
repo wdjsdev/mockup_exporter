@@ -43,7 +43,7 @@ function container()
 	var devComponents = desktopPath + "/automation/mockup_exporter/components";
 	var prodComponents = "/Volumes/Customization/Library/Scripts/Script Resources/components/mockup_exporter"
 
-	var compFiles = includeComponents(devComponents,prodComponents,true);
+	var compFiles = includeComponents(devComponents,prodComponents,false);
 	if(compFiles && compFiles.length)
 	{
 		for(var x=0,len=compFiles.length;x<len;x++)

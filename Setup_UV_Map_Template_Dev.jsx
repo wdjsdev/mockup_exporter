@@ -13,6 +13,10 @@ function setupUv()
 	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
 	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
 	
+	//Dev Utilities
+	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
+	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
+	
 
 	if(user === "will.dowling")
 	{
@@ -26,7 +30,7 @@ function setupUv()
 	var devComponents = desktopPath + "/automation/mockup_exporter/components";
 	var prodComponents = "/Volumes/Customization/Library/Scripts/Script Resources/components/mockup_exporter"
 
-	var compFiles = includeComponents(devComponents,prodComponents,true);
+	var compFiles = includeComponents(devComponents,prodComponents,false);
 	if(compFiles && compFiles.length)
 	{
 		for(var x=0,len=compFiles.length;x<len;x++)
