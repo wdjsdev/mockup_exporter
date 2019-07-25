@@ -17,7 +17,7 @@ function fixSvgCoding(exportFile)
 {
 	var contents,matchedText;
 
-	var svgidRegex = /([SVGID]{5})(_\d*_)/g;
+	var svgidRegex = /([SVGID]{5})(_\d*_?)/g;
 	var underscoreRegex = /_\d*_\"/g;
 
 	exportFile.open();

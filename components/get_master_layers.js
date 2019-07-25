@@ -45,24 +45,38 @@ function getMasterLayers()
 	infoLayer = findSpecificLayer(curGarmentLayer,"Information");
 	if(infoLayer)
 	{
-		////////////////////////
-		////////ATTENTION://////
-		//
-		//		temporarily commented to export plain blank styles
-		//
-		////////////////////////
-		// var designIdFrame = findChildByName(infoLayer,"designId","TextFrame");
-		// if(designIdFrame)
-		// {
-		// 	curGarmentDesignId = designIdFrame.contents;
-		// }
-		// else
-		// {
-		// 	curGarmentDesignId = getCurGarmentDesignId();
-		// }
-		// exportFileName = curGarmentDesignId + "-" + curGarmentCode + "-mockup";
+		if(devMode)
+		{
+			exportFileName = layers[0].name;
+		}
+		else
+		{
+			infoLayer.locked = false;
+			var designIdFrame = findChildByName(infoLayer,"designId","TextFrame");
+			if(designIdFrame)
+			{
+				curGarmentDesignId = designIdFrame.contents;
+			}
+			else
+			{
+				curGarmentDesignId = getCurGarmentDesignId();
 
-		exportFileName = layers[0].name;
+				var position = [19,-69];
+				try
+				{
+					var orderNumberFrame = infoLayer.textFrames["Order Number"];
+					position = [orderNumberFrame.left,orderNumberFrame.top - 12];
+				}
+				catch(e){};
+				var idFrame = infoLayer.textFrames.add();
+				idFrame.name = "Design ID";
+				idFrame.contents = curGarmentDesignId;
+				idFrame.position = position;
+			}
+			exportFileName = curGarmentDesignId + "-" + curOrderNumber + "-mockup";
+
+			infoLayer.locked = true;
+		}
 	}
 	else
 	{

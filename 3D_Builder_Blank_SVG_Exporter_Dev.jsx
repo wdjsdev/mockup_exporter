@@ -82,7 +82,8 @@ function container()
 		devMode = true;
 
 		//create the cleanup_swatches action
-		createCleanupSwatchesAction();
+		// createCleanupSwatchesAction();
+		createAction("cleanup_swatches",CLEANUP_SWATCHES_ACTION_STRING);
 
 		if(devMode)
 		{

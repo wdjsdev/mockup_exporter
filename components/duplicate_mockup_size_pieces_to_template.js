@@ -23,9 +23,20 @@ function duplicateMockupSizePiecesToTemplate()
 	//move the paramColors
 	paramGroup = tmpLay.groupItems.add();
 	app.redraw();
-	for(var x=0,len=paramLayer.pageItems.length;x<len;x++)
+
+	releaseCompoundPaths(paramLayer.pageItems);
+	
+	var curParamBlock,counter=1;
+	for(var x=paramLayer.pageItems.length-1;x>=0;x--)
+	// for(var x=0,len=paramLayer.pageItems.length;x<len;x++)
 	{
-		paramLayer.pageItems[x].duplicate(paramGroup);
+		curParamBlock = paramLayer.pageItems[x];
+		if(!/-C\d/.test(curParamBlock.name))
+		{
+			curParamBlock.name = "paramcolor-C" + counter;
+		}
+		curParamBlock.duplicate(paramGroup);
+		counter++;
 	}
 
 	var curLay,curGroup,curSize,curItem;
@@ -68,8 +79,8 @@ function duplicateMockupSizePiecesToTemplate()
 		uvFile.activate();
 		ungroupTmpGroup();
 		tmpLay.remove();
-		removeProductionInfo();
-		updateArtColors();
+		recolorArtwork();
+		removeProductionInfo();		
 		app.executeMenuCommand("clearguide");
 		return true;
 	}

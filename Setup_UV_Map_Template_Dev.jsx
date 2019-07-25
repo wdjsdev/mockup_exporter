@@ -168,7 +168,8 @@ function setupUv()
 
 	log.h("Beginning Setup UV Map Template Script.")
 
-	createCleanupSwatchesAction();
+	// createCleanupSwatchesAction();
+	createAction("cleanup_swatches",CLEANUP_SWATCHES_ACTION_STRING);
 
 	getGarmentData();
 	if(valid)

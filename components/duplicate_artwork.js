@@ -27,12 +27,47 @@ function duplicateArtwork(curGroup)
 
 	function checkArtForOverlap(art,pieces)
 	{
+		art.name = art.layer.name + "_art";
+		var dest,artCopy;
 		for(var x=0,len = pieces.pageItems.length;x<len;x++)
 		{
-			if(intersects(art,pieces.pageItems[x]))
+			dest = pieces.pageItems[x];
+			if(intersects(art,dest))
 			{
-				art.duplicate(pieces.pageItems[x]);
+				artCopy = art.duplicate(dest);
+				if(!isContainedWithin(artCopy,dest))
+				{
+					makeMask(artCopy,dest);
+				}
 			}
+			dest = undefined;
 		}
+	}
+
+	function makeMask(art,maskShape)
+	{
+		var suffix = "_clip_mask";
+		var clipGroup;
+		
+		try
+		{
+			clipGroup = maskShape.groupItems[maskShape.name + suffix];
+		}
+		catch(e)
+		{
+			clipGroup = maskShape.groupItems.add();
+			clipGroup.name = maskShape.name + suffix;
+		}
+
+		art.moveToBeginning(clipGroup);
+
+		var mask = clipGroup.pathItems.rectangle(maskShape.top,maskShape.left,maskShape.width,maskShape.height);
+		mask.filled = false;
+		mask.stroked = false;
+		clipGroup.clipping = true;
+		mask.clipped = true;
+
+		return clipGroup;
+
 	}
 }

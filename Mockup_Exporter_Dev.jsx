@@ -20,12 +20,12 @@ function container()
 	var valid = true;
 
 	// //Production Utilities
-	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
-	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
+	// eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
+	// eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
 	
 	//Dev Utilities
-	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
-	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
+	eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
+	eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
 
 
 	/*****************************************************************************/
@@ -79,16 +79,8 @@ function container()
 	{
 		initMockupExporter();
 
-		//create the cleanup_swatches action
-		createCleanupSwatchesAction();
-
-		if(devMode)
-		{
-			updateWrongPlaceholderColors();
-		}
-
-		layers[0].name = layers[0].name.replace("FD_","FD-");
-		layers[0].name = layers[0].name.replace("_0","_10");
+		// layers[0].name = layers[0].name.replace("FD_","FD-");
+		// layers[0].name = layers[0].name.replace("_0","_10");
 
 		log.l("Mockup Exporter Initialized for document: " + docRef.name);
 		if(valid)
@@ -102,20 +94,26 @@ function container()
 			log.l("garmentsNeeded = " + garmentsNeeded);
 			valid = masterLoop();
 		}
-
-		//remove the cleanup_swatches action
-		try
-		{
-			app.unloadAction("cleanup_swatches","");
-		}
-		catch(e)
-		{
-			//log.l("Failed to unload the apply swatch action.. That probably means the action didn't get created properly..");
-		}
 	}
 
-	batchInit(execute,"Exported svg versions of blank styles");
+	log.h("Beginning execution of Mockup Exporter Script.");
 
+	//create the cleanup_swatches action
+	// createCleanupSwatchesAction();
+	createAction("cleanup_swatches",CLEANUP_SWATCHES_ACTION_STRING);
+
+	//run the script
+	execute();
+
+	//remove the cleanup_swatches action
+	try
+	{
+		app.unloadAction("cleanup_swatches","");
+	}
+	catch(e)
+	{
+		//log.l("Failed to unload the apply swatch action.. That probably means the action didn't get created properly..");
+	}
 
 	//=================================  /Procedure  =================================//
 	/*****************************************************************************/
@@ -127,7 +125,7 @@ function container()
 
 	printLog();
 
-	return valid
+	return valid;
 
 }
 container();

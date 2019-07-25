@@ -59,6 +59,7 @@ var docRef,
 var garmentsNeeded = [],
 	curGarmentLayer,
 	curGarmentCode,
+	curOrderNumber,
 	curGarmentDesignId,
 	mockupSize,
 	tmpLay,
@@ -84,9 +85,11 @@ var uvFolder = Folder("/Volumes/Customization/Library/Scripts/Script Resources/F
 
 	//export variables
 var appendages = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-	exportPath = "/Volumes/Customization/Library/Scripts/Script Resources/Files/3D_Builder_SVGs",
+	// exportPath = "/Volumes/Customization/Library/Scripts/Script Resources/Files/3D_Builder_SVGs",
+	exportPath = desktopPath + "/3D_Builder_Mockups/",
 	exportFileName,
-	exportFile;
+	exportFile,
+	exportedFileIndex = 1;
 
 	//JPG export options
 var jpgExportType = ExportType.JPEG;

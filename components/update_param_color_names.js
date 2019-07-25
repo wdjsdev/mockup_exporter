@@ -1,6 +1,6 @@
 function updateParamColorNames()
 {
-	var paramBlocks = paramLayer.pageItems;
+	var paramBlocks = uvParamLayer.pageItems;
 
 	for(var x=0,len=paramBlocks.length;x<len;x++)
 	{

@@ -49,7 +49,7 @@ function getCurGarmentDesignId()
 		}
 		else
 		{
-			alert("Invalid Design ID");
+			alert("Invalid Design ID\nDesign ID must be 12 numbers or letters with no spaces.");
 		}
 	}
 }

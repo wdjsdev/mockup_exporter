@@ -17,7 +17,7 @@ function masterLoop()
 	var mxd; //mockup exporter data
 
 	//garmentsNeeded is an array of template layers
-	for (var x = 0, len = garmentsNeeded.length; x < len; x++)
+	for (var x = 0, len = garmentsNeeded.length; x < len ; x++)
 	{
 		log.l("Beginning master loop number: " + (x+1) + " for garment: " + garmentsNeeded[x].name);
 
@@ -29,6 +29,13 @@ function masterLoop()
 		
 		curGarmentLayer = garmentsNeeded[x];		
 		curGarmentCode = getCode(curGarmentLayer.name);
+		curOrderNumber = getOrderNumber(docRef);
+		
+		if(!curOrderNumber)
+		{
+			//file is unsaved
+			break;
+		}
 
 		if(devMode)
 		{
@@ -41,9 +48,9 @@ function masterLoop()
 		{
 			continue;
 		}
+		log.l("UV File successfully opened.");
 		if (!getMasterLayers())
 		{
-			log.l("UV File successfully opened.");
 			continue;
 		}
 
@@ -62,24 +69,6 @@ function masterLoop()
 
 		log.l("Successfully scaled and  positioned the pieces on the UV Map.");
 
-		// var specialSuccess = true;
-		// if (mockupExporterSpecialInstructions[curGarmentCode])
-		// {
-
-		// 	log.l("Special instructions are necessary for " + curGarmentCode);
-		// 	specialSuccess = mockupExporterSpecialInstructions[curGarmentCode]();
-
-		// }
-
-		// if (!specialSuccess)
-		// {
-		// 	log.e("Failed to execute the special instructions for " + curGarmentCode);
-		// 	errorList.push("Special instructions function failed for: " + curGarmentCode);
-		// 	continue;
-		// }
-
-		// log.l("Successfully executed special instructions.");
-
 		if(!recolorDisplayBlocks(curGarmentCode))
 		{
 			log.e("Failed while recoloring the display blocks.");
@@ -87,20 +76,24 @@ function masterLoop()
 			continue;
 		}
 		
-
-		if(!removePossiblePolygons())
+		if(devMode)
 		{
-			log.e("Failed while attempting to fix compound paths..");
-			errorList.push("Failed while attempting to fix compound paths..");
-			continue;
+			if(!removePossiblePolygons())
+			{
+				log.e("Failed while attempting to fix compound paths..");
+				errorList.push("Failed while attempting to fix compound paths..");
+				continue;
+			}
 		}
 
 		app.doScript("cleanup_swatches","cleanup_swatches");
 
-		// if(devMode)
-		// {
-		// 	updateParamColorNames();
-		// }
+		if(devMode)
+		{
+			updateParamColorNames();
+		}
+
+		cleanupUVFile();
 
 		exportUV();
 
