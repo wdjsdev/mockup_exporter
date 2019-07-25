@@ -17,6 +17,10 @@
 function getCurGarmentDesignId()
 {
 	var result;
+	if(devMode)
+	{
+		return "";
+	}
 	var designIdPattern = /[a-z0-9]{12}/i;
 	var w = new Window("dialog","Enter the Design ID");
 		w.orientation = "column";

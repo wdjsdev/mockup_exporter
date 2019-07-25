@@ -32,10 +32,15 @@ function getGarments()
 		result = false;
 		errorList.push("No converted template garments were found in this master file.");
 	}
-
-	selectGarmentsToExport();
-
-	garmentsNeeded = selectedGarments;
+	else if(garmentLayers.length === 1)
+	{
+		garmentsNeeded = [garmentLayers[0]];
+	}
+	else
+	{	
+		selectGarmentsToExport();
+		garmentsNeeded = selectedGarments;
+	}
 
 	return result;
 

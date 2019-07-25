@@ -29,12 +29,15 @@ function masterLoop()
 		
 		curGarmentLayer = garmentsNeeded[x];		
 		curGarmentCode = getCode(curGarmentLayer.name);
-		curOrderNumber = getOrderNumber(docRef);
 		
-		if(!curOrderNumber)
+		if(!devMode)
 		{
-			//file is unsaved
-			break;
+			curOrderNumber = getOrderNumber(docRef);
+			if(!curOrderNumber)
+			{
+				//file is unsaved
+				break;
+			}
 		}
 
 		if(devMode)
@@ -92,8 +95,12 @@ function masterLoop()
 		{
 			updateParamColorNames();
 		}
+		else
+		{
+			cleanupUVFile();
+		}
 
-		cleanupUVFile();
+
 
 		exportUV();
 

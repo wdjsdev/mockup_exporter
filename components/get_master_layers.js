@@ -59,7 +59,10 @@ function getMasterLayers()
 			}
 			else
 			{
-				curGarmentDesignId = getCurGarmentDesignId();
+				if(!devMode)
+				{
+					curGarmentDesignId = getCurGarmentDesignId();
+				}
 
 				var position = [19,-69];
 				try
