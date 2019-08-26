@@ -13,22 +13,6 @@ function addParamColors()
 	var paramLayer = mockupLay.layers.add();
 	paramLayer.name = "paramcolors";
 
-	// function getPlaceholderSwatches()
-	// {
-	// 	var result = 0;
-	// 	var pat = /[cb][\d]{1,2}/i;
-
-	// 	for(var x=0,len=swatches.length;x<len;x++)
-	// 	{
-	// 		if(pat.test(swatches[x].name))
-	// 		{
-	// 			result++;
-	// 		}
-	// 	}
-
-	// 	return result;
-	// }
-
 	function getPlaceholderSwatches()
 	{
 		var result = [];
