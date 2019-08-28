@@ -25,14 +25,7 @@ function fixSvgCoding(exportFile)
 	exportFile.close();
 
 	var docTypeDeclaration = '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n';
-	var svgInfoDeclaration = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="2048px" height="2048px" viewBox="0 0 2048 2048" enable-background="new 0 0 2048 2048" xml:space="preserve">';
-
-	//delete the existing <defs></defs> and move it up to the top of the <svg> tag
-	//it needs to be the first element inside the <svg> tag
-	contents = contents.replace("<defs></defs>","");
-	var openTagRegex = /(<svg[^>]*>)/;
-	var openTag = contents.match(openTagRegex)[0];
-	contents = contents.replace(openTag,openTag + "<defs></defs>");
+	var svgInfoDeclaration = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="2048px" height="2048px" viewBox="0 0 2048 2048" enable-background="new 0 0 2048 2048" xml:space="preserve">\n<defs></defs>';
 
 	var svgFileLines = contents.split("\n");
 
@@ -43,11 +36,7 @@ function fixSvgCoding(exportFile)
 			svgFileLines[x] = docTypeDeclaration + svgInfoDeclaration;
 			svgFileLines.splice(x+1,1);
 		}
-		else if(svgFileLines[x].indexOf("</g>")>-1 && svgFileLines[x+1] === "</svg>")
-		{
-			svgFileLines[x] = "</g>\n<defs></defs>\n</svg>";
-			svgFileLines.splice(x+1,1);
-		}
+
 		else if(svgFileLines[x].indexOf("SVGID")>-1)
 		{
 			svgFileLines[x] = svgFileLines[x].replace(svgidRegex,svgFileLines[x].match(svgidRegex)[0] + "Xrm_meX");
@@ -56,16 +45,6 @@ function fixSvgCoding(exportFile)
 	}
 
 	contents = svgFileLines.join("\n");
-
-
-
-	
-	// matchedText = contents.match(svgidRegex);
-
-	// if(matchedText)
-	// {
-	// 	contents = contents.replace(svgidRegex,matchedText[0] + "Xrm_meX");	
-	// }
 
 	contents = contents.replace(underscoreRegex,"\"");
 	contents = contents.replace(/Xrm_meX/g,"");
