@@ -1,5 +1,8 @@
 function addParamColors()
 {
+	//Production Utilities
+	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
+	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
 	var colorValues = BOOMBAH_APPROVED_COLOR_VALUES;
 
 	var placeholderPrefixLetter;
