@@ -14,13 +14,12 @@
 
 function masterLoop()
 {
-	var mxd; //mockup exporter data
 
 	//garmentsNeeded is an array of template layers
 	for (var x = 0, len = garmentsNeeded.length; x < len ; x++)
 	{
 		log.l("Beginning master loop number: " + (x+1) + " for garment: " + garmentsNeeded[x].name);
-
+		
 		if(devMode)
 		{
 			addParamColors();

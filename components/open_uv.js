@@ -71,7 +71,7 @@ function openUV(garmentCode)
 	else
 	{
 		log.e("Failed to find a UV Map File for the garment code: " + garmentCode);
-		errorList.push("Failed to find a UV Map File for the garment code: " + garmentCode);
+		errorList.push(garmentCode + " is not ready for the 3D builder. Sorry.");
 		return false;
 	}
 }
