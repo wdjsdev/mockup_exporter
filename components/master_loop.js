@@ -19,7 +19,7 @@ function masterLoop()
 	for (var x = 0, len = garmentsNeeded.length; x < len ; x++)
 	{
 		log.l("Beginning master loop number: " + (x+1) + " for garment: " + garmentsNeeded[x].name);
-		
+
 		if(devMode)
 		{
 			addParamColors();
@@ -28,6 +28,20 @@ function masterLoop()
 		
 		curGarmentLayer = garmentsNeeded[x];		
 		curGarmentCode = getCode(curGarmentLayer.name);
+
+		var paramLayerExists = false;
+		for(var x=0,len=mockupLay.layers.length;x<len && !paramLayerExists;x++)
+		{
+			if(mockupLay.layers[x].name === "paramcolors" && mockupLay.layers[x].pageItems.length)
+			{
+				paramLayerExists = true;
+			}
+		}
+		if(!paramLayerExists)
+		{
+			addParamColors();
+			getParamColorValues();
+		}
 		
 		if(!devMode)
 		{
