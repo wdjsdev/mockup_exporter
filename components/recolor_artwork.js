@@ -43,25 +43,33 @@ function recolorArtwork()
 		uvFile.defaultFillColor = makeNewSpotColor(name,"CMYK",BOOMBAH_APPROVED_COLOR_VALUES[name]).color;
 		app.executeMenuCommand("Find Fill Color menu item");
 
+		function dig(curItem)
+		{
+			if(curItem.typename === "PathItem")
+			{
+				gs.applyTo(curItem);
+			}
+			else if(curItem.typename === "CompoundPathItem" && curItem.pathItems.length)
+			{
+				gs.applyTo(curItem.pathItems[0]);
+			}
+			else if(curItem.typename === "GroupItem")
+			{
+				for(var g=0,len=curItem.pageItems.length;g<len;g++)
+				{
+					dig(curItem.pageItems[g]);
+				}
+			}
+		}
+
+
 		try
 		{
 			var gs = uvFile.graphicStyles[name];
 			var curSel,item;
 			for(var cc=0,len=uvFile.selection.length;cc<len;cc++)
 			{
-				curSel = uvFile.selection[cc];
-				if(curSel.typename === "PathItem")
-				{
-					item = curSel;
-				}
-				else if(curSel.typename === "CompoundPathItem" && curSel.pathItems.length)
-				{
-					item = curSel.pathItems[0];
-				}
-				if(item)
-				{
-					gs.applyTo(item);
-				}
+				dig(uvFile.selection[cc]);
 				item = undefined;
 			}
 		}
@@ -70,4 +78,6 @@ function recolorArtwork()
 			uvFile.defaultFillColor = src.fillColor;
 		}
 	}
+
+	
 }
