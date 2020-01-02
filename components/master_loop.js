@@ -78,6 +78,11 @@ function masterLoop()
 
 		uvFile.activate();
 
+		if(mockupExporterGarmentData[curGarmentCode].flipCollars)
+		{
+			flipCollars();
+		}
+
 		if (!scalePiecesToFitGuides())
 		{
 			continue;
