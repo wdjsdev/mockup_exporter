@@ -90,7 +90,7 @@ function masterLoop()
 
 		log.l("Successfully scaled and  positioned the pieces on the UV Map.");
 
-		if(!recolorDisplayBlocks(curGarmentCode))
+		if(!recolorDisplayBlocks())
 		{
 			log.e("Failed while recoloring the display blocks.");
 			errorList.push("Failed while recoloring the display blocks.");

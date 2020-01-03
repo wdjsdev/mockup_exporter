@@ -2,6 +2,7 @@
 function setupUv()
 {
 	var valid = true;
+	var scriptName = "setup_uv_map_template";
 
 	if(!app.documents.length)
 	{
@@ -18,14 +19,7 @@ function setupUv()
 	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
 	
 
-	if(user === "will.dowling")
-	{
-		logDest.push(File(desktopPath + "/automation/logs/mockup_exporter_dev_log.txt"));
-	}
-	else
-	{
-		logDest.push(File("/Volumes/Customization/Library/Scripts/Script Resources/Data/.script_logs/mockup_exporter_log.txt"));
-	}
+	logDest.push(getLogDest());
 
 	var devComponents = desktopPath + "/automation/mockup_exporter/components";
 	var prodComponents = "/Volumes/Customization/Library/Scripts/Script Resources/components/mockup_exporter"

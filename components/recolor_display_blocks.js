@@ -36,7 +36,8 @@ function recolorDisplayBlocks()
 		}
 		else
 		{
-			index = uvParamLayer.pageItems.length - index - 1;
+			// index = uvParamLayer.pageItems.length - index - 1;
+			// index += 1;
 		}
 		try
 		{
