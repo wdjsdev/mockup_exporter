@@ -25,7 +25,24 @@ function addParamColors()
 				result.push(swatches[x]);
 			}
 		}
-		result = result.sort();
+		//sort the array by the sequence number of placeholder swatches
+		//for example: C1 before C2, but C2 should come before C11
+		//trim the C, convert to int, then compare the int for reliable sorting
+		result = result.sort(function compareFunction(a,b)
+		{
+			a = parseInt(a.name.replace("C",""));
+			b = parseInt(b.name.replace("C",""));
+			if(a < b)
+			{
+				return -1;
+			}
+			if(a > b)
+			{
+				return 1;
+			}
+			return 0;
+		});
+		
 		return result;
 	}
 
