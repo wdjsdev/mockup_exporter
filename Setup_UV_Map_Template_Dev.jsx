@@ -10,13 +10,42 @@ function setupUv()
 		return;
 	}
 
-	//Production Utilities
-	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
-	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
-	
-	//Dev Utilities
-	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
-	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
+	function getUtilities()
+	{
+		var result;
+		var user,networkPath,localPath,utilPath;
+		if($.os.match("Windows"))
+		{
+			user= $.getenv("USERNAME");
+			networkPath = "\\AD4\\Customization\\"
+			// localPath = "C:/Users/" + user + "/Documents/Boombah_Script_Resources/";
+		}
+		else
+		{
+			user = $.getenv("USER");
+			networkPath = "/Volumes/Customization/";
+			localPath = "/Volumes/Macintosh HD/Users/" + user + "/Documents/Boombah_Script_Resources/"
+		}
+f
+		utilPath = networkPath + "Library/Scripts/Script Resources/Data/";
+		if(Folder(utilPath).exists)
+		{
+			result = utilPath;
+		}
+		return result;
+
+	}
+	var utilitiesPath = getUtilities();
+	if(utilitiesPath)
+	{
+		eval("#include \"" + utilitiesPath + "Utilities_Container.jsxbin" + "\"");
+		eval("#include \"" + utilitiesPath + "Batch_Framework.jsxbin" + "\"");
+	}
+	else
+	{
+		alert("Failed to find the utilities..");
+		return false;	
+	}
 	
 
 	logDest.push(getLogDest());
