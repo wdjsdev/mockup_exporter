@@ -17,7 +17,7 @@ function setupUv()
 		if($.os.match("Windows"))
 		{
 			user= $.getenv("USERNAME");
-			networkPath = "\\AD4\\Customization\\"
+			networkPath = "/AD4/Customization/"
 			// localPath = "C:/Users/" + user + "/Documents/Boombah_Script_Resources/";
 		}
 		else
@@ -51,7 +51,7 @@ f
 	logDest.push(getLogDest());
 
 	var devComponents = desktopPath + "/automation/mockup_exporter/components";
-	var prodComponents = "/Volumes/Customization/Library/Scripts/Script Resources/components/mockup_exporter"
+	var prodComponents = "componentsPathmockup_exporter"
 
 	var compFiles = includeComponents(devComponents,prodComponents,false);
 	if(compFiles && compFiles.length)

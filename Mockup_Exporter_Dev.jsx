@@ -20,7 +20,7 @@ function container()
 	var valid = true;
 	var scriptName = "3D_mockup_exporter";
 
-	// function getUtilities()
+	function getUtilities()
 	{
 		var result;
 		var user,networkPath,localPath,utilPath;

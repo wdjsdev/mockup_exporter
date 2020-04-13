@@ -19,14 +19,14 @@ function container()
 
 	var valid = true;
 
-	// function getUtilities()
+	function getUtilities()
 	{
 		var result;
 		var user,networkPath,localPath,utilPath;
 		if($.os.match("Windows"))
 		{
 			user= $.getenv("USERNAME");
-			networkPath = "\\AD4\\Customization\\"
+			networkPath = "/AD4/Customization/"
 			// localPath = "C:/Users/" + user + "/Documents/Boombah_Script_Resources/";
 		}
 		else
@@ -60,17 +60,10 @@ function container()
 	/*****************************************************************************/
 	//==============================  Components  ===============================//
 
-	if(user === "will.dowling")
-	{
-		logDest.push(File(desktopPath + "/automation/logs/mockup_exporter_dev_log.txt"));
-	}
-	else
-	{
-		logDest.push(File("/Volumes/Customization/Library/Scripts/Script Resources/Data/.script_logs/mockup_exporter_log.txt"));
-	}
+	logDest = getLogDest();
 
 	var devComponents = desktopPath + "/automation/mockup_exporter/components";
-	var prodComponents = "/Volumes/Customization/Library/Scripts/Script Resources/components/mockup_exporter"
+	var prodComponents = "componentsPath/mockup_exporter"
 
 	var compFiles = includeComponents(devComponents,prodComponents,true);
 	if(compFiles && compFiles.length)
