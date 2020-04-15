@@ -88,7 +88,7 @@ var uvFolder = Folder(resourcePath + "Files/uv_maps"),
 
 	//export variables
 var appendages = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-	exportPath = desktopPath + "/3D_Builder_Mockups/",
+	exportPath = desktopPath + "3D_Builder_Mockups/",
 	exportFileName,
 	exportFile,
 	exportedFileIndex = 1;
@@ -110,4 +110,4 @@ var exportType = svgExportType;
 var exportOptions = svgExportOptions;
 var exportExtension = svgExt;
 
-var devExportPath = desktopPath + "/3D_Builder_SVGs";
+var devExportPath = desktopPath + "3D_Builder_SVGs";
