@@ -20,15 +20,15 @@
 		var valid = true;
 		var scriptName = "3d_builder_blank_svg_exporter"
 
-		function getUtilities()
+		function getUtilities(mode)
 		{
 			var result;
 			var user,networkPath,localPath,utilPath;
 			if($.os.match("Windows"))
 			{
-				user= $.getenv("USERNAME");
 				networkPath = "//AD4/Customization/";
-				// networkPath = "//N:/"
+				// localPath = "~/Documents/Boombah_Script_Resources/utilities/";
+				localPath = "~/Desktop/automation/utilities/";
 			}
 			else
 			{
@@ -37,19 +37,30 @@
 				localPath = "/Volumes/Macintosh HD/Users/" + user + "/Documents/Boombah_Script_Resources/"
 			}
 
-			utilPath = networkPath + "Library/Scripts/Script Resources/Data/";
+			if(mode === "dev")
+			{
+				utilPath = localPath;
+			}
+			else
+			{
+				utilPath = networkPath + "Library/Scripts/Script Resources/Data/";
+			}
+			
 			if(Folder(utilPath).exists)
 			{
 				result = utilPath;
 			}
+			else{
+				result = Folder.selectDialog("utilities").fullName + "/";
+			}
 			return result;
 
 		}
-		var utilitiesPath = getUtilities();
+		var utilitiesPath = getUtilities("dev");
 		if(utilitiesPath)
 		{
-			eval("#include \"" + utilitiesPath + "Utilities_Container.jsxbin" + "\"");
-			eval("#include \"" + utilitiesPath + "Batch_Framework.jsxbin" + "\"");
+			eval("#include \"" + utilitiesPath + "Utilities_Container.js" + "\"");
+			eval("#include \"" + utilitiesPath + "Batch_Framework.js" + "\"");
 		}
 		else
 		{
@@ -58,6 +69,7 @@
 		}
 
 		LIVE_LOGGING = true;
+		user = "will.dowling";
 
 
 
