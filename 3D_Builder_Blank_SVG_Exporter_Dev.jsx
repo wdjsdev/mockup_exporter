@@ -20,56 +20,43 @@
 		var valid = true;
 		var scriptName = "3d_builder_blank_svg_exporter"
 
-		function getUtilities(mode)
+		function getUtilities()
 		{
 			var result;
-			var user,networkPath,localPath,utilPath;
+			var networkPath,utilPath;
 			if($.os.match("Windows"))
 			{
 				networkPath = "//AD4/Customization/";
-				// localPath = "~/Documents/Boombah_Script_Resources/utilities/";
-				localPath = "~/Desktop/automation/utilities/";
 			}
 			else
 			{
-				user = $.getenv("USER");
 				networkPath = "/Volumes/Customization/";
-				localPath = "/Volumes/Macintosh HD/Users/" + user + "/Documents/Boombah_Script_Resources/"
 			}
 
-			if(mode === "dev")
-			{
-				utilPath = localPath;
-			}
-			else
-			{
-				utilPath = networkPath + "Library/Scripts/Script Resources/Data/";
-			}
+
+			utilPath = decodeURI(networkPath + "Library/Scripts/Script Resources/Data/");
+
 			
 			if(Folder(utilPath).exists)
 			{
 				result = utilPath;
 			}
-			else{
-				result = Folder.selectDialog("utilities").fullName + "/";
-			}
+
 			return result;
 
 		}
-		var utilitiesPath = getUtilities("dev");
+
+		var utilitiesPath = getUtilities();
 		if(utilitiesPath)
 		{
-			eval("#include \"" + utilitiesPath + "Utilities_Container.js" + "\"");
-			eval("#include \"" + utilitiesPath + "Batch_Framework.js" + "\"");
+			eval("#include \"" + utilitiesPath + "Utilities_Container.jsxbin" + "\"");
+			eval("#include \"" + utilitiesPath + "Batch_Framework.jsxbin" + "\"");
 		}
 		else
 		{
 			alert("Failed to find the utilities..");
 			return false;	
 		}
-
-		LIVE_LOGGING = true;
-		user = "will.dowling";
 
 
 
@@ -156,8 +143,8 @@
 
 		log.h("Beginning Blank SVG Exporter Script")
 
-		// batchInit(execute,"Exported svg versions of blank styles");
-		execute();
+		batchInit(execute,"Exported svg versions of blank styles");
+		// execute();
 
 
 		//=================================  /Procedure  =================================//
