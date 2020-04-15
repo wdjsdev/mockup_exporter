@@ -74,7 +74,7 @@ var garmentsNeeded = [],
 
 
 	//uv file variables
-var uvFolder = Folder(resourceFolder + "Files/uv_maps"),
+var uvFolder = Folder(resourcePath + "Files/uv_maps"),
 	uvFile,
 	uvLayers,
 	uvArtboards,

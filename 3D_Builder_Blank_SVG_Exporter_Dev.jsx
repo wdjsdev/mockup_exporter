@@ -144,7 +144,8 @@
 
 		log.h("Beginning Blank SVG Exporter Script")
 
-		batchInit(execute,"Exported svg versions of blank styles");
+		// batchInit(execute,"Exported svg versions of blank styles");
+		execute();
 
 
 		//=================================  /Procedure  =================================//
