@@ -37,11 +37,12 @@ var devMode = false;
 	////////////
 
 	//get the mockup_exporter_garment_data.js file
-var dataFile = File(dataPath + "/mockup_exporter_garment_data.js");
+	var exporterDataPath = decodeURI(dataPath + "mockup_exporter_garment_data.js");
+	var mockupExporterDataFile = File(exporterDataPath);
 
-dataFile.open("r");
-eval(dataFile.read());
-dataFile.close();
+	mockupExporterDataFile.open("r");
+	eval(mockupExporterDataFile.read());
+	mockupExporterDataFile.close();
 
 
 	//master file variables

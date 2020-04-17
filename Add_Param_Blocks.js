@@ -22,28 +22,29 @@ function container()
 	function getUtilities()
 	{
 		var result;
-		var user,networkPath,localPath,utilPath;
+		var networkPath,utilPath;
 		if($.os.match("Windows"))
 		{
-			user= $.getenv("USERNAME");
-			networkPath = "/AD4/Customization/"
-			// localPath = "C:/Users/" + user + "/Documents/Boombah_Script_Resources/";
+			networkPath = "//AD4/Customization/";
 		}
 		else
 		{
-			user = $.getenv("USER");
 			networkPath = "/Volumes/Customization/";
-			localPath = "/Volumes/Macintosh HD/Users/" + user + "/Documents/Boombah_Script_Resources/"
 		}
 
-		utilPath = networkPath + "Library/Scripts/Script Resources/Data/";
+
+		utilPath = decodeURI(networkPath + "Library/Scripts/Script Resources/Data/");
+
+		
 		if(Folder(utilPath).exists)
 		{
 			result = utilPath;
 		}
+
 		return result;
 
 	}
+
 	var utilitiesPath = getUtilities();
 	if(utilitiesPath)
 	{
@@ -54,7 +55,7 @@ function container()
 	{
 		alert("Failed to find the utilities..");
 		return false;	
-	}
+	}	
 
 
 	/*****************************************************************************/

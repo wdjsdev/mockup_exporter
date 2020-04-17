@@ -13,28 +13,29 @@ function setupUv()
 	function getUtilities()
 	{
 		var result;
-		var user,networkPath,localPath,utilPath;
+		var networkPath,utilPath;
 		if($.os.match("Windows"))
 		{
-			user= $.getenv("USERNAME");
-			networkPath = "/AD4/Customization/"
-			// localPath = "C:/Users/" + user + "/Documents/Boombah_Script_Resources/";
+			networkPath = "//AD4/Customization/";
 		}
 		else
 		{
-			user = $.getenv("USER");
 			networkPath = "/Volumes/Customization/";
-			localPath = "/Volumes/Macintosh HD/Users/" + user + "/Documents/Boombah_Script_Resources/"
 		}
-f
-		utilPath = networkPath + "Library/Scripts/Script Resources/Data/";
+
+
+		utilPath = decodeURI(networkPath + "Library/Scripts/Script Resources/Data/");
+
+		
 		if(Folder(utilPath).exists)
 		{
 			result = utilPath;
 		}
+
 		return result;
 
 	}
+
 	var utilitiesPath = getUtilities();
 	if(utilitiesPath)
 	{
@@ -50,8 +51,8 @@ f
 
 	logDest.push(getLogDest());
 
-	var devComponents = desktopPath + "/automation/mockup_exporter/components";
-	var prodComponents = "componentsPathmockup_exporter"
+	var devComponents = desktopPath + "automation/mockup_exporter/components";
+	var prodComponents = componentsPath + "mockup_exporter"
 
 	var compFiles = includeComponents(devComponents,prodComponents,false);
 	if(compFiles && compFiles.length)
@@ -60,7 +61,8 @@ f
 		{
 			try
 			{
-				eval("#include \"" + compFiles[x].fsName + "\"");
+				$.writeln(compFiles[x].name);
+				eval("#include \"" + decodeURI(compFiles[x].fullName) + "\"");
 			}
 			catch(e)
 			{
