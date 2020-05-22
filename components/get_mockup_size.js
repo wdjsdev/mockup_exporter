@@ -16,7 +16,8 @@ function getMockupSize()
 {
 	var curData;
 
-	eval("#include \"" + centralLibraryFile.fsName + "\"");
+	// eval("#include \"" + centralLibraryFile.fsName + "\"");
+	eval("#include \"" + centralLibraryPath + "\"");
 	if(prepressInfo)
 	{
 		curData = getLibraryEntry(prepressInfo,curGarmentCode);

@@ -1,8 +1,5 @@
 function updateWrongPlaceholderColors()
 {
-	var valid = true;
-	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
-	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
 	function exec()
 	{
 		var docRef = app.activeDocument;

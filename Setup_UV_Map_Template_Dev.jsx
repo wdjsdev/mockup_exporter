@@ -10,19 +10,57 @@ function setupUv()
 		return;
 	}
 
-	//Production Utilities
-	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Utilities_Container.jsxbin\"");
-	eval("#include \"/Volumes/Customization/Library/Scripts/Script Resources/Data/Batch_Framework.jsxbin\"");
-	
-	//Dev Utilities
-	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Utilities_Container.js\"");
-	// eval("#include \"/Volumes/Macintosh HD/Users/will.dowling/Desktop/automation/utilities/Batch_Framework.js\"");
+	function getUtilities()
+	{
+		var result = [];
+		var utilPath = "/Volumes/Customization/Library/Scripts/Script_Resources/Data/";
+		var ext = ".jsxbin"
+
+		//check for dev utilities preference file
+		var devUtilitiesPreferenceFile = File("~/Documents/script_preferences/dev_utilities.txt");
+
+		if(devUtilitiesPreferenceFile.exists)
+		{
+			devUtilitiesPreferenceFile.open("r");
+			var prefContents = devUtilitiesPreferenceFile.read();
+			devUtilitiesPreferenceFile.close();
+			if(prefContents === "true")
+			{
+				utilPath = "~/Desktop/automation/utilities/";
+				ext = ".js";
+			}
+		}
+
+		if($.os.match("Windows"))
+		{
+			utilPath = utilPath.replace("/Volumes/","//AD4/");
+		}
+
+		result.push(utilPath + "Utilities_Container" + ext);
+		result.push(utilPath + "Batch_Framework" + ext);
+
+		if(!result.length)
+		{
+			valid = false;
+			alert("Failed to find the utilities.");
+		}
+		return result;
+
+	}
+
+	var utilities = getUtilities();
+	for(var u=0,len=utilities.length;u<len;u++)
+	{
+		eval("#include \"" + utilities[u] + "\"");	
+	}
+
+	if(!valid)return;
 	
 
 	logDest.push(getLogDest());
 
-	var devComponents = desktopPath + "/automation/mockup_exporter/components";
-	var prodComponents = "/Volumes/Customization/Library/Scripts/Script Resources/components/mockup_exporter"
+	var devComponents = desktopPath + "automation/mockup_exporter/components";
+	var prodComponents = componentsPath + "mockup_exporter"
 
 	var compFiles = includeComponents(devComponents,prodComponents,false);
 	if(compFiles && compFiles.length)
@@ -31,7 +69,8 @@ function setupUv()
 		{
 			try
 			{
-				eval("#include \"" + compFiles[x].fsName + "\"");
+				$.writeln(compFiles[x].name);
+				eval("#include \"" + decodeURI(compFiles[x].fullName) + "\"");
 			}
 			catch(e)
 			{

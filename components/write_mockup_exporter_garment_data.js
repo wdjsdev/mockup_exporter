@@ -19,12 +19,12 @@
 
 function writeMockupExporterGarmentData(nonArtworkDisplayBlocks,flipCollars)
 {
-	var dataFile = File(dataPath + "/mockup_exporter_garment_data.js");
+
 
 	var parenPat = /[\(\)]/g;
 	
-	//include the dataFile 
-	eval("#include \"" + dataFile.fsName + "\"");
+	//include the mockupExporterDataFile 
+	eval("#include \"" + exporterDataPath + "\"");
 
 	if(mockupExporterGarmentData[curGarmentCode] && !confirmProceed())
 	{
@@ -37,9 +37,9 @@ function writeMockupExporterGarmentData(nonArtworkDisplayBlocks,flipCollars)
 	var writeStr = "var mockupExporterGarmentData = ";
 	writeStr += JSON.stringify(mockupExporterGarmentData).replace(parenPat,"");
 	
-	dataFile.open("w");
-	dataFile.write(writeStr);
-	dataFile.close();
+	mockupExporterDataFile.open("w");
+	mockupExporterDataFile.write(writeStr);
+	mockupExporterDataFile.close();
 
 
 

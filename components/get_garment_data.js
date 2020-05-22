@@ -98,8 +98,13 @@ function getGarmentData()
 		}
 
 
+		//updating the garCodePat regex to acommodate new garment
+		//code formatting, example below
+			//MBB-0100200
+
 		//validate the garment code
-		var garCodePat = /[fp][ds][-_]\d{3,4}[a-z]?/i;
+		// var garCodePat = /[fp][ds][-_]\d{3,4}[a-z]?/i;
+		var garCodePat = /^[a-z]*[-_]\d{3,}([a-z]*)?/i;
 		if(!garCodePat.test(garCodeInput.text))
 		{
 			alert("Invalid Garment Code. Please try again");

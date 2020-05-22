@@ -37,8 +37,12 @@ var devMode = false;
 	////////////
 
 	//get the mockup_exporter_garment_data.js file
-var dataFile = File(dataPath + "/mockup_exporter_garment_data.js");
-eval("#include \"" + dataFile.fsName + "\"");
+	var exporterDataPath = decodeURI(dataPath + "mockup_exporter_garment_data.js");
+	var mockupExporterDataFile = File(exporterDataPath);
+
+	mockupExporterDataFile.open("r");
+	eval(mockupExporterDataFile.read());
+	mockupExporterDataFile.close();
 
 
 	//master file variables
@@ -71,7 +75,7 @@ var garmentsNeeded = [],
 
 
 	//uv file variables
-var uvFolder = Folder("/Volumes/Customization/Library/Scripts/Script Resources/Files/uv_maps"),
+var uvFolder = Folder(resourcePath + "Files/uv_maps"),
 	uvFile,
 	uvLayers,
 	uvArtboards,
@@ -85,8 +89,7 @@ var uvFolder = Folder("/Volumes/Customization/Library/Scripts/Script Resources/F
 
 	//export variables
 var appendages = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-	// exportPath = "/Volumes/Customization/Library/Scripts/Script Resources/Files/3D_Builder_SVGs",
-	exportPath = desktopPath + "/3D_Builder_Mockups/",
+	exportPath = desktopPath + "3D_Builder_Mockups/",
 	exportFileName,
 	exportFile,
 	exportedFileIndex = 1;
@@ -108,4 +111,4 @@ var exportType = svgExportType;
 var exportOptions = svgExportOptions;
 var exportExtension = svgExt;
 
-var devExportPath = desktopPath + "/3D_Builder_SVGs";
+var devExportPath = desktopPath + "3D_Builder_SVGs";

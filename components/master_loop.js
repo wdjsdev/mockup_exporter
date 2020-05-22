@@ -30,9 +30,9 @@ function masterLoop()
 		curGarmentCode = getCode(curGarmentLayer.name);
 
 		var paramLayerExists = false;
-		for(var x=0,len=mockupLay.layers.length;x<len && !paramLayerExists;x++)
+		for(var y=0,ylen=mockupLay.layers.length;y<ylen && !paramLayerExists;y++)
 		{
-			if(mockupLay.layers[x].name === "paramcolors" && mockupLay.layers[x].pageItems.length)
+			if(mockupLay.layers[y].name === "paramcolors" && mockupLay.layers[y].pageItems.length)
 			{
 				paramLayerExists = true;
 			}
