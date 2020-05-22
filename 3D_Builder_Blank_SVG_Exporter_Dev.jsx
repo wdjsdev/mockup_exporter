@@ -1,163 +1,171 @@
-	/*
+/*
 
-	Script Name: export_mockup
-	Author: William Dowling
-	Build Date: 07 August, 2018
-	Description: open the 3d mockup template file for the current garment
-					find the mockup size for the current garment
-					and duplicate one of each garment piece
-					into the 3d mockup template, update the colors
-					to match the paramcolor blocks. align the pieces
-					to the matching guide boxes and export the file
-					for the 3d builder. 
-		
-		
-	*/
-	#target Illustrator
-	function container()
+Script Name: export_mockup
+Author: William Dowling
+Build Date: 07 August, 2018
+Description: open the 3d mockup template file for the current garment
+				find the mockup size for the current garment
+				and duplicate one of each garment piece
+				into the 3d mockup template, update the colors
+				to match the paramcolor blocks. align the pieces
+				to the matching guide boxes and export the file
+				for the 3d builder. 
+	
+	
+*/
+#target Illustrator
+function container()
+{
+
+	var valid = true;
+	var scriptName = "3d_builder_blank_svg_exporter"
+
+	function getUtilities()
 	{
+		var result = [];
+		var utilPath = "/Volumes/Customization/Library/Scripts/Script_Resources/Data/";
+		var ext = ".jsxbin"
 
-		var valid = true;
-		var scriptName = "3d_builder_blank_svg_exporter"
+		//check for dev utilities preference file
+		var devUtilitiesPreferenceFile = File("~/Documents/script_preferences/dev_utilities.txt");
 
-		function getUtilities()
+		if(devUtilitiesPreferenceFile.exists)
 		{
-			var result;
-			var networkPath,utilPath;
-			if($.os.match("Windows"))
+			devUtilitiesPreferenceFile.open("r");
+			var prefContents = devUtilitiesPreferenceFile.read();
+			devUtilitiesPreferenceFile.close();
+			if(prefContents === "true")
 			{
-				networkPath = "//AD4/Customization/";
-			}
-			else
-			{
-				networkPath = "/Volumes/Customization/";
-			}
-
-
-			utilPath = decodeURI(networkPath + "Library/Scripts/Script Resources/Data/");
-
-			
-			if(Folder(utilPath).exists)
-			{
-				result = utilPath;
-			}
-
-			return result;
-
-		}
-
-		var utilitiesPath = getUtilities();
-		if(utilitiesPath)
-		{
-			eval("#include \"" + utilitiesPath + "Utilities_Container.jsxbin" + "\"");
-			eval("#include \"" + utilitiesPath + "Batch_Framework.jsxbin" + "\"");
-		}
-		else
-		{
-			alert("Failed to find the utilities..");
-			return false;	
-		}
-
-
-
-
-
-		/*****************************************************************************/
-		//==============================  Components  ===============================//
-
-		logDest.push(getLogDest());
-
-		var devComponents = desktopPath + "automation/mockup_exporter/components";
-		var prodComponents = componentsPath + "mockup_exporter"
-
-		var compFiles = includeComponents(devComponents,prodComponents,false);
-		var curFilePath;
-		if(compFiles && compFiles.length)
-		{
-			for(var x=0,len=compFiles.length;x<len;x++)
-			{
-				// curFilePath = compFiles[x].fsName.toString().replace(/\\/g,"\\\\");
-				curFilePath = compFiles[x].fullName;
-				try
-				{
-					eval("#include \"" + curFilePath + "\"");
-					log.l("Successfully included: " + curFilePath);
-				}
-				catch(e)
-				{
-					errorList.push("Failed to include the component: " + compFiles[x].name);
-					log.e("Failed to include the component: " + compFiles[x].name + "::System Error Message: " + e + "::System Error Line: " + e.line);
-					valid = false;
-				}
+				utilPath = "~/Desktop/automation/utilities/";
+				ext = ".js";
 			}
 		}
-		else
+
+		if($.os.match("Windows"))
+		{
+			utilPath = utilPath.replace("/Volumes/","//AD4/");
+		}
+
+		result.push(utilPath + "Utilities_Container" + ext);
+		result.push(utilPath + "Batch_Framework" + ext);
+
+		if(!result.length)
 		{
 			valid = false;
-			errorList.push("Failed to find any of the necessary components for this script to work.");
-			log.e("Failed to include any components. Exiting script.");
+			alert("Failed to find the utilities.");
 		}
-
-
-		//=============================  /Components  ===============================//
-		/*****************************************************************************/
-
-
-
-		/*****************************************************************************/
-		//=================================  Procedure  =================================//
-		
-		function execute()
-		{
-			initMockupExporter();
-
-			devMode = true;
-
-			//create the cleanup_swatches action
-			// createCleanupSwatchesAction();
-			createAction("cleanup_swatches",CLEANUP_SWATCHES_ACTION_STRING);
-
-			if(devMode)
-			{
-				updateWrongPlaceholderColors();
-			}
-
-			layers[0].name = layers[0].name.replace("FD_","FD-");
-			layers[0].name = layers[0].name.replace("_0","_10");
-
-			log.l("Mockup Exporter Initialized for document: " + docRef.name);
-			if(valid)
-			{
-				valid = getGarments(docRef);
-			}
-
-			if(valid)
-			{
-				log.l("Successfully gathered garments.");
-				log.l("garmentsNeeded = " + garmentsNeeded);
-				valid = masterLoop();
-			}
-
-			removeAction("cleanup_swatches");
-		}
-
-		log.h("Beginning Blank SVG Exporter Script")
-
-		batchInit(execute,"Exported svg versions of blank styles");
-		// execute();
-
-
-		//=================================  /Procedure  =================================//
-		/*****************************************************************************/
-
-		if(errorList.length>0)
-		{
-			sendErrors(errorList);
-		}
-
-		printLog();
-
-		return valid
+		return result;
 
 	}
-	container();
+
+	var utilities = getUtilities();
+	for(var u=0,len=utilities.length;u<len;u++)
+	{
+		eval("#include \"" + utilities[u] + "\"");	
+	}
+
+	if(!valid)return;
+
+
+
+
+
+	/*****************************************************************************/
+	//==============================  Components  ===============================//
+
+	logDest.push(getLogDest());
+
+	var devComponents = desktopPath + "automation/mockup_exporter/components";
+	var prodComponents = componentsPath + "mockup_exporter"
+
+	var compFiles = includeComponents(devComponents,prodComponents,false);
+	var curFilePath;
+	if(compFiles && compFiles.length)
+	{
+		for(var x=0,len=compFiles.length;x<len;x++)
+		{
+			// curFilePath = compFiles[x].fsName.toString().replace(/\\/g,"\\\\");
+			curFilePath = compFiles[x].fullName;
+			try
+			{
+				eval("#include \"" + curFilePath + "\"");
+				log.l("Successfully included: " + curFilePath);
+			}
+			catch(e)
+			{
+				errorList.push("Failed to include the component: " + compFiles[x].name);
+				log.e("Failed to include the component: " + compFiles[x].name + "::System Error Message: " + e + "::System Error Line: " + e.line);
+				valid = false;
+			}
+		}
+	}
+	else
+	{
+		valid = false;
+		errorList.push("Failed to find any of the necessary components for this script to work.");
+		log.e("Failed to include any components. Exiting script.");
+	}
+
+
+	//=============================  /Components  ===============================//
+	/*****************************************************************************/
+
+
+
+	/*****************************************************************************/
+	//=================================  Procedure  =================================//
+	
+	function execute()
+	{
+		initMockupExporter();
+
+		devMode = true;
+
+		//create the cleanup_swatches action
+		// createCleanupSwatchesAction();
+		createAction("cleanup_swatches",CLEANUP_SWATCHES_ACTION_STRING);
+
+		if(devMode)
+		{
+			updateWrongPlaceholderColors();
+		}
+
+		layers[0].name = layers[0].name.replace("FD_","FD-");
+		layers[0].name = layers[0].name.replace("_0","_10");
+
+		log.l("Mockup Exporter Initialized for document: " + docRef.name);
+		if(valid)
+		{
+			valid = getGarments(docRef);
+		}
+
+		if(valid)
+		{
+			log.l("Successfully gathered garments.");
+			log.l("garmentsNeeded = " + garmentsNeeded);
+			valid = masterLoop();
+		}
+
+		removeAction("cleanup_swatches");
+	}
+
+	log.h("Beginning Blank SVG Exporter Script")
+
+	batchInit(execute,"Exported svg versions of blank styles");
+	// execute();
+
+
+	//=================================  /Procedure  =================================//
+	/*****************************************************************************/
+
+	if(errorList.length>0)
+	{
+		sendErrors(errorList);
+	}
+
+	printLog();
+
+	return valid
+
+}
+container();
