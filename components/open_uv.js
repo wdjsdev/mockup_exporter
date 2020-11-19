@@ -17,14 +17,21 @@ function openUV(garmentCode)
 {
 	log.l("Opening UV for " + garmentCode);
 	var result;
-	var files = uvFolder.getFiles();
 
-	for (var x = 0, len = files.length; x < len && !result; x++)
+
+	result = File(uvFolderPath + garmentCode + ".ait");
+
+	if(!result || !result.exists)
 	{
-		if (files[x].name === garmentCode + ".ait")
+		var files = uvFolder.getFiles();
+
+		for (var x = 0, len = files.length; x < len && !result; x++)
 		{
-			result = files[x];
-			log.l("UV file was identified as " + result.name);
+			if (files[x].name === garmentCode + ".ait")
+			{
+				result = files[x];
+				log.l("UV file was identified as " + result.name);
+			}
 		}
 	}
 

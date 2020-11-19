@@ -29,6 +29,19 @@ function masterLoop()
 		curGarmentLayer = garmentsNeeded[x];		
 		curGarmentCode = getCode(curGarmentLayer.name);
 
+		if(curGarmentCode)
+		{
+			//add the garment code to the end of the export path
+			//so that the files are saved into subfolders by garment code
+			//all the FD-161 mockups will go into a FD-161 folder.
+			networkExportPath += curGarmentCode + "/";
+		}
+		else
+		{
+			log.e("failed to determine the garment code. continuing loop");
+			continue;
+		}
+
 		var paramLayerExists = false;
 		for(var y=0,ylen=mockupLay.layers.length;y<ylen && !paramLayerExists;y++)
 		{
@@ -53,11 +66,6 @@ function masterLoop()
 			}
 		}
 
-		if(devMode)
-		{
-			exportPath = devExportPath + "/" + curGarmentCode + "_SVGs";
-		}
-
 		getMockupSize();
 		
 		if (!openUV(curGarmentCode))
@@ -78,7 +86,7 @@ function masterLoop()
 
 		uvFile.activate();
 
-		if(mockupExporterGarmentData[curGarmentCode].flipCollars)
+		if(mockupExporterGarmentData[curGarmentCode] && mockupExporterGarmentData[curGarmentCode].flipCollars)
 		{
 			flipCollars();
 		}
@@ -122,7 +130,11 @@ function masterLoop()
 
 		exportUV();
 
-		filesToClose.push(uvFile);
+		if(blankMode)
+		{
+			filesToClose.push(uvFile);
+		}
+		
 
 	}
 

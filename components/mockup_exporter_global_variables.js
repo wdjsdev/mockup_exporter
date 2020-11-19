@@ -30,6 +30,11 @@
 	
 var devMode = false;
 
+//blank mode is for the 3d blank mockup exporter
+//for this mode we need to export and fix svg files
+//otherwise we'll just export jpgs
+var blankMode = false;
+
 	////////////
 
 	//dev mode
@@ -75,7 +80,8 @@ var garmentsNeeded = [],
 
 
 	//uv file variables
-var uvFolder = Folder(resourcePath + "Files/uv_maps"),
+var uvFolderPath = resourcePath + "Files/uv_maps/",
+	uvFolder = Folder(uvFolderPath),
 	uvFile,
 	uvLayers,
 	uvArtboards,
@@ -89,14 +95,14 @@ var uvFolder = Folder(resourcePath + "Files/uv_maps"),
 
 	//export variables
 var appendages = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-	exportPath = desktopPath + "3D_Builder_Mockups/",
+	localExportPath = desktopPath + "3D_Builder_Mockups/",
+	networkExportPath = customizationPath + "Order Mockup Files/",
 	exportFileName,
-	exportFile,
-	exportedFileIndex = 1;
+	exportFile;
 
 	//JPG export options
 var jpgExportType = ExportType.JPEG;
-	jpgExportOptions = new ExportOptionsJPEG();
+var	jpgExportOptions = new ExportOptionsJPEG();
 	jpgExportOptions.artBoardClipping = true;
 	jpgExportOptions.qualitySetting = 100;
 	jpgExt = ".jpg";

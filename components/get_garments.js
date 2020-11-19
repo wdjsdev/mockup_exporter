@@ -32,15 +32,24 @@ function getGarments()
 		result = false;
 		errorList.push("No converted template garments were found in this master file.");
 	}
-	else if(garmentLayers.length === 1)
-	{
-		garmentsNeeded = [garmentLayers[0]];
-	}
 	else
-	{	
-		selectGarmentsToExport();
-		garmentsNeeded = selectedGarments;
+	{
+		garmentsNeeded = [garmentLayers[0]];	
 	}
+
+	//disabling this for now because i don't think it ever gets used..
+	//and it will be an annoying dialog to get every time someone wants
+	//to export a mockup.
+
+	// else if(garmentLayers.length === 1 || autoMode)
+	// {
+	// 	garmentsNeeded = [garmentLayers[0]];
+	// }
+	// else
+	// {	
+	// 	selectGarmentsToExport();
+	// 	garmentsNeeded = selectedGarments;
+	// }
 
 	return result;
 

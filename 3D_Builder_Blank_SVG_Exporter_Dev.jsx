@@ -120,6 +120,7 @@ function container()
 		initMockupExporter();
 
 		devMode = true;
+		blankMode = true;
 
 		//create the cleanup_swatches action
 		// createCleanupSwatchesAction();
