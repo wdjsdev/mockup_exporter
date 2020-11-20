@@ -87,11 +87,12 @@ function container()
 		{
 			try
 			{
-				eval("#include \"" + compFiles[x].fsName + "\"");
+				eval("#include \"" + compFiles[x].fullName + "\"");
 			}
 			catch(e)
 			{
-				errorList.push("Failed to include the component: " + compFiles[x].name);
+				// errorList.push("Failed to include the component: " + compFiles[x].name);
+				errorList.push("Failed to include the component: " + compFiles[x].name + "::System Error Message: " + e + "::System Error Line: " + e.line);
 				log.e("Failed to include the component: " + compFiles[x].name + "::System Error Message: " + e + "::System Error Line: " + e.line);
 				valid = false;
 			}
@@ -103,6 +104,7 @@ function container()
 		errorList.push("Failed to find any of the necessary components for this script to work.");
 		log.e("Failed to include any components. Exiting script.");
 	}
+
 
 	//=============================  /Components  ===============================//
 	/*****************************************************************************/
@@ -123,8 +125,6 @@ function container()
 			docRef.save();
 		}
 
-		// layers[0].name = layers[0].name.replace("FD_","FD-");
-		// layers[0].name = layers[0].name.replace("_0","_10");
 
 		log.l("Mockup Exporter Initialized for document: " + docRef.name);
 		if(valid)
@@ -140,7 +140,11 @@ function container()
 		}
 	}
 
+
+
 	initMockupExporter();
+
+	printDesignNumberOnMockup();
 
 
 	log.h("Exporting standard jpg mockup.");
@@ -169,10 +173,12 @@ function container()
 		//log.l("Failed to unload the apply swatch action.. That probably means the action didn't get created properly..");
 	}
 
+	docRef.activate();
 
-	if(app.activeDocument.name.toLowerCase().indexOf("untitled") === -1)
+
+	if(docRef.name.toLowerCase().indexOf("untitled") === -1)
 	{
-		app.activeDocument.save();
+		docRef.save();
 	}
 
 	//=================================  /Procedure  =================================//

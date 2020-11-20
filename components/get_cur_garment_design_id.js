@@ -16,7 +16,7 @@
 
 function getCurGarmentDesignId()
 {
-	var result,input;
+	var result,input,w;
 	var designIdPattern = /[a-z0-9]{12}/i;
 
 
@@ -42,7 +42,22 @@ function getCurGarmentDesignId()
 		}
 		else
 		{
-			result = promptForDesignId();
+			w = new Window("dialog","Enter the Design ID");
+			w.orientation = "column";
+				var topTxt = UI.static(w,"Enter the Design ID");
+					input = UI.edit(w,"",15);
+					input.addEventListener("keydown",function(k)
+					{
+						if(k.keyName === "Enter")
+						{
+							submit();
+						}
+					})
+				var btnGroup = UI.group(w);
+					var cancelBtn = UI.button(btnGroup,"Cancel",cancel);
+					var submitBtn = UI.button(btnGroup,"Submit",submit);
+
+			w.show();
 		}
 	}
 
@@ -50,25 +65,7 @@ function getCurGarmentDesignId()
 	
 	return result;
 
-	function promptForDesignId()
-	{
-		var w = new Window("dialog","Enter the Design ID");
-			w.orientation = "column";
-			var topTxt = UI.static(w,"Enter the Design ID");
-				input = UI.edit(w,"",15);
-				input.addEventListener("keydown",function(k)
-				{
-					if(k.keyName === "Enter")
-					{
-						submit();
-					}
-				})
-			var btnGroup = UI.group(w);
-				var cancelBtn = UI.button(btnGroup,"Cancel",cancel);
-				var submitBtn = UI.button(btnGroup,"Submit",submit);
 
-		w.show();
-	}
 
 	function cancel()
 	{

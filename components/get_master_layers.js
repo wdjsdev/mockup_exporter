@@ -42,50 +42,7 @@ function getMasterLayers()
 		return false;
 	}
 
-	infoLayer = findSpecificLayer(curGarmentLayer,"Information");
-	if(infoLayer)
-	{
-		if(devMode)
-		{
-			exportFileName = layers[0].name;
-		}
-		else
-		{
-			infoLayer.locked = false;
-			var designIdFrame = findChildByName(infoLayer,"designId","TextFrame");
-			if(designIdFrame)
-			{
-				curGarmentDesignId = designIdFrame.contents;
-			}
-			else
-			{
-				if(!devMode)
-				{
-					curGarmentDesignId = getCurGarmentDesignId();
-				}
-
-				var position = [19,-69];
-				try
-				{
-					var orderNumberFrame = infoLayer.textFrames["Order Number"];
-					position = [orderNumberFrame.left,orderNumberFrame.top - 12];
-				}
-				catch(e){};
-				var idFrame = infoLayer.textFrames.add();
-				idFrame.name = "Design ID";
-				idFrame.contents = curGarmentDesignId;
-				idFrame.position = position;
-			}
-			exportFileName = curGarmentDesignId + "-" + curOrderNumber + "-mockup";
-
-			infoLayer.locked = true;
-		}
-	}
-	else
-	{
-		errorList.push("Failed to find the Information layer for " + curGarmentLayer.name);
-		return false;	
-	}
+	
 	
 	return true;
 }
