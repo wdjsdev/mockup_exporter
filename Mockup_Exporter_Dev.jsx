@@ -151,8 +151,6 @@ function container()
 
 	exportJpgMockup();
 
-	
-
 	log.h("Beginning execution of Mockup Exporter Script.");
 
 	//create the cleanup_swatches action
