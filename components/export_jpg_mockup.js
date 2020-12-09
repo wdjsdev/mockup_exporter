@@ -34,18 +34,10 @@ function exportJpgMockup()
 			newFileName = "/Volumes" + newFileName;
 		}
 	}
-
-
-	////////////////////////
-	////////ATTENTION://////
-	//
-	//		temp logging to figure out whats wrong with jessie's machine..
-	if(user.toLowerCase().indexOf("jessie")>-1)
+	else
 	{
-		
+		newFileName = newFileName.replace(user,user.toTitleCaseAfterDots());
 	}
-	//
-	////////////////////////
 	
 	log.l("finished updating newFileName::newFileName = "+ newFileName);
 	
@@ -59,7 +51,7 @@ function exportJpgMockup()
 	
 
 	actionString = actionString.split("\n");
-
+	
 	try
 	{
 		createAction("export jpg",actionString);
