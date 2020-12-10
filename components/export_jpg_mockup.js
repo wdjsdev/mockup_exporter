@@ -36,8 +36,7 @@ function exportJpgMockup()
 	}
 	else
 	{
-		// newFileName = newFileName.replace(user,user.toTitleCaseAfterDots());
-		newFileName = newFileName.replace(/\//g,"\\\\");
+		newFileName = decodeURI(newFileName.replace(/\//g,"\\\\"));
 	}
 	
 	log.l("finished updating newFileName::newFileName = "+ newFileName);
