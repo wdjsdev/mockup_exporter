@@ -20,9 +20,11 @@ function exportJpgMockup()
 	var ab = doc.artboards;
 
 	var newFileName = doc.fullName.toString();
+	log.l("newFileName = " + newFileName);
 	newFileName = newFileName.replace(/\.ai[t]?/i,"");
 	newFileName = newFileName.replace(/(master)|(prepress)/i,"Mockup");
 	newFileName += ".jpg";
+	log.l("converted newFileName to: " + newFileName);
 
 
 	newFileName = decodeURI(newFileName);
@@ -36,6 +38,7 @@ function exportJpgMockup()
 	}
 	else
 	{
+		log.l("User is on a PC. converting forward slashes to backslashes");
 		newFileName = decodeURI(newFileName.replace(/\//g,"\\\\"));
 	}
 	
