@@ -29,7 +29,8 @@ function container()
 		//check for dev utilities preference file
 		var devUtilitiesPreferenceFile = File("~/Documents/script_preferences/dev_utilities.txt");
 
-		if(devUtilitiesPreferenceFile.exists)
+
+		if(devUtilitiesPreferenceFile.exists && !$.os.match("Windows"))
 		{
 			devUtilitiesPreferenceFile.open("r");
 			var prefContents = devUtilitiesPreferenceFile.read();
@@ -150,8 +151,6 @@ function container()
 	log.h("Exporting standard jpg mockup.");
 
 	exportJpgMockup();
-
-	
 
 	log.h("Beginning execution of Mockup Exporter Script.");
 

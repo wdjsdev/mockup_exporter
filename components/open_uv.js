@@ -35,7 +35,7 @@ function openUV(garmentCode)
 		}
 	}
 
-	if (result)
+	if (result && result.exists)
 	{
 		uvFile = app.open(result);
 		uvLayers = uvFile.layers;

@@ -48,6 +48,22 @@ function scalePiecesToFitGuides()
 			continue;
 		}
 
+		////////////////////////
+		////////ATTENTION://////
+		//
+		//		this is the logic for trying to subtract overlapping artwork
+		//		from the dimensions of the actual garment to ensure proper
+		//		scaling and placement on uv map.
+		// 		still in development, though.. but i need to push the changes
+		//
+		////////////////////////	
+		// uvFile.selection = null;
+		// curItem.selected = true;
+		// for(var m=0; m < curItem.pageItems.length; m++)
+		// {
+		// 	if(curItem.pageItems)
+		// }
+
 		guideDim = curGuide.width > curGuide.height ? curGuide.width : curGuide.height;
 		itemDim = curItem.width > curItem.height ? curItem.width : curItem.height;
 		// scaleFactor = ((guideDim + GARMENT_PIECE_BLEED) / itemDim) * 100;
