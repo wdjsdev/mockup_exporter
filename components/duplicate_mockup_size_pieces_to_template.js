@@ -22,6 +22,7 @@ function duplicateMockupSizePiecesToTemplate()
 
 	//move the paramColors
 	paramGroup = tmpLay.groupItems.add();
+	paramGroup.name = "paramcolors";
 	app.redraw();
 
 	releaseCompoundPaths(paramLayer.pageItems);
@@ -68,6 +69,7 @@ function duplicateMockupSizePiecesToTemplate()
 	}
 	if(curGroup)
 	{
+
 		duplicateArtwork(curGroup);
 
 		tmpArtGroup = curGroup.duplicate(uvFile);
