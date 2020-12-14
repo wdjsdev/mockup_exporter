@@ -145,7 +145,7 @@ function container()
 
 	initMockupExporter();
 
-	printDesignNumberOnMockup();
+	
 
 
 	log.h("Exporting standard jpg mockup.");
