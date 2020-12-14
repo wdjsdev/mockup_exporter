@@ -36,6 +36,11 @@ function exportJpgMockup()
 			newFileName = "/Volumes" + newFileName;
 		}
 	}
+	else if(user == "thell")
+	{
+		newFileName = newFileName.replace("C:","D:");
+		newFileName = newFileName.replace(/\//g,"\\\\");
+	}
 	else
 	{
 		log.l("User is on a PC. converting forward slashes to backslashes");
