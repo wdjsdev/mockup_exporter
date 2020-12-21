@@ -89,6 +89,7 @@ function container()
 			try
 			{
 				eval("#include \"" + compFiles[x].fullName + "\"");
+				$.writeln("included: " + compFiles[x].name);
 			}
 			catch(e)
 			{
@@ -115,6 +116,18 @@ function container()
 	/*****************************************************************************/
 	//=================================  Procedure  =================================//
 	
+
+	//test function
+	function testFunction()
+	{
+		docRef = app.activeDocument;
+		getItemDimension(docRef.pageItems[0]);
+	}
+	// testFunction();
+	// return;
+
+
+
 	function execute()
 	{
 		
@@ -145,7 +158,7 @@ function container()
 
 	initMockupExporter();
 
-	printDesignNumberOnMockup();
+	
 
 
 	log.h("Exporting standard jpg mockup.");

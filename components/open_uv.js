@@ -38,6 +38,7 @@ function openUV(garmentCode)
 	if (result && result.exists)
 	{
 		uvFile = app.open(result);
+		app.executeMenuCommand("fitin");
 		uvLayers = uvFile.layers;
 		uvSwatches = uvFile.swatches;
 		uvArtboards = uvFile.artboards;

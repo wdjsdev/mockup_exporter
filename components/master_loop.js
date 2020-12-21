@@ -59,6 +59,7 @@ function masterLoop()
 		if(!devMode)
 		{
 			curOrderNumber = getOrderNumber(docRef);
+			printDesignNumberOnMockup();
 			if(!curOrderNumber)
 			{
 				//file is unsaved

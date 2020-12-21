@@ -15,59 +15,118 @@
 
 function duplicateArtwork(curGroup)
 {
-	docRef.selection = null;
+	app.selection = null;
 	artLayer.hasSelectedArtwork = true;
-	for(var y=0,yLen = docRef.selection.length;y<yLen;y++)
+	var artItems = [];
+
+	//masksToMake is formatted like so:
+	/*
+		{
+			"XL Front Left":
+			{
+				destPiece:(the art object matching the label for this object),
+				[(art object),(art object)]
+			}
+		}
+	*/
+	//for each "dest" in the masksToMake object
+	//loop the array of art items and add each one
+	//to the clipping mask
+	var masksToMake = {};
+
+	for(var y=docRef.selection.length-1;y>=0;y--)
 	{
-		checkArtForOverlap(docRef.selection[y],curGroup);
+		artItems.push(docRef.selection[y]);
+	}
+	app.selection = null;
+
+
+	for(var x=0,len=artItems.length;x<len;x++)
+	{
+		checkArtForOverlap(artItems[x],curGroup);
 	}
 
-	docRef.selection = null;
+	var curDest;
+	for(var dest in masksToMake)
+	{
+		curDest= masksToMake[dest];
+		for(var x=0,len=curDest.art.length;x<len;x++)
+		{
+			makeMask(curDest.art[x],curDest.destPiece);
+		}
+	}
+
+	
 	return true;
 
-	function checkArtForOverlap(art,pieces)
+	function checkArtForOverlap(art,curGroup)
 	{
-		art.name = art.layer.name + "_art";
-		var dest,artCopy;
-		for(var x=0,len = pieces.pageItems.length;x<len;x++)
+		var dest,artCopy,artName;
+		artName = art.layer.name + "_art";
+		for(var x=0,len = curGroup.pageItems.length;x<len;x++)
 		{
-			dest = pieces.pageItems[x];
+			dest = curGroup.pageItems[x];
 			if(intersects(art,dest))
 			{
-				artCopy = art.duplicate(dest);
-				if(!isContainedWithin(artCopy,dest))
+				// artCopy = art.duplicate();
+				// artCopy.name = artName;
+				if(!isContainedWithin(art,dest))
 				{
-					makeMask(artCopy,dest);
+					if(!masksToMake[dest.name])
+					{
+						masksToMake[dest.name] = {};
+						masksToMake[dest.name].destPiece = dest;
+						masksToMake[dest.name].art = [];
+					}
+					masksToMake[dest.name].art.push(art);
+					// makeMask(artCopy,dest);
+				}
+				else
+				{
+					art.duplicate(dest);
 				}
 			}
 			dest = undefined;
+			docRef.selection = null;
 		}
 	}
 
 	function makeMask(art,maskShape)
 	{
 		var suffix = "_clip_mask";
-		var clipGroup;
+		var clipGroup,mask;
+		var parent = maskShape.parent;
+		var artCopy;
 		
 		try
 		{
 			clipGroup = maskShape.groupItems[maskShape.name + suffix];
+			mask = clipGroup.pageItems["clip_path"];
+			artCopy = art.duplicate(clipGroup);
+			artCopy.zOrder(ZOrderMethod.SENDTOBACK);
+
 		}
 		catch(e)
 		{
 			clipGroup = maskShape.groupItems.add();
 			clipGroup.name = maskShape.name + suffix;
+			mask = parent.pathItems.rectangle(maskShape.top,maskShape.left,maskShape.width,maskShape.height);
+			mask.name = "clip_path";
+			mask.filled = false;
+			mask.stroked = false;
+			artCopy = art.duplicate(clipGroup);
+			mask.move(clipGroup, ElementPlacement.PLACEATBEGINNING);
+			artCopy.zOrder(ZOrderMethod.SENDTOBACK);
 		}
 
-		art.moveToBeginning(clipGroup);
+		mask.clipping = true;
+		clipGroup.clipped = true;
 
-		var mask = clipGroup.pathItems.rectangle(maskShape.top,maskShape.left,maskShape.width,maskShape.height);
-		mask.filled = false;
-		mask.stroked = false;
-		clipGroup.clipping = true;
-		mask.clipped = true;
+		
 
-		return clipGroup;
+		
+
+		
 
 	}
 }

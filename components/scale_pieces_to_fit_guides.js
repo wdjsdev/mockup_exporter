@@ -27,6 +27,8 @@ function scalePiecesToFitGuides()
 	var curName,curItem,curGuide;
 	var itemDim,guideDim,scaleFactor;
 	var itemCenter,guideCenter;
+	var leftOverlap,topOverlap;
+	var clipGroup,pieceGroup;
 
 	//boolean to determine whether any appropriate guide boxes were found
 	var guidesFound = false;
@@ -48,30 +50,49 @@ function scalePiecesToFitGuides()
 			continue;
 		}
 
-		////////////////////////
-		////////ATTENTION://////
-		//
-		//		this is the logic for trying to subtract overlapping artwork
-		//		from the dimensions of the actual garment to ensure proper
-		//		scaling and placement on uv map.
-		// 		still in development, though.. but i need to push the changes
-		//
-		////////////////////////	
-		// uvFile.selection = null;
-		// curItem.selected = true;
-		// for(var m=0; m < curItem.pageItems.length; m++)
-		// {
-		// 	if(curItem.pageItems)
-		// }
+		//figure out the dimensions of curItem minus any clipped artwork
+		//basically we want the width or height of the visible group,
+		// itemDim = curItem.width > curItem.height ? curItem.width : curItem.height;
+		itemDim = getItemDimension(curItem);
+
 
 		guideDim = curGuide.width > curGuide.height ? curGuide.width : curGuide.height;
-		itemDim = curItem.width > curItem.height ? curItem.width : curItem.height;
-		// scaleFactor = ((guideDim + GARMENT_PIECE_BLEED) / itemDim) * 100;
+		
+
 		scaleFactor = (guideDim / itemDim) * 100;
 		curItem.resize(scaleFactor,scaleFactor,true,true,true,true,scaleFactor);
 
-		guideCenter = getCenterPoint(curGuide);
-		setCenterPoint(curItem,guideCenter);
+		if(!curItem.hasClipGroup)
+		{
+			log.l(curItem.name + " has no clipping masks. using center point positioning")
+			guideCenter = getCenterPoint(curGuide);
+			setCenterPoint(curItem,guideCenter);	
+		}
+		else
+		{
+			log.l(curItem.name + " has clipping masks. Using standard positioning.")
+			clipGroup = curItem.pageItems[0];
+			pieceGroup = curItem.pageItems[1];
+
+			curItem.left = curGuide.left;
+			curItem.top= curGuide.top;
+
+			leftOverlap = pieceGroup.left - clipGroup.left;
+			topOverlap = clipGroup.top - pieceGroup.top;
+			if(clipGroup.left < pieceGroup.left)
+			{
+				log.l("moving " +  curItem.name + ": " + leftOverlap + " points left.");
+				curItem.left -= leftOverlap;
+			}
+			if(clipGroup.top > pieceGroup.top)
+			{
+				log.l("moving " +  curItem.name + ": " + topOverlap + " points up.");
+				curItem.top += topOverlap;
+			}
+			
+		}
+		
+		
 
 	}
 
