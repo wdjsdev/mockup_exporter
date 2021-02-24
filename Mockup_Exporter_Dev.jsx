@@ -71,6 +71,9 @@ function container()
 	/*****************************************************************************/
 	//==============================  Components  ===============================//
 
+
+
+
 	logDest.push(getLogDest());
 
 	if(user === "will.dowling")
@@ -131,13 +134,17 @@ function container()
 	function execute()
 	{
 		
-
+		log.l("beginning execute function.");
+		log.l("docRef.fullName = " + docRef.fullName);
+		var fullFileName = docRef.fullName.toString().replace(userPathRegex,homeFolderPath);
 		//check to see if the file has been saved (or at least that it isn't called "untitled")
 		//if so, save it again.
 		if(docRef.name.toLowerCase().indexOf("untitled") === -1)
 		{
-			docRef.save();
+			log.l("saving doc");
+			docRef.saveAs(File(fullFileName));
 		}
+
 
 
 		log.l("Mockup Exporter Initialized for document: " + docRef.name);
@@ -171,6 +178,7 @@ function container()
 	// createCleanupSwatchesAction();
 	createAction("cleanup_swatches",CLEANUP_SWATCHES_ACTION_STRING);
 
+	log.l("created cleanup swatches action");
 	//run the script
 	execute();
 
