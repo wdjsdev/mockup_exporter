@@ -19,19 +19,43 @@ function recolorArtwork()
 	if(devMode)return;
 	var result = true;
 
+	//first, delete any graphic styles that exist.
+	//then replace them with graphic styles created
+	//directly from the param blocks. this way we'll be
+	//guaranteed to have the correct graphic styles
+	for(var x = uvFile.graphicStyles.length-1;x>=0;x--)
+	{
+		uvFile.graphicStyles[x].remove();
+	}
+
+	//load the "create graphic style" action
+	createAction("graphic_style_from_selection",GRAPHIC_STYLE_FROM_SELECTION_ACTION_STRING);
+
+	
+
 	var curBlock,curName;
 	for(var x = uvParamLayer.pageItems.length - 1; x>=0; x--)
 	{
+		app.selection = null;
 		curBlock = uvParamLayer.pageItems[x];
+
+
 		if(curBlock.name.indexOf("param") === -1)
 		{
 			curBlock.remove();
 			continue;
 		}
+		curBlock.selected = true;
+
+
 		curName = curBlock.name.replace("paramcolor-","");
+		app.doScript("graphic_style_from_selection","graphic_style_from_selection");
+		uvFile.graphicStyles[uvFile.graphicStyles.length-1].name = curName;
 		app.redraw();
 		changeColor(curName,curBlock);
 	}
+
+	removeAction("graphic_style_from_selection");
 
 
 	return result;
@@ -49,9 +73,17 @@ function recolorArtwork()
 			{
 				gs.applyTo(curItem);
 			}
-			else if(curItem.typename === "CompoundPathItem" && curItem.pathItems.length)
+			else if(curItem.typename === "CompoundPathItem")
 			{
-				gs.applyTo(curItem.pathItems[0]);
+				if(curItem.pathItems.length)
+				{
+					gs.applyTo(curItem.pathItems[0]);
+				}
+				
+				for(var g=0;g<curItem.groupItems.length;g++)
+				{
+					dig(curItem.groupItems[g])
+				}
 			}
 			else if(curItem.typename === "GroupItem")
 			{

@@ -96,9 +96,15 @@ var uvFolderPath = resourcePath + "Files/uv_maps/",
 	//export variables
 var appendages = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
 	localExportPath = desktopPath + "3D_Builder_Mockups/",
+
 	networkExportPath = customizationPath + "Order Mockup Files/",
 	exportFileName,
 	exportFile;
+
+	if(!Folder(localExportPath).exists)
+	{
+		Folder(localExportPath).create();
+	}
 
 	//JPG export options
 var jpgExportType = ExportType.JPEG;
