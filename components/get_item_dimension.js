@@ -2,7 +2,7 @@ function getItemDimension(item)
 {
 	log.l("getting item dimension for: " + item.name);
 	var itemDim;
-	var clipGroup = findSpecificPageItem(item,"clip_mask");
+	var clipGroup = item.typename === "GroupItem" ? findSpecificPageItem(item,"clip_mask") : undefined;
 	var pieceGroup; //group of all items except the clip group
 	log.l(item.name + ".clipGroup = " + clipGroup);
 	if(clipGroup)

@@ -183,15 +183,8 @@ function container()
 	execute();
 
 	//remove the cleanup_swatches action
-	try
-	{
-		removeAction("cleanup_swatches");
-		// app.unloadAction("cleanup_swatches","");
-	}
-	catch(e)
-	{
-		//log.l("Failed to unload the apply swatch action.. That probably means the action didn't get created properly..");
-	}
+	removeAction("cleanup_swatches");
+
 
 	docRef.activate();
 
