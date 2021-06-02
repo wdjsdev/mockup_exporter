@@ -4,13 +4,10 @@ function addParamColors()
 
 	app.executeMenuCommand("fitin");
 
-	try
-	{
-		mockupLay.layers["paramcolors"].remove();
-	}
-	catch(e){};
+	var paramLayer = findSpecificLayer(mockupLay,"paramcolors","any");
+	if(paramLayer)paramLayer.remove();
 
-	var paramLayer = mockupLay.layers.add();
+	paramLayer = mockupLay.layers.add();
 	paramLayer.name = "paramcolors";
 
 	function getPlaceholderSwatches()

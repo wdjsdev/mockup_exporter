@@ -1,32 +1,26 @@
 function getItemDimension(item)
 {
+	
 	log.l("getting item dimension for: " + item.name);
 	var itemDim;
-	var clipGroup = item.typename === "GroupItem" ? findSpecificPageItem(item,"clip_mask") : undefined;
 	var pieceGroup; //group of all items except the clip group
-	log.l(item.name + ".clipGroup = " + clipGroup);
+	var clipGroup;
+
+
+	var artGroup = findSpecificPageItem(item,"art_group","any");
+	if(artGroup)
+	{
+		clipGroup = findSpecificPageItem(artGroup,"clip_mask","any");
+	}
+
+
 	if(clipGroup)
 	{
+		item.clipMask = clipGroup.pageItems[0];
 		item.hasClipGroup = true;
-		pieceGroup = item.groupItems.add();
-		pieceGroup.name = "piece_group";
-		app.selection = null;
-		//group everything except the clip group
-		var curItem;
-		for(var x = item.pageItems.length-1;x>=0;x--)
-		{
-			curItem = item.pageItems[x];
-			if(curItem.name === clipGroup.name || curItem.name == pieceGroup.name)
-			{
-				continue;
-			}
-			item.pageItems[x].move(pieceGroup, ElementPlacement.PLACEATEND);
-		}
-		pieceGroup.zOrder(ZOrderMethod.SENDTOBACK);
-		
-		itemDim = pieceGroup.width > pieceGroup.height ? pieceGroup.width : pieceGroup.height;
-
-	}	
+		var mask = clipGroup.pathItems[0];
+		itemDim = mask.width > mask.height ? mask.width : mask.height;
+	}
 	else
 	{
 		itemDim = item.width > item.height ? item.width : item.height;

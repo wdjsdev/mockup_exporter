@@ -92,7 +92,7 @@ function container()
 			try
 			{
 				eval("#include \"" + compFiles[x].fullName + "\"");
-				$.writeln("included: " + compFiles[x].name);
+				log.l("included: " + compFiles[x].name);
 			}
 			catch(e)
 			{
@@ -114,20 +114,6 @@ function container()
 	//=============================  /Components  ===============================//
 	/*****************************************************************************/
 
-
-
-	/*****************************************************************************/
-	//=================================  Procedure  =================================//
-	
-
-	//test function
-	function testFunction()
-	{
-		docRef = app.activeDocument;
-		getItemDimension(docRef.pageItems[0]);
-	}
-	// testFunction();
-	// return;
 
 
 
@@ -162,37 +148,64 @@ function container()
 	}
 
 
+	/*****************************************************************************/
+	//=================================  Procedure  =================================//
+	function otherTestFunction(item)
+	{
+		item.hasClipGroup = true;
+		item.artGroup = item.pageItems["art_group"];
+	}
 
-	initMockupExporter();
+	//test function
+	function testFunction()
+	{
+		docRef = app.activeDocument;
+		otherTestFunction(docRef.selection[0]);
+		getItemDimension(docRef.selection[0]);
+	}
+	// testFunction();
+	// return;
+
+
 
 	
 
 
-	log.h("Exporting standard jpg mockup.");
-
-	exportJpgMockup();
-
 	log.h("Beginning execution of Mockup Exporter Script.");
 
-	//create the cleanup_swatches action
-	// createCleanupSwatchesAction();
-	createAction("cleanup_swatches",CLEANUP_SWATCHES_ACTION_STRING);
+	if(valid)
+	{
+		initMockupExporter();
+	}
 
-	log.l("created cleanup swatches action");
-	//run the script
-	execute();
+	
+
+	if(valid)
+	{
+		log.h("Exporting standard jpg mockup.");
+		exportJpgMockup();
+	}
+	
+	if(valid)
+	{
+		//run the script
+		execute();	
+	}
+	
 
 	//remove the cleanup_swatches action
 	removeAction("cleanup_swatches");
 
-
-	docRef.activate();
-
-
-	if(docRef.name.toLowerCase().indexOf("untitled") === -1)
+	if(valid)
 	{
-		docRef.save();
+		docRef.activate();
+
+		if(docRef.name.toLowerCase().indexOf("untitled") === -1)
+		{
+			docRef.save();
+		}	
 	}
+	
 
 	//=================================  /Procedure  =================================//
 	/*****************************************************************************/

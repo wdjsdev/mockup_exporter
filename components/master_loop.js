@@ -42,18 +42,16 @@ function masterLoop()
 			continue;
 		}
 
-		var paramLayerExists = false;
-		for(var y=0,ylen=mockupLay.layers.length;y<ylen && !paramLayerExists;y++)
+		if (!getMasterLayers())
 		{
-			if(mockupLay.layers[y].name === "paramcolors" && mockupLay.layers[y].pageItems.length)
-			{
-				paramLayerExists = true;
-			}
+			continue;
 		}
-		if(!paramLayerExists)
+
+
+		var paramLayer = findSpecificLayer(mockupLayer,"paramcolors","any");
+		if(!paramLayer)
 		{
 			addParamColors();
-			getParamColorValues();
 		}
 		
 		if(!devMode)
@@ -74,10 +72,7 @@ function masterLoop()
 			continue;
 		}
 		log.l("UV File successfully opened.");
-		if (!getMasterLayers())
-		{
-			continue;
-		}
+		
 
 		if (!duplicateMockupSizePiecesToTemplate(uvFile))
 		{

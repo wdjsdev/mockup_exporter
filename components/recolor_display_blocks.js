@@ -17,7 +17,7 @@ function recolorDisplayBlocks()
 {
 	var result = true;
 	var curData = mockupExporterGarmentData[curGarmentCode];
-	var index,paramBlock;
+	var index,paramBlock,display;
 	if(curData)
 	{
 		for(var x=0,len=curData.updateDisplay.length;x<len;x++)
@@ -34,22 +34,29 @@ function recolorDisplayBlocks()
 		{
 			index = 0;
 		}
-		else
+		
+		display = findSpecificPageItem(uvArtLayer,name,"any");
+		paramBlock = uvParamLayer.pageItems[index];
+
+		if(!display)
 		{
-			// index = uvParamLayer.pageItems.length - index - 1;
-			// index += 1;
-		}
-		try
-		{
-			var display = uvArtLayer.pageItems[name];
-			paramBlock = uvParamLayer.pageItems[index];
-			display.fillColor = paramBlock.fillColor;
-		}
-		catch(e)
-		{
-			log.e("Failed to recolor the " + name + " display.");
-			errorList.push("The UV Map file is either missing a \"display block\" called: " + name + ", or a param block called: C" + index + ".");
+			errorList.push("The UV Map file is missing a display block called " + name);
+			log.e("UV Map file doesn't have a display block called: " + name);
 			result = false;
 		}
+
+
+		// try
+		// {
+		// 	var display = uvArtLayer.pageItems[name];
+		// 	paramBlock = uvParamLayer.pageItems[index];
+		// 	display.fillColor = paramBlock.fillColor;
+		// }
+		// catch(e)
+		// {
+		// 	log.e("Failed to recolor the " + name + " display.");
+		// 	errorList.push("The UV Map file is either missing a \"display block\" called: " + name + ", or a param block called: C" + index + ".");
+		// 	result = false;
+		// }
 	}
 }

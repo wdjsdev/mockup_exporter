@@ -29,10 +29,9 @@ function recolorArtwork()
 	}
 
 	//load the "create graphic style" action
-	createAction("graphic_style_from_selection",GRAPHIC_STYLE_FROM_SELECTION_ACTION_STRING);
+	// createAction("graphic_style_from_selection",GRAPHIC_STYLE_FROM_SELECTION_ACTION_STRING);
 
 	
-
 	var curBlock,curName;
 	for(var x = uvParamLayer.pageItems.length - 1; x>=0; x--)
 	{
@@ -45,17 +44,21 @@ function recolorArtwork()
 			curBlock.remove();
 			continue;
 		}
-		curBlock.selected = true;
-
 
 		curName = curBlock.name.replace("paramcolor-","");
-		app.doScript("graphic_style_from_selection","graphic_style_from_selection");
-		uvFile.graphicStyles[uvFile.graphicStyles.length-1].name = curName;
-		app.redraw();
+
+		graphicStyleFromItem(curBlock,curName);
+
+		// curBlock.selected = true;
+
+		// app.doScript("graphic_style_from_selection","graphic_style_from_selection");
+		// uvFile.graphicStyles[uvFile.graphicStyles.length-1].name = curName;
+		// app.redraw();
+		// debugger;
 		changeColor(curName,curBlock);
 	}
 
-	removeAction("graphic_style_from_selection");
+	// removeAction("graphic_style_from_selection");
 
 
 	return result;
@@ -80,7 +83,7 @@ function recolorArtwork()
 					gs.applyTo(curItem.pathItems[0]);
 				}
 				
-				for(var g=0;g<curItem.groupItems.length;g++)
+				for(var g=0;curItem.groupItems && g<curItem.groupItems.length;g++)
 				{
 					dig(curItem.groupItems[g])
 				}
@@ -94,10 +97,9 @@ function recolorArtwork()
 			}
 		}
 
-
-		try
+		var gs = findSpecificGraphicStyle(uvFile,name);
+		if(gs)
 		{
-			var gs = uvFile.graphicStyles[name];
 			var curSel,item;
 			for(var cc=0,len=uvFile.selection.length;cc<len;cc++)
 			{
@@ -105,10 +107,20 @@ function recolorArtwork()
 				item = undefined;
 			}
 		}
-		catch(e)
+		else
 		{
 			uvFile.defaultFillColor = src.fillColor;
 		}
+
+		// try
+		// {
+		// 	var gs = uvFile.graphicStyles[name];
+			
+		// }
+		// catch(e)
+		// {
+		// 	uvFile.defaultFillColor = src.fillColor;
+		// }
 	}
 
 	

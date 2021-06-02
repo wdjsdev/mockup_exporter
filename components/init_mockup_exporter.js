@@ -8,4 +8,9 @@ function initMockupExporter()
 	garmentsNeeded = [];
 	tmpLay = null;
 	paramGroup = null;
+
+	//create the cleanup_swatches action
+	// createCleanupSwatchesAction();
+	createAction("cleanup_swatches",CLEANUP_SWATCHES_ACTION_STRING);
+	log.l("created cleanup swatches action");
 }
