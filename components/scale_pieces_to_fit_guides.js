@@ -73,7 +73,7 @@ function scalePiecesToFitGuides()
 			log.l(curItem.name + " has clipping masks. Using standard positioning.")
 
 			clipMask = curItem.clipMask;
-			curItem.left = curGuide.left - (curItem.left - clipMask.left);
+			curItem.left = curGuide.left - (clipMask.left - curItem.left);
 			curItem.top = curGuide.top + (curItem.top - clipMask.top);
 		}
 		
