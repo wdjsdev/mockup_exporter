@@ -28,7 +28,10 @@ function exportJpgMockup()
 
 
 	newFileName = decodeURI(newFileName);
-	newFileName = newFileName.replace(/(^.*users\/[^\/]*\/)|(^~\/)/i,homeFolderPath);
+
+	// newFileName = newFileName.replace(/(^.*users\/)|(^~\/)/i,homeFolderPath);
+	newFileName = normalizeLocalFilePath(newFileName);
+
 	if(os === "mac")
 	{
 		if(newFileName.indexOf("Volumes") === -1)

@@ -161,9 +161,9 @@ function container()
 	
 
 
-	log.h("Exporting standard jpg mockup.");
+	
 
-	exportJpgMockup();
+	
 
 	log.h("Beginning execution of Mockup Exporter Script.");
 
@@ -173,6 +173,8 @@ function container()
 
 	//run the script
 	execute();
+
+	
 
 	//remove the cleanup_swatches action
 	try
@@ -187,6 +189,8 @@ function container()
 
 	docRef.activate();
 
+	log.h("Exporting standard jpg mockup.");
+	exportJpgMockup();
 
 	if(docRef.name.toLowerCase().indexOf("untitled") === -1)
 	{
