@@ -1,3 +1,4 @@
+
 /*
 	Component Name: scale_pieces_to_fit_guides
 	Author: William Dowling
@@ -29,6 +30,7 @@ function scalePiecesToFitGuides()
 	var itemCenter,guideCenter;
 	var leftOverlap,topOverlap;
 	var clipGroup,pieceGroup;
+	var itemVb,itemW,itemH;
 
 	//boolean to determine whether any appropriate guide boxes were found
 	var guidesFound = false;
@@ -53,7 +55,12 @@ function scalePiecesToFitGuides()
 		//figure out the dimensions of curItem minus any clipped artwork
 		//basically we want the width or height of the visible group,
 		// itemDim = curItem.width > curItem.height ? curItem.width : curItem.height;
-		itemDim = getItemDimension(curItem);
+		
+		itemVb = getVisibleBounds(curItem);
+		// itemDim = getItemDimension(curItem);
+		itemW = itemVb[2] - itemVb[0];
+		itemH = itemVb[1] - itemVb[3];
+		itemDim = itemW > itemH ? itemW : itemH;
 
 
 		guideDim = curGuide.width > curGuide.height ? curGuide.width : curGuide.height;
@@ -62,35 +69,42 @@ function scalePiecesToFitGuides()
 		scaleFactor = (guideDim / itemDim) * 100;
 		curItem.resize(scaleFactor,scaleFactor,true,true,true,true,scaleFactor);
 
-		if(!curItem.hasClipGroup)
-		{
-			log.l(curItem.name + " has no clipping masks. using center point positioning")
-			guideCenter = getCenterPoint(curGuide);
-			setCenterPoint(curItem,guideCenter);	
-		}
-		else
-		{
-			log.l(curItem.name + " has clipping masks. Using standard positioning.")
-			clipGroup = curItem.pageItems[0];
-			pieceGroup = curItem.pageItems[1];
+		//center the item to the guide
+		// itemCenter = [itemVb[0] + (itemW/2), itemVb[1] - (itemH/2)];
+		
+		guideCenter = getCenterPoint(curGuide);
+		setCenterPoint(curItem, guideCenter);
 
-			curItem.left = curGuide.left;
-			curItem.top= curGuide.top;
 
-			leftOverlap = pieceGroup.left - clipGroup.left;
-			topOverlap = clipGroup.top - pieceGroup.top;
-			if(clipGroup.left < pieceGroup.left)
-			{
-				log.l("moving " +  curItem.name + ": " + leftOverlap + " points left.");
-				curItem.left -= leftOverlap;
-			}
-			if(clipGroup.top > pieceGroup.top)
-			{
-				log.l("moving " +  curItem.name + ": " + topOverlap + " points up.");
-				curItem.top += topOverlap;
-			}
+		// if(!curItem.hasClipGroup)
+		// {
+		// 	log.l(curItem.name + " has no clipping masks. using center point positioning")
+		// 	guideCenter = getCenterPoint(curGuide);
+		// 	setCenterPoint(curItem,guideCenter);	
+		// }
+		// else
+		// {
+		// 	log.l(curItem.name + " has clipping masks. Using standard positioning.")
+		// 	clipGroup = curItem.pageItems[0];
+		// 	pieceGroup = curItem.pageItems[1];
+
+		// 	curItem.left = curGuide.left;
+		// 	curItem.top= curGuide.top;
+
+		// 	leftOverlap = pieceGroup.left - clipGroup.left;
+		// 	topOverlap = clipGroup.top - pieceGroup.top;
+		// 	if(clipGroup.left < pieceGroup.left)
+		// 	{
+		// 		log.l("moving " +  curItem.name + ": " + leftOverlap + " points left.");
+		// 		curItem.left -= leftOverlap;
+		// 	}
+		// 	if(clipGroup.top > pieceGroup.top)
+		// 	{
+		// 		log.l("moving " +  curItem.name + ": " + topOverlap + " points up.");
+		// 		curItem.top += topOverlap;
+		// 	}
 			
-		}
+		// }
 		
 		
 
