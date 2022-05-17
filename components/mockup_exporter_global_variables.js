@@ -62,7 +62,8 @@ var docRef,
 	paramLayer, //sublayer inside mockup layer that contains paramcolor blocks
 	sizeType = "std", //string representing the sizing structure. "std" = standard, "var" = variable inseam
 	waistSize = "",
-	placeholderSwatchLetter = "B";
+	placeholderSwatchLetter = "B",
+	masterFileSaveName = decodeURI(normalizeLocalFilePath(app.activeDocument.fullName.toString()));
 
 	//garment variables
 var garmentsNeeded = [],

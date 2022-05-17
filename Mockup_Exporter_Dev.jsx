@@ -35,7 +35,7 @@ function container()
 			devUtilitiesPreferenceFile.open("r");
 			var prefContents = devUtilitiesPreferenceFile.read();
 			devUtilitiesPreferenceFile.close();
-			if(prefContents === "true")
+			if(prefContents.match(/true/i))
 			{
 				utilPath = "~/Desktop/automation/utilities/";
 				ext = ".js";
@@ -73,6 +73,14 @@ function container()
 
 	logDest.push(getLogDest());
 
+	////////////////////////
+	////////ATTENTION://////
+	//
+	//		temp live logging
+	LIVE_LOGGING = false;
+	//
+	////////////////////////
+
 	if(user === "will.dowling")
 	{
 		DEV_LOGGING = true;
@@ -89,7 +97,7 @@ function container()
 			try
 			{
 				eval("#include \"" + compFiles[x].fullName + "\"");
-				$.writeln("included: " + compFiles[x].name);
+				log.l("included: " + compFiles[x].name);
 			}
 			catch(e)
 			{
@@ -136,7 +144,8 @@ function container()
 		//if so, save it again.
 		if(docRef.name.toLowerCase().indexOf("untitled") === -1)
 		{
-			docRef.save();
+			log.l("saving document as: " + masterFileSaveName)
+			// docRef.saveAs(File(masterFileSaveName));
 		}
 
 
@@ -171,21 +180,15 @@ function container()
 	// createCleanupSwatchesAction();
 	createAction("cleanup_swatches",CLEANUP_SWATCHES_ACTION_STRING);
 
+	log.l("Finished creating cleanup swatches action");
+
 	//run the script
 	execute();
 
 	
 
 	//remove the cleanup_swatches action
-	try
-	{
-		removeAction("cleanup_swatches");
-		// app.unloadAction("cleanup_swatches","");
-	}
-	catch(e)
-	{
-		//log.l("Failed to unload the apply swatch action.. That probably means the action didn't get created properly..");
-	}
+	removeAction("cleanup_swatches");
 
 	docRef.activate();
 
@@ -194,7 +197,8 @@ function container()
 
 	if(docRef.name.toLowerCase().indexOf("untitled") === -1)
 	{
-		docRef.save();
+		log.l("saving master file with file name: " + masterFileSaveName);
+		docRef.saveAs(File(masterFileSaveName));
 	}
 
 	//=================================  /Procedure  =================================//
