@@ -43,7 +43,7 @@ function openUV(garmentCode)
 		uvSwatches = uvFile.swatches;
 		uvArtboards = uvFile.artboards;
 		uvParamLayer = findSpecificLayer(uvFile,"paramcolors");
-		uvArtLayer = findSpecificLayer(uvFile,"Art");
+		uvArtLayer = findSpecificLayer(uvFile,"Art","imatch");
 		uvGuidesLayer = findSpecificLayer(uvFile,"Guides");
 
 		log.l("uvParamLayer = " + uvParamLayer);

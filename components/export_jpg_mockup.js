@@ -19,7 +19,7 @@ function exportJpgMockup()
 	var doc = app.activeDocument;
 	var ab = doc.artboards;
 
-	var newFileName = doc.fullName.toString();
+	var newFileName = decodeURI(doc.fullName.toString());
 	log.l("newFileName = " + newFileName);
 	newFileName = newFileName.replace(/\.ai[t]?/i,"");
 	newFileName = newFileName.replace(/(master)|(prepress)/i,"Mockup");

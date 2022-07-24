@@ -20,10 +20,29 @@ function container()
 	var valid = true;
 	var scriptName = "3D_mockup_exporter";
 
+	function isDrUser()
+	{
+		var files = Folder("/Volumes/").getFiles();
+
+		for(var x=0;x<files.length;x++)
+		{
+			if(files[x].name.toLowerCase().indexOf("customizationdr")>-1)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	function getUtilities()
 	{
 		var result = [];
 		var utilPath = "/Volumes/Customization/Library/Scripts/Script_Resources/Data/";
+
+		if(isDrUser())
+		{
+			utilPath = utilPath.replace("Customization","CustomizationDR")
+		}
 		var ext = ".jsxbin"
 
 		//check for dev utilities preference file
@@ -89,23 +108,14 @@ function container()
 	var devComponents = desktopPath + "/automation/mockup_exporter/components";
 	var prodComponents = componentsPath + "mockup_exporter";
 
-	var compFiles = includeComponents(devComponents,prodComponents,false);
+	// var compFiles = includeComponents(devComponents,prodComponents,false);
+	var compFiles = getComponents($.fileName.match(/dev/i) > -1 ? devPath : prodPath);
 	if(compFiles && compFiles.length)
 	{
 		for(var x=0,len=compFiles.length;x<len;x++)
 		{
-			try
-			{
-				eval("#include \"" + compFiles[x].fullName + "\"");
-				log.l("included: " + compFiles[x].name);
-			}
-			catch(e)
-			{
-				// errorList.push("Failed to include the component: " + compFiles[x].name);
-				errorList.push("Failed to include the component: " + compFiles[x].name + "::System Error Message: " + e + "::System Error Line: " + e.line);
-				log.e("Failed to include the component: " + compFiles[x].name + "::System Error Message: " + e + "::System Error Line: " + e.line);
-				valid = false;
-			}
+			eval("#include \"" + compFiles[x].fullName + "\"");
+			log.l("included: " + compFiles[x].name);
 		}
 	}
 	else
