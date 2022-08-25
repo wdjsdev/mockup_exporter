@@ -105,17 +105,17 @@ function container()
 		DEV_LOGGING = true;
 	}
 
-	var devComponents = desktopPath + "/automation/mockup_exporter/components";
-	var prodComponents = componentsPath + "mockup_exporter";
+	var devPath = desktopPath + "/automation/mockup_exporter/components";
+	var prodPath = componentsPath + "mockup_exporter";
 
 	// var compFiles = includeComponents(devComponents,prodComponents,false);
-	var compFiles = getComponents($.fileName.match(/dev/i) > -1 ? devPath : prodPath);
+	var compFiles = getComponents($.fileName.match(/dev/i) ? devPath : prodPath);
 	if(compFiles && compFiles.length)
 	{
 		for(var x=0,len=compFiles.length;x<len;x++)
 		{
 			eval("#include \"" + compFiles[x].fullName + "\"");
-			log.l("included: " + compFiles[x].name);
+			log.l("included: " + compFiles[x].fullName);
 		}
 	}
 	else
@@ -148,17 +148,6 @@ function container()
 
 	function execute()
 	{
-		
-
-		//check to see if the file has been saved (or at least that it isn't called "untitled")
-		//if so, save it again.
-		if(docRef.name.toLowerCase().indexOf("untitled") === -1)
-		{
-			log.l("saving document as: " + masterFileSaveName)
-			// docRef.saveAs(File(masterFileSaveName));
-		}
-
-
 		log.l("Mockup Exporter Initialized for document: " + docRef.name);
 		if(valid)
 		{
@@ -217,6 +206,10 @@ function container()
 	if(errorList.length>0)
 	{
 		sendErrors(errorList);
+	}
+	if(messageList.length)
+	{
+		sendScriptMessages(messageList);
 	}
 
 	printLog();
