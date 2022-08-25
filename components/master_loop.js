@@ -42,6 +42,15 @@ function masterLoop()
 			continue;
 		}
 
+
+		//add a script message about FD-400 mockups to remind the user to
+		//send both adult and youth mockups to customer.
+		if(curGarmentCode.match(/FD-400/i))
+		{
+			messageList.push("Please make sure to send both adult and youth mockups of the FD-400 to customer.");
+		}
+
+
 		var paramLayerExists = false;
 		for(var y=0,ylen=mockupLay.layers.length;y<ylen && !paramLayerExists;y++)
 		{
