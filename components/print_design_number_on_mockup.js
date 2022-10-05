@@ -12,21 +12,21 @@
 
 */
 
-function printDesignNumberOnMockup()
+function printDesignNumberOnMockup ()
 {
-	infoLayer = findSpecificLayer(layers[0],"Information");
-	if(infoLayer)
+	infoLayer = findSpecificLayer( layers[ 0 ], "Information" );
+	if ( infoLayer )
 	{
 		var designIdFrame;
-		if(devMode)
+		if ( devMode )
 		{
-			exportFileName = layers[0].name;
+			exportFileName = layers[ 0 ].name;
 		}
 		else
 		{
 			infoLayer.locked = false;
-			designIdFrame = findChildByName(infoLayer,"design Id","TextFrame");
-			if(designIdFrame)
+			designIdFrame = findSpecificPageItem( infoLayer, "design Id", "imatch" );
+			if ( designIdFrame )
 			{
 				curGarmentDesignId = designIdFrame.contents;
 			}
@@ -38,38 +38,38 @@ function printDesignNumberOnMockup()
 				// 	curGarmentDesignId = getCurGarmentDesignId();
 				// }
 
-				var position = [19,-69];
+				var position = [ 19, -69 ];
 				try
 				{
-					var orderNumberFrame = infoLayer.textFrames["Order Number"];
-					position = [orderNumberFrame.left,orderNumberFrame.top - 12];
+					var orderNumberFrame = infoLayer.textFrames[ "Order Number" ];
+					position = [ orderNumberFrame.left, orderNumberFrame.top - 12 ];
 				}
-				catch(e){};
+				catch ( e ) { };
 				designIdFrame = infoLayer.textFrames.add();
 				designIdFrame.name = "Design ID";
 				designIdFrame.contents = curGarmentDesignId;
 				designIdFrame.position = position;
-				
+
 			}
 			exportFileName = curGarmentDesignId + "_" + curOrderNumber + "_mockup";
 
 			try
 			{
-				var infoSwatch = makeNewSpotColor("Info B","CMYK",BOOMBAH_APPROVED_COLOR_VALUES["Info B"]);
+				var infoSwatch = makeNewSpotColor( "Info B", "CMYK", BOOMBAH_APPROVED_COLOR_VALUES[ "Info B" ] );
 				designIdFrame.textRange.characterAttributes.fillColor = infoSwatch.color;
-				designIdFrame.textRange.characterAttributes.fillColor.tint = 0;	
+				designIdFrame.textRange.characterAttributes.fillColor.tint = 0;
 			}
-			catch(e)
+			catch ( e )
 			{
-				log.e("Failed to change the fill color and/or tint of the design number textFrame..::e = " + e + "::e.line = " + e.line);
+				log.e( "Failed to change the fill color and/or tint of the design number textFrame..::e = " + e + "::e.line = " + e.line );
 			}
-			
+
 			infoLayer.locked = true;
 		}
 	}
 	else
 	{
-		errorList.push("Failed to find the Information layer for " + layers[0].name);
-		return false;	
+		errorList.push( "Failed to find the Information layer for " + layers[ 0 ].name );
+		return false;
 	}
 }

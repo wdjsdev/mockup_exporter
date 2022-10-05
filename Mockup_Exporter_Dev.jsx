@@ -14,19 +14,19 @@ Description: open the 3d mockup template file for the current garment
 	
 */
 #target Illustrator
-function container()
+function container ()
 {
 
 	var valid = true;
 	var scriptName = "3D_mockup_exporter";
 
-	function isDrUser()
+	function isDrUser ()
 	{
-		var files = Folder("/Volumes/").getFiles();
+		var files = Folder( "/Volumes/" ).getFiles();
 
-		for(var x=0;x<files.length;x++)
+		for ( var x = 0; x < files.length; x++ )
 		{
-			if(files[x].name.toLowerCase().indexOf("customizationdr")>-1)
+			if ( files[ x ].name.toLowerCase().indexOf( "customizationdr" ) > -1 )
 			{
 				return true;
 			}
@@ -34,63 +34,63 @@ function container()
 		return false;
 	}
 
-	function getUtilities()
+	function getUtilities ()
 	{
 		var result = [];
 		var utilPath = "/Volumes/Customization/Library/Scripts/Script_Resources/Data/";
 
-		if(isDrUser())
+		if ( isDrUser() )
 		{
-			utilPath = utilPath.replace("Customization","CustomizationDR")
+			utilPath = utilPath.replace( "Customization", "CustomizationDR" )
 		}
 		var ext = ".jsxbin"
 
 		//check for dev utilities preference file
-		var devUtilitiesPreferenceFile = File("~/Documents/script_preferences/dev_utilities.txt");
+		var devUtilitiesPreferenceFile = File( "~/Documents/script_preferences/dev_utilities.txt" );
 
 
-		if(devUtilitiesPreferenceFile.exists && !$.os.match("Windows"))
+		if ( devUtilitiesPreferenceFile.exists && !$.os.match( "Windows" ) )
 		{
-			devUtilitiesPreferenceFile.open("r");
+			devUtilitiesPreferenceFile.open( "r" );
 			var prefContents = devUtilitiesPreferenceFile.read();
 			devUtilitiesPreferenceFile.close();
-			if(prefContents.match(/true/i))
+			if ( prefContents.match( /true/i ) )
 			{
 				utilPath = "~/Desktop/automation/utilities/";
 				ext = ".js";
 			}
 		}
 
-		if($.os.match("Windows"))
+		if ( $.os.match( "Windows" ) )
 		{
-			utilPath = utilPath.replace("/Volumes/","//AD4/");
+			utilPath = utilPath.replace( "/Volumes/", "//AD4/" );
 		}
 
-		result.push(utilPath + "Utilities_Container" + ext);
-		result.push(utilPath + "Batch_Framework" + ext);
+		result.push( utilPath + "Utilities_Container" + ext );
+		result.push( utilPath + "Batch_Framework" + ext );
 
-		if(!result.length)
+		if ( !result.length )
 		{
 			valid = false;
-			alert("Failed to find the utilities.");
+			alert( "Failed to find the utilities." );
 		}
 		return result;
 
 	}
 
 	var utilities = getUtilities();
-	for(var u=0,len=utilities.length;u<len;u++)
+	for ( var u = 0, len = utilities.length; u < len; u++ )
 	{
-		eval("#include \"" + utilities[u] + "\"");	
+		eval( "#include \"" + utilities[ u ] + "\"" );
 	}
 
-	if(!valid)return;
+	if ( !valid ) return;
 
 
 	/*****************************************************************************/
 	//==============================  Components  ===============================//
 
-	logDest.push(getLogDest());
+	logDest.push( getLogDest() );
 
 	////////////////////////
 	////////ATTENTION://////
@@ -100,7 +100,7 @@ function container()
 	//
 	////////////////////////
 
-	if(user === "will.dowling")
+	if ( user === "will.dowling" )
 	{
 		DEV_LOGGING = true;
 	}
@@ -109,20 +109,20 @@ function container()
 	var prodPath = componentsPath + "mockup_exporter";
 
 	// var compFiles = includeComponents(devComponents,prodComponents,false);
-	var compFiles = getComponents($.fileName.match(/dev/i) ? devPath : prodPath);
-	if(compFiles && compFiles.length)
+	var compFiles = getComponents( $.fileName.match( /dev/i ) ? devPath : prodPath );
+	if ( compFiles && compFiles.length )
 	{
-		for(var x=0,len=compFiles.length;x<len;x++)
+		for ( var x = 0, len = compFiles.length; x < len; x++ )
 		{
-			eval("#include \"" + compFiles[x].fullName + "\"");
-			log.l("included: " + compFiles[x].fullName);
+			eval( "#include \"" + compFiles[ x ].fullName + "\"" );
+			log.l( "included: " + compFiles[ x ].fullName );
 		}
 	}
 	else
 	{
 		valid = false;
-		errorList.push("Failed to find any of the necessary components for this script to work.");
-		log.e("Failed to include any components. Exiting script.");
+		errorList.push( "Failed to find any of the necessary components for this script to work." );
+		log.e( "Failed to include any components. Exiting script." );
 	}
 
 
@@ -133,83 +133,83 @@ function container()
 
 	/*****************************************************************************/
 	//=================================  Procedure  =================================//
-	
+
 
 	//test function
-	function testFunction()
+	function testFunction ()
 	{
 		docRef = app.activeDocument;
-		getItemDimension(docRef.pageItems[0]);
+		getItemDimension( docRef.pageItems[ 0 ] );
 	}
 	// testFunction();
 	// return;
 
 
 
-	function execute()
+	function execute ()
 	{
-		log.l("Mockup Exporter Initialized for document: " + docRef.name);
-		if(valid)
+		log.l( "Mockup Exporter Initialized for document: " + docRef.name );
+		if ( valid )
 		{
-			valid = getGarments(docRef);
+			valid = getGarments( docRef );
 		}
 
-		if(valid)
+		if ( valid )
 		{
-			log.l("Successfully gathered garments.");
-			log.l("garmentsNeeded = " + garmentsNeeded);
+			log.l( "Successfully gathered garments." );
+			log.l( "garmentsNeeded = " + garmentsNeeded );
 			valid = masterLoop();
 		}
 	}
 
 
-
+	var docRef = app.activeDocument;
 	initMockupExporter();
 
-	
 
 
-	
 
-	
 
-	log.h("Beginning execution of Mockup Exporter Script.");
+
+
+
+	log.h( "Beginning execution of Mockup Exporter Script." );
 
 	//create the cleanup_swatches action
 	// createCleanupSwatchesAction();
-	createAction("cleanup_swatches",CLEANUP_SWATCHES_ACTION_STRING);
+	createAction( "cleanup_swatches", CLEANUP_SWATCHES_ACTION_STRING );
 
-	log.l("Finished creating cleanup swatches action");
+	log.l( "Finished creating cleanup swatches action" );
 
 	//run the script
 	execute();
 
-	
+
 
 	//remove the cleanup_swatches action
-	removeAction("cleanup_swatches");
+	removeAction( "cleanup_swatches" );
 
 	docRef.activate();
 
-	log.h("Exporting standard jpg mockup.");
+	log.h( "Exporting standard jpg mockup." );
 	exportJpgMockup();
 
-	if(docRef.name.toLowerCase().indexOf("untitled") === -1)
+	if ( docRef.name.toLowerCase().indexOf( "untitled" ) === -1 )
 	{
-		log.l("saving master file with file name: " + masterFileSaveName);
-		docRef.saveAs(File(masterFileSaveName));
+		log.l( "saving master file with file name: " + masterFileSaveName );
+		docRef.saveAs( File( masterFileSaveName ) );
 	}
 
 	//=================================  /Procedure  =================================//
 	/*****************************************************************************/
 
-	if(errorList.length>0)
+	if ( errorList.length > 0 )
 	{
-		sendErrors(errorList);
+		sendErrors( errorList );
 	}
-	if(messageList.length)
+	if ( messageList.length )
 	{
-		sendScriptMessages(messageList);
+		sendScriptMessages( messageList );
 	}
 
 	printLog();

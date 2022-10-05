@@ -14,29 +14,30 @@
 
 */
 
-function createDisplayBoxes(displays)
+function createDisplayBoxes ( displays )
 {
+	if ( !displays || !displays.length ) return;
 	var boxDimension = 150;
-	var abRect = aB[0].artboardRect;
-	var yPos = abRect[3]-abRect[1] + boxDimension;
-	var artLay = layers["Art"];
+	var abRect = aB[ 0 ].artboardRect;
+	var yPos = abRect[ 3 ] - abRect[ 1 ] + boxDimension;
+	var artLay = layers[ "Art" ];
 
 	var newBlock;
-	for(var x=0,len=displays.length;x<len;x++)
+	for ( var x = 0, len = displays.length; x < len; x++ )
 	{
 		try
 		{
-			newBlock = artLay.pageItems[displays[x].name];
+			newBlock = artLay.pageItems[ displays[ x ].name ];
 		}
-		catch(e)
+		catch ( e )
 		{
-			newBlock = artLay.pathItems.rectangle(yPos,0,boxDimension,boxDimension);
-			newBlock.name = displays[x].name;
+			newBlock = artLay.pathItems.rectangle( yPos, 0, boxDimension, boxDimension );
+			newBlock.name = displays[ x ].name;
 			newBlock.filled = false;
 			newBlock.stroked = false;
 			yPos += boxDimension;
 			docRef.selection = null;
 		}
-		
+
 	}
 }
