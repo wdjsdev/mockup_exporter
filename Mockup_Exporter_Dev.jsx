@@ -14,100 +14,121 @@ Description: open the 3d mockup template file for the current garment
 	
 */
 #target Illustrator
-function container()
+function container ()
 {
 
 	var valid = true;
 	var scriptName = "3D_mockup_exporter";
 
-	function getUtilities()
+	function getUtilities ()
 	{
-		var result = [];
-		var utilPath = "/Volumes/Customization/Library/Scripts/Script_Resources/Data/";
-		var ext = ".jsxbin"
-
-		//check for dev utilities preference file
-		var devUtilitiesPreferenceFile = File("~/Documents/script_preferences/dev_utilities.txt");
-
-
-		if(devUtilitiesPreferenceFile.exists && !$.os.match("Windows"))
+		//check for dev mode
+		var devUtilitiesPreferenceFile = File( "~/Documents/script_preferences/dev_utilities.txt" );
+		var devUtilPath = "~/Desktop/automation/utilities/";
+		var devUtils = [ devUtilPath + "Utilities_Container.js", devUtilPath + "Batch_Framework.js" ];
+		function readDevPref ( dp ) { dp.open( "r" ); var contents = dp.read() || ""; dp.close(); return contents; }
+		if ( readDevPref( devUtilitiesPreferenceFile ).match( /true/i ) )
 		{
-			devUtilitiesPreferenceFile.open("r");
-			var prefContents = devUtilitiesPreferenceFile.read();
-			devUtilitiesPreferenceFile.close();
-			if(prefContents === "true")
+			$.writeln( "///////\n////////\nUsing dev utilities\n///////\n////////" );
+			return devUtils;
+		}
+
+
+
+
+
+
+		var utilNames = [ "Utilities_Container" ];
+
+		//not dev mode, use network utilities
+		var OS = $.os.match( "Windows" ) ? "pc" : "mac";
+		var ad4 = ( OS == "pc" ? "//AD4/" : "/Volumes/" ) + "Customization/";
+		var drsv = ( OS == "pc" ? "O:/" : "/Volumes/CustomizationDR/" );
+		var ad4UtilsPath = ad4 + "Library/Scripts/Script_Resources/Data/";
+		var drsvUtilsPath = drsv + "Library/Scripts/Script_Resources/Data/";
+
+
+		var result = [];
+		for ( var u = 0, util; u < utilNames.length; u++ )
+		{
+			util = utilNames[ u ];
+			var ad4UtilPath = ad4UtilsPath + util + ".jsxbin";
+			var ad4UtilFile = File( ad4UtilsPath );
+			var drsvUtilPath = drsvUtilsPath + util + ".jsxbin"
+			var drsvUtilFile = File( drsvUtilPath );
+			if ( drsvUtilFile.exists )
 			{
-				utilPath = "~/Desktop/automation/utilities/";
-				ext = ".js";
+				result.push( drsvUtilPath );
+			}
+			else if ( ad4UtilFile.exists )
+			{
+				result.push( ad4UtilPath );
+			}
+			else
+			{
+				alert( "Could not find " + util + ".jsxbin\nPlease ensure you're connected to the appropriate Customization drive." );
+				valid = false;
 			}
 		}
 
-		if($.os.match("Windows"))
-		{
-			utilPath = utilPath.replace("/Volumes/","//AD4/");
-		}
-
-		result.push(utilPath + "Utilities_Container" + ext);
-		result.push(utilPath + "Batch_Framework" + ext);
-
-		if(!result.length)
-		{
-			valid = false;
-			alert("Failed to find the utilities.");
-		}
 		return result;
 
 	}
 
+
+
 	var utilities = getUtilities();
-	for(var u=0,len=utilities.length;u<len;u++)
+
+
+
+
+	for ( var u = 0, len = utilities.length; u < len && valid; u++ )
 	{
-		eval("#include \"" + utilities[u] + "\"");	
+		eval( "#include \"" + utilities[ u ] + "\"" );
 	}
 
-	if(!valid)return;
+	log.l( "Using Utilities: " + utilities );
+
+
+	if ( !valid ) return;
 
 
 	/*****************************************************************************/
 	//==============================  Components  ===============================//
 
+	logDest.push( getLogDest() );
 
+	////////////////////////
+	////////ATTENTION://////
+	//
+	//		temp live logging
+	LIVE_LOGGING = false;
+	//
+	////////////////////////
 
-
-	logDest.push(getLogDest());
-
-	if(user === "will.dowling")
+	if ( user === "will.dowling" )
 	{
 		DEV_LOGGING = true;
 	}
 
-	var devComponents = desktopPath + "/automation/mockup_exporter/components";
-	var prodComponents = componentsPath + "mockup_exporter";
+	var devPath = desktopPath + "/automation/mockup_exporter/components";
+	var prodPath = componentsPath + "mockup_exporter";
 
-	var compFiles = includeComponents(devComponents,prodComponents,false);
-	if(compFiles && compFiles.length)
+	// var compFiles = includeComponents(devComponents,prodComponents,false);
+	var compFiles = getComponents( $.fileName.match( /dev/i ) ? devPath : prodPath );
+	if ( compFiles && compFiles.length )
 	{
-		for(var x=0,len=compFiles.length;x<len;x++)
+		for ( var x = 0, len = compFiles.length; x < len; x++ )
 		{
-			try
-			{
-				eval("#include \"" + compFiles[x].fullName + "\"");
-				log.l("included: " + compFiles[x].name);
-			}
-			catch(e)
-			{
-				// errorList.push("Failed to include the component: " + compFiles[x].name);
-				errorList.push("Failed to include the component: " + compFiles[x].name + "::System Error Message: " + e + "::System Error Line: " + e.line);
-				log.e("Failed to include the component: " + compFiles[x].name + "::System Error Message: " + e + "::System Error Line: " + e.line);
-				valid = false;
-			}
+			eval( "#include \"" + compFiles[ x ].fullName + "\"" );
+			log.l( "included: " + compFiles[ x ].fullName );
 		}
 	}
 	else
 	{
 		valid = false;
-		errorList.push("Failed to find any of the necessary components for this script to work.");
-		log.e("Failed to include any components. Exiting script.");
+		errorList.push( "Failed to find any of the necessary components for this script to work." );
+		log.e( "Failed to include any components. Exiting script." );
 	}
 
 
@@ -116,59 +137,20 @@ function container()
 
 
 
-
-	function execute()
-	{
-		
-		log.l("beginning execute function.");
-		log.l("docRef.fullName = " + docRef.fullName);
-		var fullFileName = docRef.fullName.toString().replace(userPathRegex,homeFolderPath);
-		//check to see if the file has been saved (or at least that it isn't called "untitled")
-		//if so, save it again.
-		if(docRef.name.toLowerCase().indexOf("untitled") === -1)
-		{
-			log.l("saving doc");
-			docRef.saveAs(File(fullFileName));
-		}
-
-
-
-		log.l("Mockup Exporter Initialized for document: " + docRef.name);
-		if(valid)
-		{
-			valid = getGarments(docRef);
-		}
-
-		if(valid)
-		{
-			log.l("Successfully gathered garments.");
-			log.l("garmentsNeeded = " + garmentsNeeded);
-			valid = masterLoop();
-		}
-	}
-
-
 	/*****************************************************************************/
 	//=================================  Procedure  =================================//
-	function otherTestFunction(item)
-	{
-		item.hasClipGroup = true;
-		item.artGroup = item.pageItems["art_group"];
-	}
+
 
 	//test function
-	function testFunction()
+	function testFunction ()
 	{
 		docRef = app.activeDocument;
-		otherTestFunction(docRef.selection[0]);
-		getItemDimension(docRef.selection[0]);
+		getItemDimension( docRef.pageItems[ 0 ] );
 	}
 	// testFunction();
 	// return;
 
 
-
-	
 
 
 	log.h("Beginning execution of Mockup Exporter Script.");
@@ -193,6 +175,8 @@ function container()
 	}
 	
 
+
+
 	//remove the cleanup_swatches action
 	removeAction("cleanup_swatches");
 
@@ -210,9 +194,13 @@ function container()
 	//=================================  /Procedure  =================================//
 	/*****************************************************************************/
 
-	if(errorList.length>0)
+	if ( errorList.length > 0 )
 	{
-		sendErrors(errorList);
+		sendErrors( errorList );
+	}
+	if ( messageList.length )
+	{
+		sendScriptMessages( messageList );
 	}
 
 	printLog();

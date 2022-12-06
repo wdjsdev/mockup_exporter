@@ -19,7 +19,7 @@ function exportJpgMockup()
 	var doc = app.activeDocument;
 	var ab = doc.artboards;
 
-	var newFileName = doc.fullName.toString();
+	var newFileName = decodeURI(doc.fullName.toString());
 	log.l("newFileName = " + newFileName);
 	newFileName = newFileName.replace(/\.ai[t]?/i,"");
 	newFileName = newFileName.replace(/(master)|(prepress)/i,"Mockup");
@@ -28,7 +28,10 @@ function exportJpgMockup()
 
 
 	newFileName = decodeURI(newFileName);
-	newFileName = newFileName.replace(/(^.*users\/[^\/]*\/)|(^~\/)/i,homeFolderPath);
+
+	// newFileName = newFileName.replace(/(^.*users\/)|(^~\/)/i,homeFolderPath);
+	newFileName = normalizeLocalFilePath(newFileName);
+
 	if(os === "mac")
 	{
 		if(newFileName.indexOf("Volumes") === -1)

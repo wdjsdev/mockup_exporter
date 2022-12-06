@@ -1,3 +1,4 @@
+
 /*
 	Component Name: scale_pieces_to_fit_guides
 	Author: William Dowling
@@ -16,7 +17,7 @@
 
 */
 
-function scalePiecesToFitGuides()
+function scalePiecesToFitGuides ()
 {
 	//bleed value
 	//integer in points representing how many points
@@ -36,7 +37,7 @@ function scalePiecesToFitGuides()
 
 	for(var x = uvArtLayer.pageItems.length-1;x>=0;x--)
 	{
-		curItem = uvArtLayer.pageItems[x];
+		curItem = uvArtLayer.pageItems[ x ];
 		curName = curItem.name;
 		curGuide = findSpecificPageItem(uvGuidesLayer,curName,"imatch");
 		if(!curGuide)
@@ -49,11 +50,14 @@ function scalePiecesToFitGuides()
 		//figure out the dimensions of curItem minus any clipped artwork
 		//basically we want the width or height of the visible group,
 		// itemDim = curItem.width > curItem.height ? curItem.width : curItem.height;
-		itemDim = getItemDimension(curItem);
+
+		itemVb = getBoundsData( curItem );
+		// itemDim = getItemDimension(curItem);
+
+		itemDim = itemVb.w > itemVb.h ? itemVb.w : itemVb.h;
 
 		//biggest dimension of dest guide box
 		guideDim = curGuide.width > curGuide.height ? curGuide.width : curGuide.height;
-		
 
 		//scale the whole item up to match guide box dimensions
 		scaleFactor = (guideDim / itemDim) * 100;
@@ -81,9 +85,9 @@ function scalePiecesToFitGuides()
 
 	}
 
-	if(!guidesFound)
+	if ( !guidesFound )
 	{
-		errorList.push("Failed to find any guide boxes in the UV Map File.");
+		errorList.push( "Failed to find any guide boxes in the UV Map File." );
 		valid = false;
 		return false;
 	}
@@ -91,9 +95,9 @@ function scalePiecesToFitGuides()
 	//move the param blocks to the top left corner of the artboard
 	for(var x=0,len=uvParamLayer.pageItems.length;x<len;x++)
 	{
-		curItem = uvParamLayer.pageItems[x];
-		curItem.left = uvArtboards[0].artboardRect[0];
-		curItem.top = uvArtboards[0].artboardRect[1] + (x * -5);
+		curItem = uvParamLayer.pageItems[ x ];
+		curItem.left = uvArtboards[ 0 ].artboardRect[ 0 ];
+		curItem.top = uvArtboards[ 0 ].artboardRect[ 1 ] + ( x * -5 );
 	}
 	return true;
 }

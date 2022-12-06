@@ -12,24 +12,30 @@
 
 */
 
-function masterLoop()
+function masterLoop ()
 {
+	var doc = app.activeDocument;
+	var lays = afc( doc, "layers" );
+	var layVisStates = lays.map( function ( l ) { return l.visible; } );
+	var layLockStates = lays.map( function ( l ) { return l.locked; } );
+
+	lays.forEach( function ( l ) { l.visible = true; l.locked = false; } );
 
 	//garmentsNeeded is an array of template layers
-	for (var x = 0, len = garmentsNeeded.length; x < len ; x++)
+	for ( var x = 0, len = garmentsNeeded.length; x < len; x++ )
 	{
-		log.l("Beginning master loop number: " + (x+1) + " for garment: " + garmentsNeeded[x].name);
+		log.l( "Beginning master loop number: " + ( x + 1 ) + " for garment: " + garmentsNeeded[ x ].name );
 
-		if(devMode)
+		if ( devMode )
 		{
 			addParamColors();
 			normalizeLayerName();
 		}
-		
-		curGarmentLayer = garmentsNeeded[x];		
-		curGarmentCode = getCode(curGarmentLayer.name);
 
-		if(curGarmentCode)
+		curGarmentLayer = garmentsNeeded[ x ];
+		curGarmentCode = getCode( curGarmentLayer.name );
+
+		if ( curGarmentCode )
 		{
 			//add the garment code to the end of the export path
 			//so that the files are saved into subfolders by garment code
@@ -38,7 +44,7 @@ function masterLoop()
 		}
 		else
 		{
-			log.e("failed to determine the garment code. continuing loop");
+			log.e( "failed to determine the garment code. continuing loop" );
 			continue;
 		}
 
@@ -53,12 +59,12 @@ function masterLoop()
 		{
 			addParamColors();
 		}
-		
-		if(!devMode)
+
+		if ( !devMode )
 		{
-			curOrderNumber = getOrderNumber(docRef);
+			curOrderNumber = getOrderNumber( docRef );
 			printDesignNumberOnMockup();
-			if(!curOrderNumber)
+			if ( !curOrderNumber )
 			{
 				//file is unsaved
 				break;
@@ -66,54 +72,54 @@ function masterLoop()
 		}
 
 		getMockupSize();
-		
-		if (!openUV(curGarmentCode))
+
+		if ( !openUV( curGarmentCode ) )
 		{
 			continue;
 		}
 		log.l("UV File successfully opened.");
 		
 
-		if (!duplicateMockupSizePiecesToTemplate(uvFile))
+		if ( !duplicateMockupSizePiecesToTemplate( uvFile ) )
 		{
-			log.l("Successfully found the necessary layers in the Master File.");
+			log.l( "Successfully found the necessary layers in the Master File." );
 			continue;
 		}
 
 		uvFile.activate();
 
-		if(mockupExporterGarmentData[curGarmentCode] && mockupExporterGarmentData[curGarmentCode].flipCollars)
+		if ( mockupExporterGarmentData[ curGarmentCode ] && mockupExporterGarmentData[ curGarmentCode ].flipCollars )
 		{
 			flipCollars();
 		}
 
-		if (!scalePiecesToFitGuides())
+		if ( !scalePiecesToFitGuides() )
 		{
 			continue;
 		}
 
-		log.l("Successfully scaled and  positioned the pieces on the UV Map.");
+		log.l( "Successfully scaled and  positioned the pieces on the UV Map." );
 
-		if(!recolorDisplayBlocks())
+		if ( !recolorDisplayBlocks() )
 		{
-			log.e("Failed while recoloring the display blocks.");
-			errorList.push("Failed while recoloring the display blocks.");
+			log.e( "Failed while recoloring the display blocks." );
+			errorList.push( "Failed while recoloring the display blocks." );
 			continue;
 		}
-		
-		if(devMode)
+
+		if ( devMode )
 		{
-			if(!removePossiblePolygons())
+			if ( !removePossiblePolygons() )
 			{
-				log.e("Failed while attempting to fix compound paths..");
-				errorList.push("Failed while attempting to fix compound paths..");
+				log.e( "Failed while attempting to fix compound paths.." );
+				errorList.push( "Failed while attempting to fix compound paths.." );
 				continue;
 			}
 		}
 
-		app.doScript("cleanup_swatches","cleanup_swatches");
 
-		if(devMode)
+
+		if ( devMode )
 		{
 			updateParamColorNames();
 		}
@@ -126,13 +132,15 @@ function masterLoop()
 
 		exportUV();
 
-		if(blankMode)
+		if ( blankMode )
 		{
-			filesToClose.push(uvFile);
+			filesToClose.push( uvFile );
 		}
-		
+
 
 	}
+
+	lays.forEach( function ( l, i ) { l.visible = layVisStates[ i ]; l.locked = layLockStates[ i ]; } );
 
 	return true;
 }

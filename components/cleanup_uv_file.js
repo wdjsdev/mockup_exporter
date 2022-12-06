@@ -15,11 +15,6 @@ function cleanupUVFile()
 {
 	var settings = 
 	{
-		"Targets":
-		{
-			"locked": false,
-			"visible": false
-		},
 		"uv":
 		{
 			"locked": true,
@@ -49,18 +44,26 @@ function cleanupUVFile()
 		{
 			"locked": true,
 			"visible": true
+		},
+		"Targets":
+		{
+			"locked": false,
+			"visible": false
 		}
 	}
 
 	for(var lay in settings)
 	{
-		try
+		var thisLay = findSpecificLayer(uvLayers, lay, lay.match(/art/i) ? "imatch" : "any");
+		if(thisLay)
 		{
-			var thisLay = uvLayers[lay];
 			thisLay.locked = settings[lay].locked;
 			thisLay.visible = settings[lay].visible;
 		}
-		catch(e){};
+		else
+		{
+			$.writeln("Failed to find layer " + lay);
+		}
 	}
 
 }

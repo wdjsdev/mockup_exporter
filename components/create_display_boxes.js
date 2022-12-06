@@ -14,8 +14,9 @@
 
 */
 
-function createDisplayBoxes(displays)
+function createDisplayBoxes ( displays )
 {
+	if ( !displays || !displays.length ) return;
 	var boxDimension = 150;
 	var abRect = aB[0].artboardRect;
 	var yPos = abRect[3]-abRect[1] + boxDimension;
@@ -29,7 +30,7 @@ function createDisplayBoxes(displays)
 
 
 	var newBlock;
-	for(var x=0,len=displays.length;x<len;x++)
+	for ( var x = 0, len = displays.length; x < len; x++ )
 	{
 		//
 		//attn
@@ -52,13 +53,13 @@ function createDisplayBoxes(displays)
 		newBlock = findSpecificPageItem(artLay,displays[x].name,"imatch");
 		if(!newBlock)
 		{
-			newBlock = artLay.pathItems.rectangle(yPos,0,boxDimension,boxDimension);
-			newBlock.name = displays[x].name;
+			newBlock = artLay.pathItems.rectangle( yPos, 0, boxDimension, boxDimension );
+			newBlock.name = displays[ x ].name;
 			newBlock.filled = false;
 			newBlock.stroked = false;
 			yPos += boxDimension;
 			docRef.selection = null;
 		}
-		
+
 	}
 }
