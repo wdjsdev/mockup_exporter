@@ -75,13 +75,7 @@ function container ()
 
 	}
 
-
-
 	var utilities = getUtilities();
-
-
-
-
 	for ( var u = 0, len = utilities.length; u < len && valid; u++ )
 	{
 		eval( "#include \"" + utilities[ u ] + "\"" );
@@ -98,13 +92,6 @@ function container ()
 
 	logDest.push( getLogDest() );
 
-	////////////////////////
-	////////ATTENTION://////
-	//
-	//		temp live logging
-	LIVE_LOGGING = false;
-	//
-	////////////////////////
 
 	if ( user === "will.dowling" )
 	{
@@ -152,44 +139,59 @@ function container ()
 
 
 
-
-	log.h("Beginning execution of Mockup Exporter Script.");
-
-	if(valid)
+	function execute ()
 	{
-		initMockupExporter();
+		log.l( "Mockup Exporter Initialized for document: " + docRef.name );
+		if ( valid )
+		{
+			valid = getGarments( docRef );
+		}
+
+		if ( valid )
+		{
+			log.l( "Successfully gathered garments." );
+			log.l( "garmentsNeeded = " + garmentsNeeded );
+			valid = masterLoop();
+		}
 	}
 
-	
 
-	if(valid)
-	{
-		log.h("Exporting standard jpg mockup.");
-		exportJpgMockup();
-	}
-	
-	if(valid)
-	{
-		//run the script
-		execute();	
-	}
-	
+	var docRef = app.activeDocument;
+	initMockupExporter();
+
+
+
+
+
+
+
+
+	log.h( "Beginning execution of Mockup Exporter Script." );
+
+	//create the cleanup_swatches action
+	// createCleanupSwatchesAction();
+	createAction( "cleanup_swatches", CLEANUP_SWATCHES_ACTION_STRING );
+
+	log.l( "Finished creating cleanup swatches action" );
+
+	//run the script
+	execute();
 
 
 
 	//remove the cleanup_swatches action
-	removeAction("cleanup_swatches");
+	removeAction( "cleanup_swatches" );
 
-	if(valid)
+	docRef.activate();
+
+	log.h( "Exporting standard jpg mockup." );
+	exportJpgMockup();
+
+	if ( docRef.name.toLowerCase().indexOf( "untitled" ) === -1 )
 	{
-		docRef.activate();
-
-		if(docRef.name.toLowerCase().indexOf("untitled") === -1)
-		{
-			docRef.save();
-		}	
+		log.l( "saving master file with file name: " + masterFileSaveName );
+		docRef.saveAs( File( masterFileSaveName ) );
 	}
-	
 
 	//=================================  /Procedure  =================================//
 	/*****************************************************************************/
