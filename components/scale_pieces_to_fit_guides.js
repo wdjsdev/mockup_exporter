@@ -31,6 +31,8 @@ function scalePiecesToFitGuides ()
 	var leftOverlap,topOverlap;
 	var clipGroup,pieceGroup,artGroup,clipMask;
 
+	var itemVb,guideVb,guideCenter;
+
 	//boolean to determine whether any appropriate guide boxes were found
 	var guidesFound = false;
 
@@ -47,39 +49,25 @@ function scalePiecesToFitGuides ()
 		}
 		guidesFound = true;
 
-		//figure out the dimensions of curItem minus any clipped artwork
-		//basically we want the width or height of the visible group,
-		// itemDim = curItem.width > curItem.height ? curItem.width : curItem.height;
-
 		itemVb = getBoundsData( curItem );
-		// itemDim = getItemDimension(curItem);
+		guideVb = getBoundsData( curGuide );
 
 		itemDim = itemVb.w > itemVb.h ? itemVb.w : itemVb.h;
 
 		//biggest dimension of dest guide box
-		guideDim = curGuide.width > curGuide.height ? curGuide.width : curGuide.height;
+		guideDim = guideVb.w > guideVb.h ? guideVb.w : guideVb.h;
 
 		//scale the whole item up to match guide box dimensions
 		scaleFactor = (guideDim / itemDim) * 100;
 		curItem.resize(scaleFactor,scaleFactor,true,true,true,true,scaleFactor);
 
+		itemVb = getBoundsData( curItem );
+
 		//get the centerpoint of guide box
-		guideCenter = getCenterPoint(curGuide);
+		guideCenter = [guideVb.hc,guideVb.vc];
 
-		if(!curItem.hasClipGroup || !curItem.clipMask)
-		{
-			log.l(curItem.name + " has no clipping masks. using center point positioning")
-			
-			setCenterPoint(curItem,guideCenter);	
-		}
-		else
-		{
-			log.l(curItem.name + " has clipping masks. Using standard positioning.")
-
-			clipMask = curItem.clipMask;
-			curItem.left = curGuide.left - (clipMask.left - curItem.left);
-			curItem.top = curGuide.top + (curItem.top - clipMask.top);
-		}
+		curItem.left = guideCenter[0] - (itemVb.w/2) - itemVb.clipped.left;
+		curItem.top = guideCenter[1] + (itemVb.h/2) + itemVb.clipped.top;
 		
 		
 
