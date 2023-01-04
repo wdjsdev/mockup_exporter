@@ -106,6 +106,16 @@ var mockupExporterSpecialInstructions =
 		return this.updateDisplay("buttons", uvParamLayer.pageItems.length - 2);
 	},
 
+	"FD-3132" : function()
+	{
+		return this.flipCollars();
+	},
+
+	"FD-3132W" : function()
+	{
+		return this.flipCollars();
+	},
+
 	"FD-400W" : function()
 	{
 		return this.flipCollars();

@@ -85,6 +85,16 @@ var mockupExporterGarmentData =
 		flipCollars:false,
 		updateDisplay:[{"name":"buttons","seq":1}]
 	},
+	"FD-3132":
+	{
+		flipCollars:true,
+		updateDisplay: []
+	},
+	"FD-3132W":
+	{
+		flipCollars:true,
+		updateDisplay: []
+	},
 	"FD-400W":
 	{
 		flipCollars:true,
