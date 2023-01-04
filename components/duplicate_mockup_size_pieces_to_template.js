@@ -76,7 +76,7 @@ function duplicateMockupSizePiecesToTemplate ()
 	}
 	if ( curGroup )
 	{
-
+		app.userInteractionLevel = UserInteractionLevel.DONTDISPLAYALERTS;
 		duplicateArtwork( curGroup );
 
 		tmpArtGroup = curGroup.duplicate( uvFile );
@@ -84,7 +84,7 @@ function duplicateMockupSizePiecesToTemplate ()
 
 		tmpParamGroup = paramGroup.duplicate( uvFile );
 		tmpParamGroup.moveToBeginning( uvParamLayer );
-
+		app.userInteractionLevel = UserInteractionLevel.DISPLAYALERTS;
 		uvFile.activate();
 		ungroupTmpGroup();
 		tmpLay.remove();
