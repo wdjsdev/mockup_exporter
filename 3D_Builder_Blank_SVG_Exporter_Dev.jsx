@@ -22,7 +22,7 @@ function container ()
 
 	function getUtilities ()
 	{
-		var utilNames = [ "Utilities_Container" ]; //array of util names
+		var utilNames = [ "Utilities_Container", "Batch_Framework" ]; //array of util names
 		var utilFiles = []; //array of util files
 		//check for dev mode
 		var devUtilitiesPreferenceFile = File( "~/Documents/script_preferences/dev_utilities.txt" );

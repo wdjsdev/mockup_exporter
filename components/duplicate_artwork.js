@@ -13,7 +13,7 @@
 
 */
 
-function duplicateArtwork(curGroup)
+function duplicateArtwork ( curGroup )
 {
 	app.selection = null;
 
@@ -35,63 +35,63 @@ function duplicateArtwork(curGroup)
 	var masksToMake = {};
 
 	// for(var y=artLayer.pageItems.length-1;y>=0;y--)
-	for(var y=0;y<artLayer.pageItems.length;y++)
+	for ( var y = 0; y < artLayer.pageItems.length; y++ )
 	{
-		artItems.push(artLayer.pageItems[y]);
+		artItems.push( artLayer.pageItems[ y ] );
 	}
 	app.selection = null;
 
 
-	for(var x=0,len=artItems.length;x<len;x++)
+	for ( var x = 0, len = artItems.length; x < len; x++ )
 	// for(var x = artItems.length -1; x>=0;x--)
 	{
-		checkArtForOverlap(artItems[x],curGroup);
+		checkArtForOverlap( artItems[ x ], curGroup );
 	}
 
 	var curDest;
-	for(var dest in masksToMake)
+	for ( var dest in masksToMake )
 	{
-		curDest= masksToMake[dest];
-		for(var x=0,len=curDest.art.length;x<len;x++)
+		curDest = masksToMake[ dest ];
+		for ( var x = 0, len = curDest.art.length; x < len; x++ )
 		{
-			makeMask(curDest.art[x],curDest.destPiece,curDest.destPiece.artGroup);
+			makeMask( curDest.art[ x ], curDest.destPiece, curDest.destPiece.artGroup );
 		}
 	}
 
-	
+
 	return true;
 
-	function checkArtForOverlap(art,curGroup)
+	function checkArtForOverlap ( art, curGroup )
 	{
-		var dest,artCopy,artName,artGroup;
+		var dest, artCopy, artName, artGroup;
 		// for(var x=0,len = curGroup.pageItems.length;x<len;x++)
-		for(var x=curGroup.pageItems.length-1;x>=0;x--)
+		for ( var x = curGroup.pageItems.length - 1; x >= 0; x-- )
 		{
 
-			dest = curGroup.pageItems[x];
-			artGroup = findSpecificPageItem(dest,"art_group","match");
-			if(!artGroup)
+			dest = curGroup.pageItems[ x ];
+			artGroup = findSpecificPageItem( dest, "art_group", "match" );
+			if ( !artGroup )
 			{
 				artGroup = dest.artGroup = dest.groupItems.add();
 				artGroup.name = "art_group";
 			}
 
-			if(intersects(art,dest))
+			if ( intersects( art, dest ) && halfWayIn( art, dest ) )
 			{
-				if(!isContainedWithin(art,dest))
+				if ( !isContainedWithin( art, dest ) )
 				{
-					if(!masksToMake[dest.name])
+					if ( !masksToMake[ dest.name ] )
 					{
-						masksToMake[dest.name] = {};
-						masksToMake[dest.name].destPiece = dest;
-						masksToMake[dest.name].art = [];
+						masksToMake[ dest.name ] = {};
+						masksToMake[ dest.name ].destPiece = dest;
+						masksToMake[ dest.name ].art = [];
 					}
-					masksToMake[dest.name].art.push(art);
+					masksToMake[ dest.name ].art.push( art );
 					// makeMask(artCopy,dest);
 				}
 				else
 				{
-					art.duplicate(artGroup);
+					art.duplicate( artGroup );
 				}
 			}
 
@@ -100,28 +100,28 @@ function duplicateArtwork(curGroup)
 		}
 	}
 
-	function makeMask(art,maskShape,artGroup)
+	function makeMask ( art, maskShape, artGroup )
 	{
 		var suffix = "_clip_mask";
-		var clipGroup,mask;
+		var clipGroup, mask;
 		var parent = maskShape.parent;
 		var artCopy;
-		
-		clipGroup = findSpecificPageItem(artGroup,maskShape.name + suffix,"any");
 
-		if(!clipGroup)
+		clipGroup = findSpecificPageItem( artGroup, maskShape.name + suffix, "any" );
+
+		if ( !clipGroup )
 		{
 			clipGroup = artGroup.groupItems.add();
 			clipGroup.name = maskShape.name + suffix;
 		}
 
-		
+
 
 		//identify or create the clipping path
-		mask = findSpecificPageItem(clipGroup,"clip_path","any");
-		if(!mask)
+		mask = findSpecificPageItem( clipGroup, "clip_path", "any" );
+		if ( !mask )
 		{
-			mask = clipGroup.pathItems.rectangle(maskShape.top,maskShape.left,maskShape.width,maskShape.height);
+			mask = clipGroup.pathItems.rectangle( maskShape.top, maskShape.left, maskShape.width, maskShape.height );
 			// mask.move(clipGroup, ElementPlacement.PLACEATBEGINNING);
 		}
 
@@ -131,14 +131,14 @@ function duplicateArtwork(curGroup)
 		mask.clipping = true;
 
 		//copy art to clip group
-		artCopy = art.duplicate(clipGroup,ElementPlacement.PLACEATEND);
+		artCopy = art.duplicate( clipGroup, ElementPlacement.PLACEATEND );
 
 		// artCopy.zOrder(ZOrderMethod.SENDTOBACK);
 		clipGroup.clipped = true;
-		clipGroup.zOrder(ZOrderMethod.SENDTOBACK);
+		clipGroup.zOrder( ZOrderMethod.SENDTOBACK );
 
-		
-		
+
+
 
 
 		// try
