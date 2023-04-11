@@ -69,6 +69,10 @@ function duplicateArtwork ( curGroup )
 		{
 
 			dest = curGroup.pageItems[ x ];
+			if ( dest.name.match( /placard|placket|collar|center/i ) )
+			{
+				return;
+			}
 			artGroup = findSpecificPageItem( dest, "art_group", "match" );
 			if ( !artGroup )
 			{
