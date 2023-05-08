@@ -26,7 +26,7 @@ function container ()
 		var devUtilPath = "~/Desktop/automation/utilities/";
 		var utilPath = dataResourcePath + "Utilities_Container.jsxbin";
 		var batchPath = dataResourcePath + "Batch_Framework.jsxbin";
-		var utilFilePaths = [utilPath]; //array of util files
+		var utilFilePaths = [ utilPath ]; //array of util files
 		var devUtilitiesPreferenceFile = File( "~/Documents/script_preferences/dev_utilities.txt" );
 		function readDevPref ( dp ) { dp.open( "r" ); var contents = dp.read() || ""; dp.close(); return contents; }
 		if ( devUtilitiesPreferenceFile.exists && readDevPref( devUtilitiesPreferenceFile ).match( /true/i ) )
@@ -35,9 +35,9 @@ function container ()
 			return utilFilePaths;
 		}
 
-		if(!File(utilFilePaths[0]).exists)
+		if ( !File( utilFilePaths[ 0 ] ).exists )
 		{
-			alert("Could not find utilities. Please ensure you're connected to the appropriate Customization drive.");
+			alert( "Could not find utilities. Please ensure you're connected to the appropriate Customization drive." );
 			return [];
 		}
 
@@ -51,7 +51,7 @@ function container ()
 		eval( "#include \"" + utilities[ u ] + "\"" );
 	}
 
-	if ( !valid || !utilities.length) return;
+	if ( !valid || !utilities.length ) return;
 
 
 	/*****************************************************************************/
@@ -98,8 +98,7 @@ function container ()
 	//test function
 	function testFunction ()
 	{
-		docRef = app.activeDocument;
-		getItemDimension( docRef.pageItems[ 0 ] );
+		makeDataSheet();
 	}
 	// testFunction();
 	// return;
@@ -108,10 +107,10 @@ function container ()
 
 	function execute ()
 	{
-		log.l( "Mockup Exporter Initialized for document: " + docRef.name );
+		log.l( "Mockup Exporter Initialized for document: " + doc.name );
 		if ( valid )
 		{
-			valid = getGarments( docRef );
+			valid = getGarments( doc );
 		}
 
 		if ( valid )
@@ -123,7 +122,12 @@ function container ()
 	}
 
 
-	var docRef = app.activeDocument;
+	var doc = app.activeDocument;
+	if ( doc.name.match( /untitled/i ) )
+	{
+		alert( "Please save the document before running this script." );
+		return;
+	}
 	initMockupExporter();
 
 
@@ -149,16 +153,23 @@ function container ()
 	//remove the cleanup_swatches action
 	removeAction( "cleanup_swatches" );
 
-	docRef.activate();
+	doc.activate();
+
+	//make the data sheet
+	makeDataSheet();
 
 	log.h( "Exporting standard jpg mockup." );
-	exportJpgMockup();
+	exportJpgMockup( 0 );
 
-	if ( docRef.name.toLowerCase().indexOf( "untitled" ) === -1 )
+	if ( afc( doc, "layers" ).filter( function ( l ) { return l.name.match( /fd-400g/i ); } ).length )
 	{
-		log.l( "saving master file with file name: " + masterFileSaveName );
-		docRef.saveAs( File( masterFileSaveName ) );
+		exportJpgMockup( 1, "Girls" );
 	}
+
+	log.l( "saving master file with file name: " + masterFileSaveName );
+	app.userInteractionLevel = UserInteractionLevel.DONTDISPLAYALERTS;
+	doc.saveAs( File( masterFileSaveName ) );
+	app.userInteractionLevel = UserInteractionLevel.DISPLAYALERTS;
 
 	//=================================  /Procedure  =================================//
 	/*****************************************************************************/
