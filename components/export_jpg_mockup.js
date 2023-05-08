@@ -14,70 +14,49 @@
 
 */
 
-function exportJpgMockup()
+function exportJpgMockup ( abIndex, suffix )
 {
 	var doc = app.activeDocument;
 	var ab = doc.artboards;
 
-	var newFileName = decodeURI(doc.fullName.toString());
-	log.l("newFileName = " + newFileName);
-	newFileName = newFileName.replace(/\.ai[t]?/i,"");
-	newFileName = newFileName.replace(/(master)|(prepress)/i,"Mockup");
+	var newFileName = decodeURI( doc.fullName.toString() );
+	log.l( "newFileName = " + newFileName );
+	newFileName = newFileName.replace( /\.ai[t]?/i, "" );
+	newFileName = newFileName.replace( /(master)|(prepress)/i, "Mockup" );
+	log.l( "converted newFileName to: " + newFileName );
+
+	newFileName = decodeURI( newFileName );
+
+	newFileName = normalizeLocalFilePath( newFileName );
+
+	if ( user == "thell" )
+	{
+		newFileName = newFileName.replace( "C:", "D:" );
+		newFileName = newFileName.replace( /\//g, "\\\\" );
+	}
+	else if ( os == "windows" )
+	{
+		log.l( "User is on a PC. converting forward slashes to backslashes" );
+		newFileName = decodeURI( newFileName.replace( /\//g, "\\\\" ) );
+	}
+
+	suffix ? ( newFileName += "_" + suffix ) : null;
 	newFileName += ".jpg";
-	log.l("converted newFileName to: " + newFileName);
 
+	log.l( "finished updating newFileName::newFileName = " + newFileName );
 
-	newFileName = decodeURI(newFileName);
+	ab.setActiveArtboardIndex( abIndex || 0 );
 
-	// newFileName = newFileName.replace(/(^.*users\/)|(^~\/)/i,homeFolderPath);
-	newFileName = normalizeLocalFilePath(newFileName);
+	// var jpgExportOptions = new ExportOptionsJPEG();
+	// jpgExportOptions.verticalScale = 250;
+	// jpgExportOptions.horizontalScale = 250;
+	// jpgExportOptions.qualitySetting = 100;
+	// jpgExportOptions.artBoardClipping = true;
 
-	if(os === "mac")
-	{
-		if(newFileName.indexOf("Volumes") === -1)
-		{
-			newFileName = "/Volumes" + newFileName;
-		}
-	}
-	else if(user == "thell")
-	{
-		newFileName = newFileName.replace("C:","D:");
-		newFileName = newFileName.replace(/\//g,"\\\\");
-	}
-	else
-	{
-		log.l("User is on a PC. converting forward slashes to backslashes");
-		newFileName = decodeURI(newFileName.replace(/\//g,"\\\\"));
-	}
-	
-	log.l("finished updating newFileName::newFileName = "+ newFileName);
-	
+	// doc.exportFile( File( newFileName ), jpgExportType, jpgExportOptions )
 
-	var actionString = EXPORT_JPG_HIGH_QUALITY_ACTION_STRING.join("\n");
+	exportJpg( newFileName, ab[ abIndex || 0 ].artboardRect, 150 );
 
-	actionString = actionString.replace("**folder_char_length**",newFileName.length);
-	actionString = actionString.replace("**hex_folder_path**",asciiToHex(newFileName));
-
-
-	
-
-	actionString = actionString.split("\n");
-	
-	try
-	{
-		createAction("export jpg",actionString);
-		app.doScript("export jpg","export jpg");
-		removeAction("export jpg");	
-		log.l("Successfully exported jpg mockup.");
-	}
-	catch(e)
-	{
-		log.e("Failed to export the jpg mockup.::actionString = " + actionString.join("\n") + "::e = " + e + "::e.line = " + e.line);
-		errorList.push("Failed to export the jpg mockup.");
-
-	}
-	
-
-	// doc.exportFile(File(newFileName), jpgExportType, jpgExportOptions)
+	ab.setActiveArtboardIndex( 0 );
 
 }
