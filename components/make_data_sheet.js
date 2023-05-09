@@ -418,7 +418,7 @@ function makeDataSheet ()
 
     // doc.exportFile( new File( newFileName ), ExportType.JPEG, jpgOpts );
 
-    exportJpg( newFileName, ab.artboardRect, 200 );
+    exportJpg( newFileName, 0 );
 
     labelLayer.visible = false;
     ogLayers.forEach( function ( lay )

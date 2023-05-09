@@ -14,7 +14,7 @@
 
 */
 
-function exportJpgMockup ( abIndex, suffix )
+function exportJpgMockup ()
 {
 	var doc = app.activeDocument;
 	var ab = doc.artboards;
@@ -40,23 +40,18 @@ function exportJpgMockup ( abIndex, suffix )
 		newFileName = decodeURI( newFileName.replace( /\//g, "\\\\" ) );
 	}
 
-	suffix ? ( newFileName += "_" + suffix ) : null;
+
 	newFileName += ".jpg";
 
 	log.l( "finished updating newFileName::newFileName = " + newFileName );
 
-	ab.setActiveArtboardIndex( abIndex || 0 );
 
-	// var jpgExportOptions = new ExportOptionsJPEG();
-	// jpgExportOptions.verticalScale = 250;
-	// jpgExportOptions.horizontalScale = 250;
-	// jpgExportOptions.qualitySetting = 100;
-	// jpgExportOptions.artBoardClipping = true;
+	//global export function located in utilites container
+	exportJpg( newFileName, 0 );
 
-	// doc.exportFile( File( newFileName ), jpgExportType, jpgExportOptions )
-
-	exportJpg( newFileName, ab[ abIndex || 0 ].artboardRect, 150 );
-
-	ab.setActiveArtboardIndex( 0 );
+	if ( afc( doc, "layers" ).filter( function ( l ) { return l.name.match( /fd-400g/i ); } ).length )
+	{
+		exportJpg( newFileName.replace( ".jpg", "Girls.jpg" ), 1 );
+	}
 
 }

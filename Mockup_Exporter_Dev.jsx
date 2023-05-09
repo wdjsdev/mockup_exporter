@@ -158,13 +158,10 @@ function container ()
 	//make the data sheet
 	makeDataSheet();
 
-	log.h( "Exporting standard jpg mockup." );
-	exportJpgMockup( 0 );
+	log.l( "Exporting standard jpg mockup." );
+	exportJpgMockup();
 
-	if ( afc( doc, "layers" ).filter( function ( l ) { return l.name.match( /fd-400g/i ); } ).length )
-	{
-		exportJpgMockup( 1, "Girls" );
-	}
+
 
 	log.l( "saving master file with file name: " + masterFileSaveName );
 	app.userInteractionLevel = UserInteractionLevel.DONTDISPLAYALERTS;
