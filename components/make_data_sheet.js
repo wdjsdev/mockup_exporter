@@ -190,7 +190,7 @@ function makeDataSheet ()
             {
                 return;
             }
-            patternColors.push( itemColors.colors[ 0 ] );
+            patternColors.push( itemColors.base[ 0 ] );
         } );
 
         tmpPatternLay.remove();
