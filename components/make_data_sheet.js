@@ -28,6 +28,10 @@ function makeDataSheet ()
 
     function analyzeParamBlock ( block )
     {
+        if ( block.typename.match( /group/i ) && !block.groupItems.length )
+        {
+            return;
+        }
         app.activeDocument.selection = null;
         var label = block.name.replace( /paramcolor-/i, "" );
 
@@ -36,13 +40,13 @@ function makeDataSheet ()
         app.executeMenuCommand( "expandStyle" );
         app.activeDocument.selection = null;
         ungroup( tmpLay, tmpLay, 0 );
-        var result = { "label": label, "colors": [], "gradients": [], "patterns": [] };
+        var result = { "label": label, "base": [], "gradients": [], "patterns": [] };
         afc( tmpLay, "pageItems" ).forEach( function ( item )
         {
             if ( !item ) { return; }
             var itemResult = getItemColors( item );
             if ( !itemResult ) { return; }
-            [ "colors", "gradients", "patterns" ].forEach( function ( prop )
+            [ "base", "gradients", "patterns" ].forEach( function ( prop )
             {
                 itemResult[ prop ].forEach( function ( color )
                 {
@@ -118,7 +122,7 @@ function makeDataSheet ()
             return prodColors.indexOf( color.toLowerCase() ) === -1;
         } )
 
-        return { colors: getUnique( curItemColors ), gradients: getUnique( curItemGradients ), patterns: getUnique( curItemPatterns ) };
+        return { base: getUnique( curItemColors ), gradients: getUnique( curItemGradients ), patterns: getUnique( curItemPatterns ) };
     }
 
     function processPatternFill ( patternName )
@@ -225,7 +229,7 @@ function makeDataSheet ()
 
         var infoGroup = phLabelGroup.groupItems.add();
 
-        [ "colors", "gradients", "patterns" ].forEach( function ( prop, ind, thisArr )
+        [ "base", "gradients", "patterns" ].forEach( function ( prop, ind, thisArr )
         {
             var labelFrame = infoGroup.textFrames.add();
             labelFrame.contents = prop.toTitleCase();
@@ -311,7 +315,7 @@ function makeDataSheet ()
             errorList.push( "Could not find paramcolors layer" );
             return;
         }
-        paramBlocks = afc( paramLay, "pageItems" ).sort( function ( a, b )
+        paramBlocks = afc( paramLay, "pathItems" ).sort( function ( a, b )
         {
             return a.name.charAt( a.name.length - 1 ) - b.name.charAt( b.name.length - 1 )
         } );
