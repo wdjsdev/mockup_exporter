@@ -48,14 +48,14 @@ function masterLoop ()
 			continue;
 		}
 
-		if (!getMasterLayers())
+		if ( !getMasterLayers() )
 		{
 			continue;
 		}
 
 
-		var paramLayer = findSpecificLayer(mockupLayer,"paramcolors","any");
-		if(!paramLayer)
+		var paramLayer = findSpecificLayer( mockupLayer, "paramcolors", "any" );
+		if ( !paramLayer )
 		{
 			addParamColors();
 		}
@@ -77,8 +77,8 @@ function masterLoop ()
 		{
 			continue;
 		}
-		log.l("UV File successfully opened.");
-		
+		log.l( "UV File successfully opened." );
+
 
 		if ( !duplicateMockupSizePiecesToTemplate( uvFile ) )
 		{
@@ -88,10 +88,10 @@ function masterLoop ()
 
 		uvFile.activate();
 
-		if ( mockupExporterGarmentData[ curGarmentCode ] && mockupExporterGarmentData[ curGarmentCode ].flipCollars )
-		{
-			flipCollars();
-		}
+		// if ( mockupExporterGarmentData[ curGarmentCode ] && mockupExporterGarmentData[ curGarmentCode ].flipCollars )
+		// {
+		// 	flipCollars();
+		// }
 
 		if ( !scalePiecesToFitGuides() )
 		{
