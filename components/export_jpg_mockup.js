@@ -51,7 +51,7 @@ function exportJpgMockup ()
 
 	if ( afc( doc, "layers" ).filter( function ( l ) { return l.name.match( /fd-400g/i ); } ).length )
 	{
-		exportJpg( newFileName.replace( ".jpg", "Girls.jpg" ), 1 );
+		exportJpg( newFileName.replace( ".jpg", "_Girls.jpg" ), 1 );
 	}
 
 }
