@@ -248,7 +248,18 @@ function makeDataSheet ()
         var displayBlock = infoGroup.pathItems.rectangle( bgBounds.t, bgBounds.l, dbDim, dbDim );
         displayBlock.left = ( bgBounds.left + bgBounds.width * .9 ) - dbDim;
         align( bgRect, [ displayBlock ], "vcenter" )
-        doc.graphicStyles[ data.label ].applyTo( displayBlock );
+
+        var gS = afc( doc, "graphicStyles" ).filter( function ( gs ) { return gs.name === data.label } );
+
+        if ( gS.length )
+        {
+            gS = gS[ 0 ];
+            gS.applyTo( displayBlock );
+        }
+        else 
+        {
+            errorList.push( "Could not find graphic style: " + data.label );
+        }
         if ( !displayBlock.stroked )
         {
             displayBlock.strokeColor = infoSwatch.color;
