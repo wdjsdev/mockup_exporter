@@ -332,7 +332,10 @@ function makeDataSheet ()
         } );
     }
 
-
+    if ( !paramBlocks.length )
+    {
+        return;
+    }
 
 
     var paramData = [];
