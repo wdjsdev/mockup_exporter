@@ -12,37 +12,37 @@
 
 */
 
-function getMasterLayers()
+function getMasterLayers ()
 {
-	ppLay = getPPLay(curGarmentLayer);
-	if(!ppLay)
+	ppLay = getPPLay( curGarmentLayer );
+	if ( !ppLay )
 	{
-		errorList.push("Failed to find the prepress layer for " + curGarmentLayer.name);
+		errorList.push( "Failed to find the prepress layer for " + curGarmentLayer.name );
 		return false;
 	}
 
-	mockupLayer = findSpecificLayer(curGarmentLayer,"Mockup");
-	if(!mockupLayer)
+	mockupLayer = findSpecificLayer( curGarmentLayer, "Mockup" );
+	if ( !mockupLayer )
 	{
-		errorList.push("Failed to find a mockup layer for " + curGarmentLayer.name);
+		errorList.push( "Failed to find a mockup layer for " + curGarmentLayer.name );
 		return false;
 	}
 
-	paramLayer = findSpecificLayer(mockupLayer,"paramcolors");
-	if(!paramLayer)
+	paramLayer = findSpecificLayer( mockupLayer, "paramcolor", "any" );
+	if ( !paramLayer )
 	{
-		errorList.push("Failed to find the paramcolors layer for " + curGarmentLayer.name);
+		errorList.push( "Failed to find the paramcolors layer for " + curGarmentLayer.name );
 		return false;
 	}
 
-	artLayer = findSpecificLayer(curGarmentLayer,"Artwork Layer");
-	if(!artLayer)
+	artLayer = findSpecificLayer( curGarmentLayer, "Artwork Layer" );
+	if ( !artLayer )
 	{
-		errorList.push("Failed to find the artwork layer for " + curGarmentLayer.name);
+		errorList.push( "Failed to find the artwork layer for " + curGarmentLayer.name );
 		return false;
 	}
 
-	
-	
+
+
 	return true;
 }
