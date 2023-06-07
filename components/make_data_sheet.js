@@ -245,9 +245,16 @@ function makeDataSheet ()
         } );
 
         var dbDim = bgBounds.height * .7;
+        var strokeBlock = infoGroup.pathItems.rectangle( bgBounds.t, bgBounds.l, dbDim, dbDim );
         var displayBlock = infoGroup.pathItems.rectangle( bgBounds.t, bgBounds.l, dbDim, dbDim );
-        displayBlock.left = ( bgBounds.left + bgBounds.width * .9 ) - dbDim;
-        align( bgRect, [ displayBlock ], "vcenter" )
+        strokeBlock.name = "strokeBlock";
+        strokeBlock.filled = false;
+        strokeBlock.strokeColor = infoSwatch.color;
+        strokeBlock.strokeWeight = 1;
+        strokeBlock.left = displayBlock.left = ( bgBounds.left + bgBounds.width * .9 ) - dbDim;
+
+        align( bgRect, [ displayBlock, strokeBlock ], "vcenter" )
+
 
         var gS = afc( doc, "graphicStyles" ).filter( function ( gs ) { return gs.name === data.label } );
 
@@ -259,10 +266,6 @@ function makeDataSheet ()
         else 
         {
             errorList.push( "Could not find graphic style: " + data.label );
-        }
-        if ( !displayBlock.stroked )
-        {
-            displayBlock.strokeColor = infoSwatch.color;
         }
 
         return phLabelGroup;
