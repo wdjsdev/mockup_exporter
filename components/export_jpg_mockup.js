@@ -49,9 +49,20 @@ function exportJpgMockup ()
 	//global export function located in utilites container
 	exportJpg( newFileName, 0 );
 
-	if ( afc( doc, "layers" ).filter( function ( l ) { return l.name.match( /fd-400g/i ); } ).length )
+	var youthMockupCodes = [ "FD-400G", "FD-3096Y", "FD-5421Y", "FD-5422Y", "FD-5423Y", "FD-5424Y", "FD-5425Y", "FD-5426Y", "FD-5427Y", "FD-5428Y", "FD-5430Y" ]
+
+	var youthMockupLayers = [];
+
+	afc( doc, "layers" ).forEach( function ( l ) 
 	{
-		exportJpg( newFileName.replace( ".jpg", "_Girls.jpg" ), 1 );
+		if ( youthMockupCodes.indexOf( l.name.replace( /_.*/i, "" ) ) >= 0 )
+		{
+			youthMockupLayers.push( l );
+		}
+	} );
+	if ( youthMockupLayers.length )
+	{
+		exportJpg( newFileName.replace( ".jpg", "_Youth.jpg" ), 1 );
 	}
 
 }
