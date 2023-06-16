@@ -104,22 +104,22 @@ function container ()
 	// return;
 
 
+	//disabled logic for making a 3d mockup 
+	// function execute ()
+	// {
+	// 	log.l( "Mockup Exporter Initialized for document: " + doc.name );
+	// 	if ( valid )
+	// 	{
+	// 		valid = getGarments( doc );
+	// 	}
 
-	function execute ()
-	{
-		log.l( "Mockup Exporter Initialized for document: " + doc.name );
-		if ( valid )
-		{
-			valid = getGarments( doc );
-		}
-
-		if ( valid )
-		{
-			log.l( "Successfully gathered garments." );
-			log.l( "garmentsNeeded = " + garmentsNeeded );
-			valid = masterLoop();
-		}
-	}
+	// 	if ( valid )
+	// 	{
+	// 		log.l( "Successfully gathered garments." );
+	// 		log.l( "garmentsNeeded = " + garmentsNeeded );
+	// 		valid = masterLoop();
+	// 	}
+	// }
 
 
 	var doc = app.activeDocument;
@@ -141,17 +141,18 @@ function container ()
 
 	//create the cleanup_swatches action
 	// createCleanupSwatchesAction();
-	createAction( "cleanup_swatches", CLEANUP_SWATCHES_ACTION_STRING );
+	// createAction( "cleanup_swatches", CLEANUP_SWATCHES_ACTION_STRING );
 
 	log.l( "Finished creating cleanup swatches action" );
 
 	//run the script
-	execute();
+	// execute();
+	printDesignNumberOnMockup();
 
 
 
 	//remove the cleanup_swatches action
-	removeAction( "cleanup_swatches" );
+	// removeAction( "cleanup_swatches" );
 
 	doc.activate();
 
