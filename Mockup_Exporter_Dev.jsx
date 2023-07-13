@@ -105,21 +105,21 @@ function container ()
 
 
 	//disabled logic for making a 3d mockup 
-	// function execute ()
-	// {
-	// 	log.l( "Mockup Exporter Initialized for document: " + doc.name );
-	// 	if ( valid )
-	// 	{
-	// 		valid = getGarments( doc );
-	// 	}
+	function execute ()
+	{
+		log.l( "Mockup Exporter Initialized for document: " + doc.name );
+		if ( valid )
+		{
+			valid = getGarments( doc );
+		}
 
-	// 	if ( valid )
-	// 	{
-	// 		log.l( "Successfully gathered garments." );
-	// 		log.l( "garmentsNeeded = " + garmentsNeeded );
-	// 		valid = masterLoop();
-	// 	}
-	// }
+		if ( valid )
+		{
+			log.l( "Successfully gathered garments." );
+			log.l( "garmentsNeeded = " + garmentsNeeded );
+			valid = masterLoop();
+		}
+	}
 
 
 	var doc = app.activeDocument;
@@ -146,7 +146,11 @@ function container ()
 	log.l( "Finished creating cleanup swatches action" );
 
 	//run the script
-	// execute();
+	execute();
+	// if ( user.match( /aimee|kieser/i ) )
+	// {
+	// 	execute();
+	// }
 	printDesignNumberOnMockup();
 
 

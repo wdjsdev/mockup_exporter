@@ -12,26 +12,28 @@
 
 */
 
-function getExportSettings()
+function getExportSettings ()
 {
-	if(!Folder(networkExportPath).exists)
+	if ( !Folder( networkExportPath ).exists )
 	{
-		Folder(networkExportPath).create();
-	}
-	
-
-	if(blankMode)
-	{
-		exportType = svgExportType;
-		exportOptions = svgExportOptions;
-		exportExtension = svgExt;
-	}
-	else
-	{
-		exportType = jpgExportType;
-		exportOptions = jpgExportOptions;
-		exportExtension = jpgExt;
+		Folder( networkExportPath ).create();
 	}
 
-	exportFileName = layers[0].name + "_" + exportFileName + "_" + exportExtension;
+	exportType = svgExportType;
+	exportOptions = svgExportOptions;
+	exportExtension = svgExt;
+	// if(blankMode)
+	// {
+	// 	exportType = svgExportType;
+	// 	exportOptions = svgExportOptions;
+	// 	exportExtension = svgExt;
+	// }
+	// else
+	// {
+	// 	exportType = jpgExportType;
+	// 	exportOptions = jpgExportOptions;
+	// 	exportExtension = jpgExt;
+	// }
+
+	exportFileName = layers[ 0 ].name + "_" + exportFileName + "_" + exportExtension;
 }
