@@ -42,8 +42,8 @@ function duplicateArtwork ( curGroup )
 	app.selection = null;
 
 
-	for ( var x = 0, len = artItems.length; x < len; x++ )
-	// for(var x = artItems.length -1; x>=0;x--)
+	// for ( var x = 0, len = artItems.length; x < len; x++ )
+	for ( var x = artItems.length - 1; x >= 0; x-- )
 	{
 		checkArtForOverlap( artItems[ x ], curGroup );
 	}
@@ -71,7 +71,7 @@ function duplicateArtwork ( curGroup )
 			dest = curGroup.pageItems[ x ];
 			if ( dest.name.match( /placard|placket|collar|center/i ) )
 			{
-				return;
+				continue;
 			}
 			artGroup = findSpecificPageItem( dest, "art_group", "match" );
 			if ( !artGroup )
