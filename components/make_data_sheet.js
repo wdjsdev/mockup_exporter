@@ -28,7 +28,7 @@ function makeDataSheet ()
 
     function analyzeParamBlock ( block )
     {
-        if ( block.typename.match( /group/i ) && !block.groupItems.length )
+        if ( block.typename.match( /group|layer/i ) && !block.groupItems.length )
         {
             return;
         }
@@ -329,7 +329,7 @@ function makeDataSheet ()
             errorList.push( "Could not find paramcolors layer" );
             return;
         }
-        paramBlocks = afc( paramLay, "pathItems" ).sort( function ( a, b )
+        paramBlocks = afc( paramLay, "pageItems" ).sort( function ( a, b )
         {
             return a.name.charAt( a.name.length - 1 ) - b.name.charAt( b.name.length - 1 )
         } );
