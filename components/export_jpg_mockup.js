@@ -50,8 +50,11 @@ function exportJpgMockup ()
 	exportJpg( newFileName, 0 );
 
 	var youthMockupCodes = [ "FD-400G", "FD-3096Y", "FD-5421Y", "FD-5422Y", "FD-5423Y", "FD-5424Y", "FD-5425Y", "FD-5426Y", "FD-5427Y", "FD-5428Y", "FD-5430Y" ]
+	var multiArtboardGarments = [ "MBB-0601100", "MBB-0601100", "MBB-0601200", "MBB-0601200W", "MBB-0701100", "MBB-0701100", "MBB-0701200", "MBB-0701200W", "MBB-0801100", "MBB-0801100", "MBB-0801200", "MBB-0801200W" ]
+
 
 	var youthMockupLayers = [];
+	var multiArtboardGarmentLayers = [];
 
 	afc( doc, "layers" ).forEach( function ( l ) 
 	{
@@ -59,10 +62,19 @@ function exportJpgMockup ()
 		{
 			youthMockupLayers.push( l );
 		}
+		else if ( multiArtboardGarments.indexOf( l.name.replace( /_.*/i, "" ) ) >= 0 )
+		{
+			multiArtboardGarmentLayers.push( l );
+		}
 	} );
 	if ( youthMockupLayers.length )
 	{
 		exportJpg( newFileName.replace( ".jpg", "_Youth.jpg" ), 1 );
 	}
+	if ( multiArtboardGarmentLayers.length )
+	{
+		exportJpg( newFileName.replace( ".jpg", "_2.jpg" ), 1 );
+	}
+
 
 }
