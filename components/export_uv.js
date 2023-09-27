@@ -13,35 +13,45 @@
 
 */
 
-function exportUV()
+function exportUV ()
 {
 
 	getExportSettings();
 
-	exportFile = File(networkExportPath + exportFileName);
+	// kill all live text
+	killAllLiveText();
 
-	log.l("Exporting UV to: " + exportFile.fullName);
+	exportFile = File( networkExportPath + exportFileName );
 
-	uvFile.exportFile(exportFile,exportType,exportOptions);
+	log.l( "Exporting UV to: " + exportFile.fullName );
 
-	if(exportType.toString().toLowerCase().indexOf("svg")>-1)
+	if ( exportType == "pdf" )
 	{
-		fixSvgCoding(exportFile);
+		app.activeDocument.saveAs( exportFile, pdfSaveOpts );
+	}
+	else 
+	{
+		uvFile.exportFile( exportFile, exportType, exportOptions );
+	}
+
+	if ( exportType.toString().toLowerCase().indexOf( "svg" ) > -1 )
+	{
+		fixSvgCoding( exportFile );
 	}
 
 
-	if(devMode)
+	if ( devMode )
 	{
-		exportFile = File(localExportPath + exportFileName);
-		log.l("Exporting UV to: " + exportFile.fullName);
+		exportFile = File( localExportPath + exportFileName );
+		log.l( "Exporting UV to: " + exportFile.fullName );
 
-		uvFile.exportFile(exportFile,exportType,exportOptions);
+		uvFile.exportFile( exportFile, exportType, exportOptions );
 
-		if(exportType.toString().toLowerCase().indexOf("svg")>-1)
+		if ( exportType.toString().toLowerCase().indexOf( "svg" ) > -1 )
 		{
-			fixSvgCoding(exportFile);
+			fixSvgCoding( exportFile );
 		}
 	}
-	
+
 
 }

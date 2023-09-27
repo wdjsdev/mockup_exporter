@@ -22,12 +22,12 @@
 
 */
 
-	////////////
+////////////
 
-	//dev mode
+//dev mode
 
-	////////////
-	
+////////////
+
 var devMode = false;
 
 //blank mode is for the 3d blank mockup exporter
@@ -35,22 +35,22 @@ var devMode = false;
 //otherwise we'll just export jpgs
 var blankMode = false;
 
-	////////////
+////////////
 
-	//dev mode
+//dev mode
 
-	////////////
+////////////
 
-	//get the mockup_exporter_garment_data.js file
-	var exporterDataPath = decodeURI(dataPath + "mockup_exporter_garment_data.js");
-	var mockupExporterDataFile = File(exporterDataPath);
+//get the mockup_exporter_garment_data.js file
+var exporterDataPath = decodeURI( dataPath + "mockup_exporter_garment_data.js" );
+var mockupExporterDataFile = File( exporterDataPath );
 
-	mockupExporterDataFile.open("r");
-	eval(mockupExporterDataFile.read());
-	mockupExporterDataFile.close();
+mockupExporterDataFile.open( "r" );
+eval( mockupExporterDataFile.read() );
+mockupExporterDataFile.close();
 
 
-	//master file variables
+//master file variables
 var docRef,
 	layers,
 	aB,
@@ -63,9 +63,9 @@ var docRef,
 	sizeType = "std", //string representing the sizing structure. "std" = standard, "var" = variable inseam
 	waistSize = "",
 	placeholderSwatchLetter = "B",
-	masterFileSaveName = decodeURI(normalizeLocalFilePath(app.activeDocument.fullName.toString()));
+	masterFileSaveName = decodeURI( normalizeLocalFilePath( app.activeDocument.fullName.toString() ) );
 
-	//garment variables
+//garment variables
 var garmentsNeeded = [],
 	curGarmentLayer,
 	curGarmentCode,
@@ -76,13 +76,13 @@ var garmentsNeeded = [],
 	tmpArtGroup,
 	tmpParamGroup,
 	//COLAR_COLORS is a list of colors that should be removed from the uvFile before exporting.
-	COLLAR_COLORS = ["Collar Info B", "Collar Info 2 B", "Care Label B", "Collar B", "Collar 2 B"];
+	COLLAR_COLORS = [ "Collar Info B", "Collar Info 2 B", "Care Label B", "Collar B", "Collar 2 B" ];
 
 
 
-	//uv file variables
+//uv file variables
 var uvFolderPath = resourcePath + "Files/uv_maps/",
-	uvFolder = Folder(uvFolderPath),
+	uvFolder = Folder( uvFolderPath ),
 	uvFile,
 	uvLayers,
 	uvArtboards,
@@ -94,31 +94,44 @@ var uvFolderPath = resourcePath + "Files/uv_maps/",
 
 
 
-	//export variables
-var appendages = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+//export variables
+var appendages = [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" ],
 	localExportPath = desktopPath + "3D_Builder_Mockups/",
 
 	networkExportPath = customizationPath + "Order_Mockup_Files/",
 	exportFileName,
 	exportFile;
 
-	if(!Folder(localExportPath).exists)
-	{
-		Folder(localExportPath).create();
-	}
+if ( !Folder( localExportPath ).exists )
+{
+	Folder( localExportPath ).create();
+}
 
-	//JPG export options
+//JPG export options
 var jpgExportType = ExportType.JPEG;
-var	jpgExportOptions = new ExportOptionsJPEG();
-	jpgExportOptions.artBoardClipping = true;
-	jpgExportOptions.qualitySetting = 100;
-	jpgExt = ".jpg";
+var jpgExportOptions = new ExportOptionsJPEG();
+jpgExportOptions.artBoardClipping = true;
+jpgExportOptions.qualitySetting = 100;
+jpgExt = ".jpg";
 
-	//SVG export options
+//SVG export options
 var svgExportType = ExportType.SVG;
 var svgExportOptions = new ExportOptionsSVG();
-	svgExportOptions.cssProperties = SVGCSSPropertyLocation.PRESENTATIONATTRIBUTES;
+svgExportOptions.cssProperties = SVGCSSPropertyLocation.PRESENTATIONATTRIBUTES;
+// svgExportOptions.fontType = SVGFontType.OUTLINEFONT;
 var svgExt = ".svg";
+
+//PDF save settings
+var flatOpts = new PrintFlattenerOptions();
+flatOpts.overprint = PDFOverprint.DISCARDPDFOVERPRINT;
+flatOpts.convertTextToOutlines = true;
+
+var pdfSaveOpts = new PDFSaveOptions();
+pdfSaveOpts.preserveEditability = false;
+pdfSaveOpts.viewAfterSaving = false;
+pdfSaveOpts.compressArt = true;
+pdfSaveOpts.optimization = true;
+pdfSaveOpts.flattenerOptions = flatOpts;
 
 var exportType = svgExportType;
 var exportOptions = svgExportOptions;

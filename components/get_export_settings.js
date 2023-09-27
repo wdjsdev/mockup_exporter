@@ -19,15 +19,28 @@ function getExportSettings ()
 		Folder( networkExportPath ).create();
 	}
 
-	exportType = svgExportType;
-	exportOptions = svgExportOptions;
-	exportExtension = svgExt;
-	// if(blankMode)
-	// {
-	// 	exportType = svgExportType;
-	// 	exportOptions = svgExportOptions;
-	// 	exportExtension = svgExt;
-	// }
+	if ( blankMode )
+	{
+		exportType = svgExportType;
+		exportOptions = svgExportOptions;
+		exportExtension = svgExt;
+	}
+	else 
+	{
+		//PDF save settings
+		var flatOpts = new PrintFlattenerOptions();
+		flatOpts.overprint = PDFOverprint.DISCARDPDFOVERPRINT;
+		flatOpts.convertTextToOutlines = true;
+
+		var pdfSaveOpts = new PDFSaveOptions();
+		pdfSaveOpts.preserveEditability = false;
+		pdfSaveOpts.viewAfterSaving = false;
+		pdfSaveOpts.compressArt = true;
+		pdfSaveOpts.optimization = true;
+		pdfSaveOpts.flattenerOptions = flatOpts;
+
+		exportType = "pdf";
+	}
 	// else
 	// {
 	// 	exportType = jpgExportType;
