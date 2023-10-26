@@ -14,7 +14,7 @@
 
 function getMasterLayers ()
 {
-	ppLay = getPPLay( curGarmentLayer );
+	ppLay = findSpecificLayer( curGarmentLayer, "Prepress", "any" );
 	if ( !ppLay )
 	{
 		errorList.push( "Failed to find the prepress layer for " + curGarmentLayer.name );

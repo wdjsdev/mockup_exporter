@@ -387,7 +387,7 @@ function makeDataSheet ()
 
     paramData.forEach( function ( paramInfo, ind )
     {
-        if ( !paramInfo.label ) { return; }
+        if ( !paramInfo || !paramInfo.label ) { return; }
         var labelGroup = makePlaceholderLabel( paramInfo, labelContainer, labelWidth, labelHeight );
         labelGroup.position = [ curX, curY ];
         if ( ind && ind % 4 === 0 )
