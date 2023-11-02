@@ -13,35 +13,35 @@
 
 */
 
-function recolorDisplayBlocks()
+function recolorDisplayBlocks ()
 {
 	var result = true;
-	var curData = mockupExporterGarmentData[curGarmentCode];
-	var index,paramBlock,display;
-	if(curData)
+	var curData = mockupExporterGarmentData[ curGarmentCode ];
+	var index, paramBlock, display;
+	if ( curData )
 	{
-		for(var x=0,len=curData.updateDisplay.length;x<len;x++)
+		for ( var x = 0, len = curData.updateDisplay.length; x < len; x++ )
 		{
-			recolorBlock(curData.updateDisplay[x].name,curData.updateDisplay[x].seq)
+			recolorBlock( curData.updateDisplay[ x ].name, curData.updateDisplay[ x ].seq )
 		}
 	}
 
 	return result;
 
-	function recolorBlock(name,index)
+	function recolorBlock ( name, index )
 	{
-		if(index === -1)
+		if ( index === -1 )
 		{
 			index = 0;
 		}
-		
-		display = findSpecificPageItem(uvArtLayer,name,"any");
-		paramBlock = uvParamLayer.pageItems[index];
 
-		if(!display)
+		display = findSpecificPageItem( uvArtLayer, name, "any" );
+		paramBlock = uvParamLayer.pageItems.length > index ? uvParamLayer.pageItems[ index ] : undefined;
+
+		if ( !display )
 		{
-			errorList.push("The UV Map file is missing a display block called " + name);
-			log.e("UV Map file doesn't have a display block called: " + name);
+			errorList.push( "The UV Map file is missing a display block called " + name );
+			log.e( "UV Map file doesn't have a display block called: " + name );
 			result = false;
 		}
 
