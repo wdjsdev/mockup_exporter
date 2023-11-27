@@ -108,6 +108,11 @@ function makeDataSheet ()
             }
             else if ( curProp.typename.match( /pattern/i ) )
             {
+                if ( !curProp.pattern.name || curProp.pattern.name.match( /unnamed/i ) )
+                {
+                    errorList.push( "There is an unnamed pattern fill in the document. Please name it and try again." );
+                    return;
+                }
                 curItemPatterns.push( curProp.pattern.name + "_" + processPatternFill( curProp.pattern.name ).join( "/" ) );
             }
             else
