@@ -14,36 +14,36 @@
 
 */
 
-function removeProductionInfo()
+function removeProductionInfo ()
 {
 	var colorsToRemove = BOOMBAH_PRODUCTION_COLORS;
 
 	//add the collar colors to the list of colors to remove
-	colorsToRemove = colorsToRemove.concat(COLLAR_COLORS);
+	colorsToRemove = colorsToRemove.concat( COLLAR_COLORS );
 	var toBeRemoved = [];
 
 	var curSwatch;
-	for(var x=0,len=uvSwatches.length;x<len;x++)
+	for ( var x = 0, len = uvSwatches.length; x < len; x++ )
 	{
-		curSwatch = uvSwatches[x];
-		if(colorsToRemove.indexOf(curSwatch.name)>-1)
+		curSwatch = uvSwatches[ x ];
+		if ( colorsToRemove.indexOf( curSwatch.name ) > -1 && !curSwatch.name.match( /jock/i ) )
 		{
-			findProdColor(curSwatch);
+			findProdColor( curSwatch );
 		}
 	}
 
-	for(var x= toBeRemoved.length-1;x>=0;x--)
+	for ( var x = toBeRemoved.length - 1; x >= 0; x-- )
 	{
 		try
 		{
-			toBeRemoved[x].remove();
+			toBeRemoved[ x ].remove();
 		}
-		catch(e){}
+		catch ( e ) { }
 	}
 
 	return true;
 
-	function findProdColor(swatch)
+	function findProdColor ( swatch )
 	{
 		var curSwatch;
 		uvFile.selection = null;
@@ -57,20 +57,20 @@ function removeProductionInfo()
 		// curSwatch = makeNewSpotColor(swatchName, "CMYK", tmpColorValues);
 
 		uvFile.defaultFillColor = swatch.color;
-		app.executeMenuCommand("Find Fill Color menu item");
-		pushRmColors(uvFile.selection);
+		app.executeMenuCommand( "Find Fill Color menu item" );
+		pushRmColors( uvFile.selection );
 		uvFile.selection = null;
 
 		uvFile.defaultStrokeColor = swatch.color;
-		app.executeMenuCommand("Find Stroke Color menu item");
-		pushRmColors(uvFile.selection);
+		app.executeMenuCommand( "Find Stroke Color menu item" );
+		pushRmColors( uvFile.selection );
 		uvFile.selection = null;
 
-		function pushRmColors(arr)
+		function pushRmColors ( arr )
 		{
-			for(var x=0,len=arr.length;x<len;x++)
+			for ( var x = 0, len = arr.length; x < len; x++ )
 			{
-				toBeRemoved.push(arr[x]);
+				toBeRemoved.push( arr[ x ] );
 			}
 		}
 	}
