@@ -63,7 +63,7 @@ function exportJpgMockup ()
 		{
 			youthMockupLayers.push( l );
 		}
-		else if ( multiArtboardGarments.indexOf( l.name.replace( /_.*/i, "" ) ) >= 0 )
+		else if ( l.name.match( /m\d/i ) || multiArtboardGarments.indexOf( l.name.replace( /_.*/i, "" ) ) >= 0 )
 		{
 			multiArtboardGarmentLayers.push( l );
 		}
