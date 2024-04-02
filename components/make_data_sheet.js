@@ -321,24 +321,35 @@ function makeDataSheet ()
 
     //get the param colors
     var mockupLayer = findSpecificLayer( garmentLayers[ 0 ], "Mockup" );
-    if ( mockupLayer )
-    {
-        var paramLay = findSpecificLayer( mockupLayer, "paramcolors" );
-        if ( !paramLay )
-        {
-            errorList.push( "Could not find paramcolors layer" );
-            return;
-        }
-        paramBlocks = afc( paramLay, "pageItems" ).sort( function ( a, b )
-        {
-            return a.name.charAt( a.name.length - 1 ) - b.name.charAt( b.name.length - 1 )
-        } );
-    }
-
-    if ( !paramBlocks.length )
+    if ( !mockupLayer )
     {
         return;
     }
+    var paramLay = findSpecificLayer( mockupLayer, "paramcolors" );
+    if ( !paramLay )
+    {
+        errorList.push( "Could not find paramcolors layer" );
+        return;
+    }
+
+    var paramBlocks = afc( paramLay, "pageItems" );
+
+    //if theres anything on the paramLayer that isnt a param block,
+    //move it out to the mockup layer
+    paramBlocks.forEach( function ( block ) 
+    {
+        if ( !block.name.match( /paramcolor-[cb]\d*/i ) )
+        {
+            block.move( paramLayer, ElementPlacement.PLACEBEFORE );
+        }
+    } );
+
+    paramBlocks = paramBlocks.sort( function ( a, b )
+    {
+        var aSeq = Number( a.name.match( /\d+$/ )[ 0 ] );
+        var bSeq = Number( b.name.match( /\d+$/ )[ 0 ] );
+        return aSeq - bSeq;
+    } );
 
 
     var paramData = [];
