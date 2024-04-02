@@ -5,19 +5,10 @@ function makeDataSheet ()
     if ( app.documents.length )
     {
         var doc = app.activeDocument;
+        var docFullName = normalizeLocalFilePath( doc.fullName.toString() );
         var docsArray = afc( app, "documents" );
         var layers = doc.layers;
         var layArray = afc( doc, "layers" );
-        var swatches = doc.swatches;
-        var swatchArray = afc( doc, "swatches" );
-        var aB = doc.artboards;
-        var aBArray = afc( doc, "artboards" );
-        var sel, selArray;
-        if ( doc.selection.length )
-        {
-            sel = doc.selection;
-            selArray = afc( doc, "selection" );
-        }
     }
 
     var infoSwatch = makeNewSpotColor( "Info B" );
@@ -287,9 +278,13 @@ function makeDataSheet ()
     var garmentCode, orderNumber, designNumber, appearanceString = "";
     var artItems = [];
 
-    var garmentLayers = layArray.filter( function ( lay )
+    var garmentLayers = [];
+    layArray.forEach( function ( lay )
     {
-        return lay.name.match( /[a-z]{2,3}-\d{3,}/i )
+        if ( isTemplate( lay ) ) 
+        {
+            garmentLayers.push( lay );
+        }
     } );
 
     if ( !garmentLayers.length )
@@ -433,25 +428,39 @@ function makeDataSheet ()
     align( ab, [ titleFrame ], "hcenter" );
     titleFrame.top = ab.artboardRect[ 1 ] - padding;
 
-    //export a jpg
-    var newFileName = decodeURI( doc.path.toString() + "/INFO_" + orderNumber + "_" + designNumber + "_" + garmentCode ) + ".jpg"
+    //export a pdf
+    var newFileName = decodeURI( doc.path.toString() + "/INFO_" + orderNumber + "_" + designNumber + "_" + garmentCode ) + ".pdf"
     newFileName = normalizeLocalFilePath( newFileName );
     log.l( newFileName );
-    // var jpgOpts = new ExportOptionsJPEG();
-    // jpgOpts.qualitySetting = 100;
-    // jpgOpts.artBoardClipping = true;
-    // jpgOpts.horizontalScale = 200;
-    // jpgOpts.verticalScale = 200;
 
-    // doc.exportFile( new File( newFileName ), ExportType.JPEG, jpgOpts );
 
-    exportJpg( newFileName, 0 );
+    //PDF save settings
+    var flatOpts = new PrintFlattenerOptions();
+    flatOpts.overprint = PDFOverprint.DISCARDPDFOVERPRINT;
+    flatOpts.convertTextToOutlines = true;
+    //attn:
+    //look into using flattener options to negate the need for text expansion.
+    //attn;
+
+    var pdfSaveOpts = new PDFSaveOptions();
+    pdfSaveOpts.preserveEditability = false;
+    pdfSaveOpts.viewAfterSaving = false;
+    pdfSaveOpts.compressArt = true;
+    pdfSaveOpts.optimization = true;
+    pdfSaveOpts.flattenerOptions = flatOpts;
+    pdfSaveOpts.artboardRange = "1";
+
+    //export a pdf of the data sheet
+    doc.saveAs( File( newFileName ), pdfSaveOpts );
 
     labelLayer.visible = false;
     ogLayers.forEach( function ( lay )
     {
         lay.visible = true;
     } )
+
+    doc.save();
+
 
     return;
 

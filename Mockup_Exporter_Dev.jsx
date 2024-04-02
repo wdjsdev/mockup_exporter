@@ -160,18 +160,21 @@ function container ()
 
 	doc.activate();
 
-	//make the data sheet
-	makeDataSheet();
 
 	log.l( "Exporting standard jpg mockup." );
 	exportJpgMockup();
-
-
 
 	log.l( "saving master file with file name: " + masterFileSaveName );
 	app.userInteractionLevel = UserInteractionLevel.DONTDISPLAYALERTS;
 	doc.saveAs( File( masterFileSaveName ) );
 	app.userInteractionLevel = UserInteractionLevel.DISPLAYALERTS;
+
+
+	//make the data sheet
+	makeDataSheet();
+
+	// app.open( File( masterFileSaveName ) );
+
 
 	//=================================  /Procedure  =================================//
 	/*****************************************************************************/
