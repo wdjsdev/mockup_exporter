@@ -47,6 +47,8 @@ function duplicateMockupSizePiecesToTemplate ()
 		counter++;
 	}
 
+	fixPrepressSizing( ppLay );
+
 	var curLay, curGroup, curSize, curItem;
 	for ( var x = 0, len = ppLay.layers.length; x < len; x++ )
 	{
