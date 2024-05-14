@@ -12,26 +12,41 @@
 
 */
 
-function getExportSettings()
+function getExportSettings ()
 {
-	if(!Folder(networkExportPath).exists)
+	if ( !Folder( networkExportPath ).exists )
 	{
-		Folder(networkExportPath).create();
+		Folder( networkExportPath ).create();
 	}
-	
 
-	if(blankMode)
+	if ( blankMode )
 	{
 		exportType = svgExportType;
 		exportOptions = svgExportOptions;
 		exportExtension = svgExt;
 	}
-	else
+	else 
 	{
-		exportType = jpgExportType;
-		exportOptions = jpgExportOptions;
-		exportExtension = jpgExt;
-	}
+		//PDF save settings
+		var flatOpts = new PrintFlattenerOptions();
+		flatOpts.overprint = PDFOverprint.DISCARDPDFOVERPRINT;
+		flatOpts.convertTextToOutlines = true;
 
-	exportFileName = layers[0].name + "_" + exportFileName + "_" + exportExtension;
+		var pdfSaveOpts = new PDFSaveOptions();
+		pdfSaveOpts.preserveEditability = false;
+		pdfSaveOpts.viewAfterSaving = false;
+		pdfSaveOpts.compressArt = true;
+		pdfSaveOpts.optimization = true;
+		pdfSaveOpts.flattenerOptions = flatOpts;
+
+		exportType = "pdf";
+	}
+	// else
+	// {
+	// 	exportType = jpgExportType;
+	// 	exportOptions = jpgExportOptions;
+	// 	exportExtension = jpgExt;
+	// }
+
+	exportFileName = layers[ 0 ].name + "_" + exportFileName + "_" + exportExtension;
 }

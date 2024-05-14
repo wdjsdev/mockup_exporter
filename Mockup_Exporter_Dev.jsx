@@ -22,75 +22,36 @@ function container ()
 
 	function getUtilities ()
 	{
-		//check for dev mode
-		var devUtilitiesPreferenceFile = File( "~/Documents/script_preferences/dev_utilities.txt" );
+		var dataResourcePath = customizationPath + "Library/Scripts/Script_Resources/Data/";
 		var devUtilPath = "~/Desktop/automation/utilities/";
-		var devUtils = [ devUtilPath + "Utilities_Container.js", devUtilPath + "Batch_Framework.js" ];
+		var utilPath = dataResourcePath + "Utilities_Container.jsxbin";
+		var batchPath = dataResourcePath + "Batch_Framework.jsxbin";
+		var utilFilePaths = [ utilPath ]; //array of util files
+		var devUtilitiesPreferenceFile = File( "~/Documents/script_preferences/dev_utilities.txt" );
 		function readDevPref ( dp ) { dp.open( "r" ); var contents = dp.read() || ""; dp.close(); return contents; }
-		if ( readDevPref( devUtilitiesPreferenceFile ).match( /true/i ) )
+		if ( devUtilitiesPreferenceFile.exists && readDevPref( devUtilitiesPreferenceFile ).match( /true/i ) )
 		{
-			$.writeln( "///////\n////////\nUsing dev utilities\n///////\n////////" );
-			return devUtils;
+			utilFilePaths = [ devUtilPath + "Utilities_Container.js", devUtilPath + "Batch_Framework.js" ];
+			return utilFilePaths;
 		}
 
-
-
-
-
-
-		var utilNames = [ "Utilities_Container" ];
-
-		//not dev mode, use network utilities
-		var OS = $.os.match( "Windows" ) ? "pc" : "mac";
-		var ad4 = ( OS == "pc" ? "//AD4/" : "/Volumes/" ) + "Customization/";
-		var drsv = ( OS == "pc" ? "O:/" : "/Volumes/CustomizationDR/" );
-		var ad4UtilsPath = ad4 + "Library/Scripts/Script_Resources/Data/";
-		var drsvUtilsPath = drsv + "Library/Scripts/Script_Resources/Data/";
-
-
-		var result = [];
-		for ( var u = 0, util; u < utilNames.length; u++ )
+		if ( !File( utilFilePaths[ 0 ] ).exists )
 		{
-			util = utilNames[ u ];
-			var ad4UtilPath = ad4UtilsPath + util + ".jsxbin";
-			var ad4UtilFile = File( ad4UtilsPath );
-			var drsvUtilPath = drsvUtilsPath + util + ".jsxbin"
-			var drsvUtilFile = File( drsvUtilPath );
-			if ( drsvUtilFile.exists )
-			{
-				result.push( drsvUtilPath );
-			}
-			else if ( ad4UtilFile.exists )
-			{
-				result.push( ad4UtilPath );
-			}
-			else
-			{
-				alert( "Could not find " + util + ".jsxbin\nPlease ensure you're connected to the appropriate Customization drive." );
-				valid = false;
-			}
+			alert( "Could not find utilities. Please ensure you're connected to the appropriate Customization drive." );
+			return [];
 		}
 
-		return result;
+		return utilFilePaths;
 
 	}
-
-
-
 	var utilities = getUtilities();
-
-
-
 
 	for ( var u = 0, len = utilities.length; u < len && valid; u++ )
 	{
 		eval( "#include \"" + utilities[ u ] + "\"" );
 	}
 
-	log.l( "Using Utilities: " + utilities );
-
-
-	if ( !valid ) return;
+	if ( !valid || !utilities.length ) return;
 
 
 	/*****************************************************************************/
@@ -98,13 +59,6 @@ function container ()
 
 	logDest.push( getLogDest() );
 
-	////////////////////////
-	////////ATTENTION://////
-	//
-	//		temp live logging
-	LIVE_LOGGING = false;
-	//
-	////////////////////////
 
 	if ( user === "will.dowling" )
 	{
@@ -144,20 +98,19 @@ function container ()
 	//test function
 	function testFunction ()
 	{
-		docRef = app.activeDocument;
-		getItemDimension( docRef.pageItems[ 0 ] );
+		makeDataSheet();
 	}
 	// testFunction();
 	// return;
 
 
-
+	//disabled logic for making a 3d mockup 
 	function execute ()
 	{
-		log.l( "Mockup Exporter Initialized for document: " + docRef.name );
+		log.l( "Mockup Exporter Initialized for document: " + doc.name );
 		if ( valid )
 		{
-			valid = getGarments( docRef );
+			valid = getGarments( doc );
 		}
 
 		if ( valid )
@@ -169,7 +122,12 @@ function container ()
 	}
 
 
-	var docRef = app.activeDocument;
+	var doc = app.activeDocument;
+	if ( doc.name.match( /untitled/i ) )
+	{
+		alert( "Please save the document before running this script." );
+		return;
+	}
 	initMockupExporter();
 
 
@@ -183,28 +141,40 @@ function container ()
 
 	//create the cleanup_swatches action
 	// createCleanupSwatchesAction();
-	createAction( "cleanup_swatches", CLEANUP_SWATCHES_ACTION_STRING );
+	// createAction( "cleanup_swatches", CLEANUP_SWATCHES_ACTION_STRING );
 
 	log.l( "Finished creating cleanup swatches action" );
 
 	//run the script
 	execute();
+	// if ( user.match( /aimee|kieser/i ) )
+	// {
+	// 	execute();
+	// }
+	printDesignNumberOnMockup();
 
 
 
 	//remove the cleanup_swatches action
-	removeAction( "cleanup_swatches" );
+	// removeAction( "cleanup_swatches" );
 
-	docRef.activate();
+	doc.activate();
 
-	log.h( "Exporting standard jpg mockup." );
+
+	log.l( "Exporting standard jpg mockup." );
 	exportJpgMockup();
 
-	if ( docRef.name.toLowerCase().indexOf( "untitled" ) === -1 )
-	{
-		log.l( "saving master file with file name: " + masterFileSaveName );
-		docRef.saveAs( File( masterFileSaveName ) );
-	}
+	log.l( "saving master file with file name: " + masterFileSaveName );
+	app.userInteractionLevel = UserInteractionLevel.DONTDISPLAYALERTS;
+	doc.saveAs( File( masterFileSaveName ) );
+	app.userInteractionLevel = UserInteractionLevel.DISPLAYALERTS;
+
+
+	//make the data sheet
+	makeDataSheet();
+
+	// app.open( File( masterFileSaveName ) );
+
 
 	//=================================  /Procedure  =================================//
 	/*****************************************************************************/

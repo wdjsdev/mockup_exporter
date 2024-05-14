@@ -18,18 +18,40 @@ function createDisplayBoxes ( displays )
 {
 	if ( !displays || !displays.length ) return;
 	var boxDimension = 150;
-	var abRect = aB[ 0 ].artboardRect;
-	var yPos = abRect[ 3 ] - abRect[ 1 ] + boxDimension;
-	var artLay = layers[ "Art" ];
+	var abRect = aB[0].artboardRect;
+	var yPos = abRect[3]-abRect[1] + boxDimension;
+	// var artLay = layers["Art"];
+	var artLay = findSpecificLayer(layers,"Art","imatch");
+	if(!artLay)
+	{
+		artLay = layers.add();
+		artLay.name = "Art";
+	}
+
 
 	var newBlock;
 	for ( var x = 0, len = displays.length; x < len; x++ )
 	{
-		try
-		{
-			newBlock = artLay.pageItems[ displays[ x ].name ];
-		}
-		catch ( e )
+		//
+		//attn
+		//
+		//this try/catch should be replaced
+		// try
+		// {
+		// 	newBlock = artLay.pageItems[displays[x].name];
+		// }
+		// catch(e)
+		// {
+		// 	newBlock = artLay.pathItems.rectangle(yPos,0,boxDimension,boxDimension);
+		// 	newBlock.name = displays[x].name;
+		// 	newBlock.filled = false;
+		// 	newBlock.stroked = false;
+		// 	yPos += boxDimension;
+		// 	docRef.selection = null;
+		// }
+
+		newBlock = findSpecificPageItem(artLay,displays[x].name,"imatch");
+		if(!newBlock)
 		{
 			newBlock = artLay.pathItems.rectangle( yPos, 0, boxDimension, boxDimension );
 			newBlock.name = displays[ x ].name;

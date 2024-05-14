@@ -12,29 +12,29 @@
 
 */
 
-function getMockupSize()
+function getMockupSize ()
 {
 	var curData;
 
 	// eval("#include \"" + centralLibraryFile.fsName + "\"");
-	eval("#include \"" + centralLibraryPath + "\"");
-	if(prepressInfo)
+	eval( "#include \"" + centralLibraryPath + "\"" );
+	if ( prepressInfo )
 	{
-		curData = getLibraryEntry(prepressInfo,curGarmentCode);
-		
-		if(curData)
+		curData = getLibraryEntry( prepressInfo, curGarmentCode );
+
+		if ( curData )
 		{
 			mockupSize = curData.mockupSize;
-			if(mockupSize.toLowerCase().indexOf("i")>-1)
+			if ( mockupSize.match( /i$/i ) )
 			{
 				sizeType = "var";
 				waistSize = curData.waistMockupSize;
-				if(!waistSize)
+				if ( !waistSize )
 				{
-					waistSize = uiPrompt("Enter the mockup waist size.");
-					if(!waistSize)
+					waistSize = uiPrompt( "Enter the mockup waist size." );
+					if ( !waistSize )
 					{
-						errorList.push("Failed to determine the proper mockup size.");
+						errorList.push( "Failed to determine the proper mockup size." );
 						valid = false;
 						return;
 					}

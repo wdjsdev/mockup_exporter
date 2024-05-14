@@ -48,27 +48,16 @@ function masterLoop ()
 			continue;
 		}
 
-
-		//add a script message about FD-400 mockups to remind the user to
-		//send both adult and youth mockups to customer.
-		if ( curGarmentCode.match( /FD-400/i ) )
+		if ( !getMasterLayers() )
 		{
-			messageList.push( "Please make sure to send both adult and youth mockups of the FD-400 to customer." );
+			continue;
 		}
 
 
-		var paramLayerExists = false;
-		for ( var y = 0, ylen = mockupLay.layers.length; y < ylen && !paramLayerExists; y++ )
-		{
-			if ( mockupLay.layers[ y ].name === "paramcolors" && mockupLay.layers[ y ].pageItems.length )
-			{
-				paramLayerExists = true;
-			}
-		}
-		if ( !paramLayerExists )
+		var paramLayer = findSpecificLayer( mockupLayer, "paramcolors", "any" );
+		if ( !paramLayer )
 		{
 			addParamColors();
-			getParamColorValues();
 		}
 
 		if ( !devMode )
@@ -89,10 +78,7 @@ function masterLoop ()
 			continue;
 		}
 		log.l( "UV File successfully opened." );
-		if ( !getMasterLayers() )
-		{
-			continue;
-		}
+
 
 		if ( !duplicateMockupSizePiecesToTemplate( uvFile ) )
 		{
@@ -102,10 +88,10 @@ function masterLoop ()
 
 		uvFile.activate();
 
-		if ( mockupExporterGarmentData[ curGarmentCode ] && mockupExporterGarmentData[ curGarmentCode ].flipCollars )
-		{
-			flipCollars();
-		}
+		// if ( mockupExporterGarmentData[ curGarmentCode ] && mockupExporterGarmentData[ curGarmentCode ].flipCollars )
+		// {
+		// 	flipCollars();
+		// }
 
 		if ( !scalePiecesToFitGuides() )
 		{

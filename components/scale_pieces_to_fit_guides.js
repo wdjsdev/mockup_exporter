@@ -25,87 +25,51 @@ function scalePiecesToFitGuides ()
 	//to ensure full coverage of the UV Map
 	// var GARMENT_PIECE_BLEED = 2;
 
-	var curName, curItem, curGuide;
-	var itemDim, guideDim, scaleFactor;
-	var itemCenter, guideCenter;
-	var leftOverlap, topOverlap;
-	var clipGroup, pieceGroup;
-	var itemVb, itemW, itemH;
+	var curName,curItem,curGuide;
+	var itemDim,guideDim,scaleFactor;
+	var itemCenter,guideCenter;
+	var leftOverlap,topOverlap;
+	var clipGroup,pieceGroup,artGroup,clipMask;
+
+	var itemVb,guideVb,guideCenter;
 
 	//boolean to determine whether any appropriate guide boxes were found
 	var guidesFound = false;
 
-	// for(var x=0,len = uvArtLayer.pageItems.length;x<len;x++)
-	for ( var x = uvArtLayer.pageItems.length - 1; x >= 0; x-- )
+
+	for(var x = uvArtLayer.pageItems.length-1;x>=0;x--)
 	{
 		curItem = uvArtLayer.pageItems[ x ];
 		curName = curItem.name;
-		try
+		curGuide = findSpecificPageItem(uvGuidesLayer,curName,"imatch");
+		if(!curGuide)
 		{
-			curGuide = uvGuidesLayer.pageItems[ curName ];
-			guidesFound = true;
-		}
-		catch ( e )
-		{
-			// errorList.push("The UV Map File has no target for " + curName);
-			// valid = false;
+			log.e("Didn't find a guide matching the name: " + curName);
 			continue;
 		}
-
-		//figure out the dimensions of curItem minus any clipped artwork
-		//basically we want the width or height of the visible group,
-		// itemDim = curItem.width > curItem.height ? curItem.width : curItem.height;
+		guidesFound = true;
 
 		itemVb = getBoundsData( curItem );
-		// itemDim = getItemDimension(curItem);
+		guideVb = getBoundsData( curGuide );
 
 		itemDim = itemVb.w > itemVb.h ? itemVb.w : itemVb.h;
 
+		//biggest dimension of dest guide box
+		guideDim = guideVb.w > guideVb.h ? guideVb.w : guideVb.h;
 
-		guideDim = curGuide.width > curGuide.height ? curGuide.width : curGuide.height;
+		//scale the whole item up to match guide box dimensions
+		scaleFactor = (guideDim / itemDim) * 100;
+		curItem.resize(scaleFactor,scaleFactor,true,true,true,true,scaleFactor);
 
+		itemVb = getBoundsData( curItem );
 
-		scaleFactor = ( guideDim / itemDim ) * 100;
-		curItem.resize( scaleFactor, scaleFactor, true, true, true, true, scaleFactor );
+		//get the centerpoint of guide box
+		guideCenter = [guideVb.hc,guideVb.vc];
 
-
-		guideCenter = getCenterPoint( curGuide );
-		// setCenterPoint(curItem, guideCenter);
-		curItem.left = curGuide.left - itemVb.clipped.left;
-		curItem.top = curGuide.top + itemVb.clipped.top;
-
-
-		// if(!curItem.hasClipGroup)
-		// {
-		// 	log.l(curItem.name + " has no clipping masks. using center point positioning")
-		// 	guideCenter = getCenterPoint(curGuide);
-		// 	setCenterPoint(curItem,guideCenter);	
-		// }
-		// else
-		// {
-		// 	log.l(curItem.name + " has clipping masks. Using standard positioning.")
-		// 	clipGroup = curItem.pageItems[0];
-		// 	pieceGroup = curItem.pageItems[1];
-
-		// 	curItem.left = curGuide.left;
-		// 	curItem.top= curGuide.top;
-
-		// 	leftOverlap = pieceGroup.left - clipGroup.left;
-		// 	topOverlap = clipGroup.top - pieceGroup.top;
-		// 	if(clipGroup.left < pieceGroup.left)
-		// 	{
-		// 		log.l("moving " +  curItem.name + ": " + leftOverlap + " points left.");
-		// 		curItem.left -= leftOverlap;
-		// 	}
-		// 	if(clipGroup.top > pieceGroup.top)
-		// 	{
-		// 		log.l("moving " +  curItem.name + ": " + topOverlap + " points up.");
-		// 		curItem.top += topOverlap;
-		// 	}
-
-		// }
-
-
+		curItem.left = guideCenter[0] - (itemVb.w/2) - itemVb.clipped.left;
+		curItem.top = guideCenter[1] + (itemVb.h/2) + itemVb.clipped.top;
+		
+		
 
 	}
 
@@ -116,7 +80,8 @@ function scalePiecesToFitGuides ()
 		return false;
 	}
 
-	for ( var x = 0, len = uvParamLayer.pageItems.length; x < len; x++ )
+	//move the param blocks to the top left corner of the artboard
+	for(var x=0,len=uvParamLayer.pageItems.length;x<len;x++)
 	{
 		curItem = uvParamLayer.pageItems[ x ];
 		curItem.left = uvArtboards[ 0 ].artboardRect[ 0 ];

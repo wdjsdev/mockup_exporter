@@ -13,43 +13,50 @@
 
 */
 
-function recolorDisplayBlocks()
+function recolorDisplayBlocks ()
 {
 	var result = true;
-	var curData = mockupExporterGarmentData[curGarmentCode];
-	var index,paramBlock;
-	if(curData)
+	var curData = mockupExporterGarmentData[ curGarmentCode ];
+	var index, paramBlock, display;
+	if ( curData )
 	{
-		for(var x=0,len=curData.updateDisplay.length;x<len;x++)
+		for ( var x = 0, len = curData.updateDisplay.length; x < len; x++ )
 		{
-			recolorBlock(curData.updateDisplay[x].name,curData.updateDisplay[x].seq)
+			recolorBlock( curData.updateDisplay[ x ].name, curData.updateDisplay[ x ].seq )
 		}
 	}
 
 	return result;
 
-	function recolorBlock(name,index)
+	function recolorBlock ( name, index )
 	{
-		if(index === -1)
+		if ( index === -1 )
 		{
 			index = 0;
 		}
-		else
+
+		display = findSpecificPageItem( uvArtLayer, name, "any" );
+		paramBlock = uvParamLayer.pageItems.length > index ? uvParamLayer.pageItems[ index ] : undefined;
+
+		if ( !display )
 		{
-			// index = uvParamLayer.pageItems.length - index - 1;
-			// index += 1;
-		}
-		try
-		{
-			var display = uvArtLayer.pageItems[name];
-			paramBlock = uvParamLayer.pageItems[index];
-			display.fillColor = paramBlock.fillColor;
-		}
-		catch(e)
-		{
-			log.e("Failed to recolor the " + name + " display.");
-			errorList.push("The UV Map file is either missing a \"display block\" called: " + name + ", or a param block called: C" + index + ".");
+			errorList.push( "The UV Map file is missing a display block called " + name );
+			log.e( "UV Map file doesn't have a display block called: " + name );
 			result = false;
 		}
+
+
+		// try
+		// {
+		// 	var display = uvArtLayer.pageItems[name];
+		// 	paramBlock = uvParamLayer.pageItems[index];
+		// 	display.fillColor = paramBlock.fillColor;
+		// }
+		// catch(e)
+		// {
+		// 	log.e("Failed to recolor the " + name + " display.");
+		// 	errorList.push("The UV Map file is either missing a \"display block\" called: " + name + ", or a param block called: C" + index + ".");
+		// 	result = false;
+		// }
 	}
 }

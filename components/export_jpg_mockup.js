@@ -14,70 +14,68 @@
 
 */
 
-function exportJpgMockup()
+function exportJpgMockup ()
 {
 	var doc = app.activeDocument;
 	var ab = doc.artboards;
 
-	var newFileName = decodeURI(doc.fullName.toString());
-	log.l("newFileName = " + newFileName);
-	newFileName = newFileName.replace(/\.ai[t]?/i,"");
-	newFileName = newFileName.replace(/(master)|(prepress)/i,"Mockup");
+	var newFileName = decodeURI( doc.fullName.toString() );
+	log.l( "newFileName = " + newFileName );
+	newFileName = newFileName.replace( /\.ai[t]?/i, "" );
+	newFileName = newFileName.replace( /(master)|(prepress)/i, "Mockup" );
+	log.l( "converted newFileName to: " + newFileName );
+
+	newFileName = decodeURI( newFileName );
+
+	newFileName = normalizeLocalFilePath( newFileName );
+
+	if ( user == "thell" )
+	{
+		newFileName = newFileName.replace( "C:", "D:" );
+		newFileName = newFileName.replace( /\//g, "\\\\" );
+	}
+	else if ( os == "windows" )
+	{
+		log.l( "User is on a PC. converting forward slashes to backslashes" );
+		newFileName = decodeURI( newFileName.replace( /\//g, "\\\\" ) );
+	}
+
+
 	newFileName += ".jpg";
-	log.l("converted newFileName to: " + newFileName);
+
+	log.l( "finished updating newFileName::newFileName = " + newFileName );
 
 
-	newFileName = decodeURI(newFileName);
+	//global export function located in utilites container
+	exportJpg( newFileName, 0 );
 
-	// newFileName = newFileName.replace(/(^.*users\/)|(^~\/)/i,homeFolderPath);
-	newFileName = normalizeLocalFilePath(newFileName);
+	var youthMockupCodes = [ "FD-400G", "FD-3096Y", "FD-5421Y", "FD-5422Y", "FD-5423Y", "FD-5424Y", "FD-5425Y", "FD-5426Y", "FD-5427Y", "FD-5428Y", "FD-5430Y" ]
+	// var multiArtboardGarments = [ "MBB-0601100", "MBB-0601100", "MBB-0601200", "MBB-0601200W", "MBB-0701100", "MBB-0701100", "MBB-0701200", "MBB-0701200W", "MBB-0801100", "MBB-0801100", "MBB-0801200", "MBB-0801200W" ]
+	var multiArtboardGarments = [ "M2306500", "M2306500W", "M2306510", "M2306510W", "M2606500", "M2606500W", "M2606510", "M2606510W", "M2706500", "M2706500W", "M2706510", "M2706510W", "MBB-0601100", "MBB-0601100", "MBB-0601200", "MBB-0601200W", "MBB-0701100", "MBB-0701100", "MBB-0701200", "MBB-0701200W", "MBB-0801100", "MBB-0801100", "MBB-0801200", "MBB-0801200W" ];
 
-	if(os === "mac")
+
+	var youthMockupLayers = [];
+	var multiArtboardGarmentLayers = [];
+
+	afc( doc, "layers" ).forEach( function ( l ) 
 	{
-		if(newFileName.indexOf("Volumes") === -1)
+		if ( youthMockupCodes.indexOf( l.name.replace( /_.*/i, "" ) ) >= 0 )
 		{
-			newFileName = "/Volumes" + newFileName;
+			youthMockupLayers.push( l );
 		}
-	}
-	else if(user == "thell")
+		else if ( l.name.match( /m\d/i ) || multiArtboardGarments.indexOf( l.name.replace( /_.*/i, "" ) ) >= 0 )
+		{
+			multiArtboardGarmentLayers.push( l );
+		}
+	} );
+	if ( youthMockupLayers.length )
 	{
-		newFileName = newFileName.replace("C:","D:");
-		newFileName = newFileName.replace(/\//g,"\\\\");
+		exportJpg( newFileName.replace( ".jpg", "_Youth.jpg" ), 1 );
 	}
-	else
+	if ( multiArtboardGarmentLayers.length )
 	{
-		log.l("User is on a PC. converting forward slashes to backslashes");
-		newFileName = decodeURI(newFileName.replace(/\//g,"\\\\"));
+		exportJpg( newFileName.replace( ".jpg", "_2.jpg" ), 1 );
 	}
-	
-	log.l("finished updating newFileName::newFileName = "+ newFileName);
-	
 
-	var actionString = EXPORT_JPG_HIGH_QUALITY_ACTION_STRING.join("\n");
-
-	actionString = actionString.replace("**folder_char_length**",newFileName.length);
-	actionString = actionString.replace("**hex_folder_path**",asciiToHex(newFileName));
-
-
-	
-
-	actionString = actionString.split("\n");
-	
-	try
-	{
-		createAction("export jpg",actionString);
-		app.doScript("export jpg","export jpg");
-		removeAction("export jpg");	
-		log.l("Successfully exported jpg mockup.");
-	}
-	catch(e)
-	{
-		log.e("Failed to export the jpg mockup.::actionString = " + actionString.join("\n") + "::e = " + e + "::e.line = " + e.line);
-		errorList.push("Failed to export the jpg mockup.");
-
-	}
-	
-
-	// doc.exportFile(File(newFileName), jpgExportType, jpgExportOptions)
 
 }

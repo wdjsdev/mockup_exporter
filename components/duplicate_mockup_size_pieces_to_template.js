@@ -47,6 +47,8 @@ function duplicateMockupSizePiecesToTemplate ()
 		counter++;
 	}
 
+	fixPrepressSizing( ppLay );
+
 	var curLay, curGroup, curSize, curItem;
 	for ( var x = 0, len = ppLay.layers.length; x < len; x++ )
 	{
@@ -76,15 +78,12 @@ function duplicateMockupSizePiecesToTemplate ()
 	}
 	if ( curGroup )
 	{
-
+		app.userInteractionLevel = UserInteractionLevel.DONTDISPLAYALERTS;
 		duplicateArtwork( curGroup );
+		tmpArtGroup = curGroup.duplicate( uvArtLayer );
 
-		tmpArtGroup = curGroup.duplicate( uvFile );
-		tmpArtGroup.moveToBeginning( uvArtLayer );
-
-		tmpParamGroup = paramGroup.duplicate( uvFile );
-		tmpParamGroup.moveToBeginning( uvParamLayer );
-
+		tmpParamGroup = paramGroup.duplicate( uvArtLayer );
+		app.userInteractionLevel = UserInteractionLevel.DISPLAYALERTS;
 		uvFile.activate();
 		ungroupTmpGroup();
 		tmpLay.remove();

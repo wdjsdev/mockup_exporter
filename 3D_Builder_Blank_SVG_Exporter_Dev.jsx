@@ -14,57 +14,59 @@ Description: open the 3d mockup template file for the current garment
 	
 */
 #target Illustrator
-function container()
+function container ()
 {
 
 	var valid = true;
 	var scriptName = "3d_builder_blank_svg_exporter"
 
-	function getUtilities()
+	function getUtilities ()
 	{
-		var result = [];
-		var utilPath = "/Volumes/Customization/Library/Scripts/Script_Resources/Data/";
-		var ext = ".jsxbin"
-
-		//check for dev utilities preference file
-		var devUtilitiesPreferenceFile = File("~/Documents/script_preferences/dev_utilities.txt");
-
-		if(devUtilitiesPreferenceFile.exists)
+		var utilNames = [ "Utilities_Container", "Batch_Framework" ]; //array of util names
+		var utilFiles = []; //array of util files
+		//check for dev mode
+		var devUtilitiesPreferenceFile = File( "~/Documents/script_preferences/dev_utilities.txt" );
+		function readDevPref ( dp ) { dp.open( "r" ); var contents = dp.read() || ""; dp.close(); return contents; }
+		if ( devUtilitiesPreferenceFile.exists && readDevPref( devUtilitiesPreferenceFile ).match( /true/i ) )
 		{
-			devUtilitiesPreferenceFile.open("r");
-			var prefContents = devUtilitiesPreferenceFile.read();
-			devUtilitiesPreferenceFile.close();
-			if(prefContents === "true")
+			$.writeln( "///////\n////////\nUsing dev utilities\n///////\n////////" );
+			var devUtilPath = "~/Desktop/automation/utilities/";
+			utilFiles = [ devUtilPath + "Utilities_Container.js", devUtilPath + "Batch_Framework.js" ];
+			return utilFiles;
+		}
+
+		var dataResourcePath = customizationPath + "Library/Scripts/Script_Resources/Data/";
+
+		for ( var u = 0; u < utilNames.length; u++ )
+		{
+			var utilFile = new File( dataResourcePath + utilNames[ u ] + ".jsxbin" );
+			if ( utilFile.exists )
 			{
-				utilPath = "~/Desktop/automation/utilities/";
-				ext = ".js";
+				utilFiles.push( utilFile );
 			}
+
 		}
 
-		if($.os.match("Windows"))
+		if ( !utilFiles.length )
 		{
-			utilPath = utilPath.replace("/Volumes/","//AD4/");
+			alert( "Could not find utilities. Please ensure you're connected to the appropriate Customization drive." );
+			return [];
 		}
 
-		result.push(utilPath + "Utilities_Container" + ext);
-		result.push(utilPath + "Batch_Framework" + ext);
 
-		if(!result.length)
-		{
-			valid = false;
-			alert("Failed to find the utilities.");
-		}
-		return result;
+		return utilFiles;
 
 	}
-
 	var utilities = getUtilities();
-	for(var u=0,len=utilities.length;u<len;u++)
+
+	for ( var u = 0, len = utilities.length; u < len && valid; u++ )
 	{
-		eval("#include \"" + utilities[u] + "\"");	
+		eval( "#include \"" + utilities[ u ] + "\"" );
 	}
 
-	if(!valid)return;
+	if ( !valid || !utilities.length ) return;
+
+	DEV_LOGGING = user === "will.dowling";
 
 
 
@@ -73,28 +75,28 @@ function container()
 	/*****************************************************************************/
 	//==============================  Components  ===============================//
 
-	logDest.push(getLogDest());
+	logDest.push( getLogDest() );
 
 	var devComponents = desktopPath + "automation/mockup_exporter/components";
 	var prodComponents = componentsPath + "mockup_exporter"
 
-	var compFiles = includeComponents(devComponents,prodComponents,false);
+	var compFiles = includeComponents( devComponents, prodComponents, false );
 	var curFilePath;
-	if(compFiles && compFiles.length)
+	if ( compFiles && compFiles.length )
 	{
-		for(var x=0,len=compFiles.length;x<len;x++)
+		for ( var x = 0, len = compFiles.length; x < len; x++ )
 		{
 			// curFilePath = compFiles[x].fsName.toString().replace(/\\/g,"\\\\");
-			curFilePath = compFiles[x].fullName;
+			curFilePath = compFiles[ x ].fullName;
 			try
 			{
-				eval("#include \"" + curFilePath + "\"");
-				log.l("Successfully included: " + curFilePath);
+				eval( "#include \"" + curFilePath + "\"" );
+				log.l( "Successfully included: " + curFilePath );
 			}
-			catch(e)
+			catch ( e )
 			{
-				errorList.push("Failed to include the component: " + compFiles[x].name);
-				log.e("Failed to include the component: " + compFiles[x].name + "::System Error Message: " + e + "::System Error Line: " + e.line);
+				errorList.push( "Failed to include the component: " + compFiles[ x ].name );
+				log.e( "Failed to include the component: " + compFiles[ x ].name + "::System Error Message: " + e + "::System Error Line: " + e.line );
 				valid = false;
 			}
 		}
@@ -102,8 +104,8 @@ function container()
 	else
 	{
 		valid = false;
-		errorList.push("Failed to find any of the necessary components for this script to work.");
-		log.e("Failed to include any components. Exiting script.");
+		errorList.push( "Failed to find any of the necessary components for this script to work." );
+		log.e( "Failed to include any components. Exiting script." );
 	}
 
 
@@ -114,8 +116,8 @@ function container()
 
 	/*****************************************************************************/
 	//=================================  Procedure  =================================//
-	
-	function execute()
+
+	function execute ()
 	{
 		initMockupExporter();
 
@@ -124,44 +126,44 @@ function container()
 
 		//create the cleanup_swatches action
 		// createCleanupSwatchesAction();
-		createAction("cleanup_swatches",CLEANUP_SWATCHES_ACTION_STRING);
+		createAction( "cleanup_swatches", CLEANUP_SWATCHES_ACTION_STRING );
 
-		if(devMode)
+		if ( devMode )
 		{
 			updateWrongPlaceholderColors();
 		}
 
-		layers[0].name = layers[0].name.replace("FD_","FD-");
-		layers[0].name = layers[0].name.replace("_0","_10");
+		layers[ 0 ].name = layers[ 0 ].name.replace( "FD_", "FD-" );
+		layers[ 0 ].name = layers[ 0 ].name.replace( "_0", "_10" );
 
-		log.l("Mockup Exporter Initialized for document: " + docRef.name);
-		if(valid)
+		log.l( "Mockup Exporter Initialized for document: " + docRef.name );
+		if ( valid )
 		{
-			valid = getGarments(docRef);
+			valid = getGarments( docRef );
 		}
 
-		if(valid)
+		if ( valid )
 		{
-			log.l("Successfully gathered garments.");
-			log.l("garmentsNeeded = " + garmentsNeeded);
+			log.l( "Successfully gathered garments." );
+			log.l( "garmentsNeeded = " + garmentsNeeded );
 			valid = masterLoop();
 		}
 
-		removeAction("cleanup_swatches");
+		removeAction( "cleanup_swatches" );
 	}
 
-	log.h("Beginning Blank SVG Exporter Script")
+	log.h( "Beginning Blank SVG Exporter Script" )
 
-	batchInit(execute,"Exported svg versions of blank styles");
+	batchInit( execute, "Exported svg versions of blank styles" );
 	// execute();
 
 
 	//=================================  /Procedure  =================================//
 	/*****************************************************************************/
 
-	if(errorList.length>0)
+	if ( errorList.length > 0 )
 	{
-		sendErrors(errorList);
+		sendErrors( errorList );
 	}
 
 	printLog();
