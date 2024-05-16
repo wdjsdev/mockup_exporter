@@ -94,6 +94,7 @@ function duplicateMockupSizePiecesToTemplate ()
 	}
 	else
 	{
+		tmpLay.remove();
 		errorList.push( "Failed to find any artwork on the prepress layer for the size: " + mockupSize );
 		return false;
 	}
